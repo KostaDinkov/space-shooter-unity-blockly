@@ -68,8 +68,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4061746071001236}
-  - component: {fileID: 114603326856211080}
   - component: {fileID: 82812649936098992}
+  - component: {fileID: 114423173842082224}
   m_Layer: 8
   m_Name: Game Controller
   m_TagString: GameController
@@ -345,7 +345,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1806653450372042
 GameObject:
   m_ObjectHideFlags: 0
@@ -1582,6 +1582,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114423173842082224
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1191947184325090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3c6d83b1fbf68a41a6594319f7034b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 1377924361504830}
+  Levels:
+  - {fileID: 1199039358313412, guid: bc9b1ee25cf8dca43814be7b65f30606, type: 2}
+  - {fileID: 1199039358313412, guid: 2f522f4853e761a4a8f2a1b586a84548, type: 2}
 --- !u!114 &114453438487507774
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1635,21 +1650,6 @@ MonoBehaviour:
   shot: {fileID: 1668585415462516, guid: 10f4fe664e6cf324c8312bd697e71834, type: 2}
   shotSpawn: {fileID: 4874895049608058}
   speed: 10
---- !u!114 &114603326856211080
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1191947184325090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3c6d83b1fbf68a41a6594319f7034b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Player: {fileID: 1377924361504830}
-  Levels:
-  - {fileID: 1199039358313412, guid: bc9b1ee25cf8dca43814be7b65f30606, type: 2}
-  - {fileID: 1199039358313412, guid: 2f522f4853e761a4a8f2a1b586a84548, type: 2}
 --- !u!114 &114798530799721012
 MonoBehaviour:
   m_ObjectHideFlags: 1
