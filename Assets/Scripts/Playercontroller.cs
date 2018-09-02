@@ -87,7 +87,7 @@ public class Playercontroller : MonoBehaviour
     public void MoveForward()
     {
         this.commandQueue.Enqueue(MoveForwardCommand);
-        Debug.Log($"isIdle: {isIdle}");
+        
 
         
     }

@@ -1,8 +1,7 @@
-﻿
+﻿using System;
 using UnityEngine;
-
 using UnityEngine.UI;
-
+using Easy.MessageHub;
 public class UIManager : MonoBehaviour
 {
     public Button RestartButton;
@@ -30,9 +29,15 @@ public class UIManager : MonoBehaviour
         this.RestartButton.onClick.AddListener(GameController.instance.RestartLevel);
         this.NextLevelButton.onClick.AddListener(GameController.instance.NextLevel);
         this.NextLevelButton.interactable = false;
+        var hub = MessageHub.Instance;
+        var token = hub.Subscribe<ObjectiveCompleted>(onObjectiveCompleted);
     }
 
-   
+    private Action<ObjectiveCompleted> onObjectiveCompleted = oc=> 
+    {
+      instance.NextLevelButton.interactable = true;
+      Debug.Log("onObjectiveCompleted");
+    };
     
     public void ActivateLevel(int level)
     {

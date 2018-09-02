@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Easy.MessageHub;
 
 public class TargetDestination : MonoBehaviour {
 
@@ -12,11 +13,12 @@ public class TargetDestination : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
-            UIManager.instance.NextLevelButton.interactable = true;
+          var hub = MessageHub.Instance;
+          hub.Publish(new ObjectiveCompleted());
+            
         }
     }
 	// Update is called once per frame
-	void Update () {
-		
-	}
+	
 }
+public class ObjectiveCompleted{}
