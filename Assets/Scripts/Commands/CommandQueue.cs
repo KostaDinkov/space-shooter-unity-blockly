@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
 
-namespace Assets.Scripts.Commands
+namespace Game.Commands
 {
-    class CommandQueue
+    public class CommandQueue
     {
         private Queue<Command> commands;
 

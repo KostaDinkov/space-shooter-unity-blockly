@@ -1,24 +1,16 @@
 ﻿using UnityEngine;
 using Easy.MessageHub;
 
-public class TargetDestination : MonoBehaviour {
-
-    
-	// Use this for initialization
-	void Start () {
-		
-	}
-
-    void OnTriggerEnter(Collider other)
+public class TargetDestination : MonoBehaviour
+{
+  void OnTriggerEnter(Collider other)
+  {
+    if (other.tag == "Player")
     {
-        if (other.tag == "Player")
-        {
-          var hub = MessageHub.Instance;
-          hub.Publish(new ObjectiveCompleted());
-            
-        }
+      var hub = MessageHub.Instance;
+      hub.Publish(new Game.Events.ChallengeCompleted());
+
     }
-	// Update is called once per frame
-	
+  }
 }
-public class ObjectiveCompleted{}
+

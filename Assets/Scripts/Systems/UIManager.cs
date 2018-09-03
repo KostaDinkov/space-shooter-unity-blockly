@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Easy.MessageHub;
+using Game.Systems;
 public class UIManager : MonoBehaviour
 {
     public Button RestartButton;
@@ -19,9 +20,6 @@ public class UIManager : MonoBehaviour
             Destroy(this.gameObject);
             return;
         }
-       
-       
-        
     }
 
     void Start()
@@ -30,18 +28,29 @@ public class UIManager : MonoBehaviour
         this.NextLevelButton.onClick.AddListener(GameController.instance.NextLevel);
         this.NextLevelButton.interactable = false;
         var hub = MessageHub.Instance;
-        var token = hub.Subscribe<ObjectiveCompleted>(onObjectiveCompleted);
-    }
+        var OCtoken = hub.Subscribe<Game.Events.ChallengeCompleted>(onObjectiveCompleted);
+        var NextLevelStartedToken = hub.Subscribe<Game.Events.NewChallangeStarted>(onNewLevelStarted);
 
-    private Action<ObjectiveCompleted> onObjectiveCompleted = oc=> 
+    }
+    private Action<Game.Events.NewChallangeStarted> onNewLevelStarted = nls =>
     {
-      instance.NextLevelButton.interactable = true;
-      Debug.Log("onObjectiveCompleted");
+      instance.ActivateChallenge(nls.ChallengeNumber);
     };
     
-    public void ActivateLevel(int level)
+    private Action<Game.Events.ChallengeCompleted> onObjectiveCompleted = oc => 
     {
-        GameProgressBar.instance.ActivateLevel(level);
+      instance.NextLevelButton.interactable = true;
+      
+    };
+    
+    public void ActivateChallenge(int challenge)
+    {
+        this.NextLevelButton.interactable = false;
+        //check if we are at the last challenge;
+        if(challenge+1 == GameData.ChallengeCount){
+          this.NextLevelButton.GetComponentInChildren<Text>().text = "Complete Level";
+        }
+        GameProgressBar.instance.ActivateLevel(challenge);
     }
 
 

@@ -1,5 +1,6 @@
 ﻿
-namespace Assets.Scripts.Commands.PlayerCommands
+using Game.Systems;
+namespace Game.Commands.PlayerCommands
 {
     public class MoveForward:Command
     {

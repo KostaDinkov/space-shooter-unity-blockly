@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Assets.Scripts.Commands
+namespace Game.Commands
 {
     
     public abstract class Command
