@@ -9,10 +9,10 @@ namespace Game.Systems
 
     public GameObject Player;
     public GameObject[] Challenges;
-
     public static GameController instance;
     private bool gameOver = false;
     private MessageHub hub;
+    private BrowserManager browserManager;
 
     void Awake()
     {
@@ -26,14 +26,25 @@ namespace Game.Systems
         Destroy(this.gameObject);
         return;
       }
+      this.hub = MessageHub.Instance;
+      this.browserManager = new BrowserManager();
 
+
+    }
+    void OnEnable(){
+      SceneManager.sceneLoaded +=OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode){
+      hub.Publish(new Game.Systems.GameEvents.SceneLoaded());
+      Debug.Log("Publishing event SceneLoaded");
     }
     void Start()
     {
-      this.hub = MessageHub.Instance;
+      
       GameData.ChallengeCount = this.Challenges.Length;
       GameProgressBar.instance.Init(GameData.ChallengeCount);
-      this.hub.Publish(new Game.Events.NewChallangeStarted(GameData.CurrentChallengeIndex));
+      this.hub.Publish(new Game.Systems.GameEvents.NewChallangeStarted(GameData.CurrentChallengeIndex));
       InitLevel();
     }
 
@@ -58,14 +69,14 @@ namespace Game.Systems
     {
       if (GameData.CurrentChallengeIndex + 1 >= this.Challenges.Length)
       {
-        this.hub.Publish(new Game.Events.LevelCompleted());
+        this.hub.Publish(new Game.Systems.GameEvents.LevelCompleted());
         return;
       }
 
       Destroy(GameData.CurrentChallenge);
       GameData.CurrentChallengeIndex += 1;
       InitLevel();
-      this.hub.Publish(new Game.Events.NewChallangeStarted(GameData.CurrentChallengeIndex));
+      this.hub.Publish(new Game.Systems.GameEvents.NewChallangeStarted(GameData.CurrentChallengeIndex));
 
     }
   }

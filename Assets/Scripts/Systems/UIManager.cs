@@ -28,16 +28,16 @@ public class UIManager : MonoBehaviour
         this.NextLevelButton.onClick.AddListener(GameController.instance.NextLevel);
         this.NextLevelButton.interactable = false;
         var hub = MessageHub.Instance;
-        var OCtoken = hub.Subscribe<Game.Events.ChallengeCompleted>(onObjectiveCompleted);
-        var NextLevelStartedToken = hub.Subscribe<Game.Events.NewChallangeStarted>(onNewLevelStarted);
+        var OCtoken = hub.Subscribe<Game.Systems.GameEvents.ChallengeCompleted>(onObjectiveCompleted);
+        var NextLevelStartedToken = hub.Subscribe<Game.Systems.GameEvents.NewChallangeStarted>(onNewLevelStarted);
 
     }
-    private Action<Game.Events.NewChallangeStarted> onNewLevelStarted = nls =>
+    private Action<Game.Systems.GameEvents.NewChallangeStarted> onNewLevelStarted = nls =>
     {
       instance.ActivateChallenge(nls.ChallengeNumber);
     };
     
-    private Action<Game.Events.ChallengeCompleted> onObjectiveCompleted = oc => 
+    private Action<Game.Systems.GameEvents.ChallengeCompleted> onObjectiveCompleted = oc => 
     {
       instance.NextLevelButton.interactable = true;
       

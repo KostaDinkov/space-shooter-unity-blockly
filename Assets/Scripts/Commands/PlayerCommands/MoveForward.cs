@@ -1,6 +1,6 @@
 ﻿
 using Game.Systems;
-namespace Game.Commands.PlayerCommands
+namespace Game.Systems.GameEvents.Commands.PlayerCommands
 {
     public class MoveForward:Command
     {

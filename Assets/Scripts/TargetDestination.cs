@@ -8,7 +8,7 @@ public class TargetDestination : MonoBehaviour
     if (other.tag == "Player")
     {
       var hub = MessageHub.Instance;
-      hub.Publish(new Game.Events.ChallengeCompleted());
+      hub.Publish(new Game.Systems.GameEvents.ChallengeCompleted());
 
     }
   }

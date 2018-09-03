@@ -1,5 +1,6 @@
-namespace Game.Events
+namespace Game.Systems.GameEvents
 {
+  public class SceneLoaded{}
   public class NewChallangeStarted
   {
     public NewChallangeStarted(int challengeNumber)

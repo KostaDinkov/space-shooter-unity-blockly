@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 
-namespace Game.Commands
+namespace Game.Systems.GameEvents.Commands
 {
     public class CommandQueue
     {

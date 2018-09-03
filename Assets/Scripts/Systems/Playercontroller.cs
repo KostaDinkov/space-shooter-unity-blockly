@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections;
-using Game.Commands;
-using Game.Commands.PlayerCommands;
+using Game.Systems.GameEvents.Commands;
+using Game.Systems.GameEvents.Commands.PlayerCommands;
 using UnityEngine;
 
-namespace Game.Systems
-{
+namespace Game.Systems{
 
   [Serializable]
   public class Boundary
