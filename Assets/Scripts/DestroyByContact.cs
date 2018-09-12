@@ -40,7 +40,7 @@ public class DestroyByContact : MonoBehaviour
      if (other.tag == "Player")
     {
       Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
-      GameController.instance.Player.GetComponent<Playercontroller>().Die();
+      GameController.Instance.Player.GetComponent<Playercontroller>().Die();
 
     }
     else

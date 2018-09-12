@@ -1,12 +1,24 @@
 ﻿
+using System;
 using UnityEngine;
+
+
 namespace Game.Systems
 {
-  public static class GameData
-  {
-    public static int CurrentChallengeIndex = 0;
-    public static GameObject CurrentChallenge;
-    public static int ChallengeCount = 0;
-    public static int gridSize = 2;
-  }
+    public class GameData
+    {
+        private static readonly GameData instance = new GameData();
+        
+        public int CurrentChallengeNumber = 0;
+        public GameObject CurrentChallenge;
+        public int ChallengeCount = 0;
+        public int GridSize = 2;
+
+        public static GameData Instance =>instance;
+
+        private GameData() { }
+
+        static GameData() { }
+
+    }
 }
