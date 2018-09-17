@@ -1,22 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Easy.MessageHub;
+﻿using Easy.MessageHub;
 using System.Runtime.InteropServices;
 
 namespace Game.Systems
 {
-  public class BrowserManager 
-  {
-    [DllImport("__Internal")]
-    private static extern void TestBrowser();
-    private MessageHub hub;
-
-    public BrowserManager()
+    public class BrowserManager
     {
-        this.hub = MessageHub.Instance;
-        Debug.Log("calling browser with test function");
-        var token = hub.Subscribe<Game.Systems.GameEvents.SceneLoaded>(sl=> TestBrowser());
+        [DllImport("__Internal")]
+        private static extern void TestBrowser();
+
+        [DllImport("__Internal")]
+        private static extern void ChallangeCompleted();
+
+        [DllImport("__Internal")]
+        private static extern void PlayerDied();
+
+        private MessageHub hub;
+
+
+        public BrowserManager()
+        {
+            this.hub = MessageHub.Instance;
+            
+            hub.Subscribe<Game.Systems.GameEvents.SceneLoaded>(sl => TestBrowser());
+            hub.Subscribe<Game.Systems.GameEvents.ChallengeCompleted>(sl => ChallangeCompleted());
+            hub.Subscribe<Game.Systems.GameEvents.PlayerDied>(sl => PlayerDied());
+        }
     }
-  }
 }

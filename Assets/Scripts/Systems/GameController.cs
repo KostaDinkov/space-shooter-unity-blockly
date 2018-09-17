@@ -58,7 +58,9 @@ namespace Game.Systems
             this.gameData.CurrentChallenge = Instantiate(Challenges[this.gameData.CurrentChallengeNumber]);
         }
 
-
+        /// <summary>
+        /// Resets / reloads the currently active challenge.
+        /// </summary>
         public void RestartChallenge()
         {
             Destroy(this.gameData.CurrentChallenge);
@@ -66,20 +68,26 @@ namespace Game.Systems
             InitLevel();
         }
 
+        /// <summary>
+        /// Destroys the currently active challenge and instantiates the next one.
+        /// </summary>
         public void NextChallenge()
         {
             if (this.gameData.CurrentChallengeNumber + 1 >= this.Challenges.Length)
             {
-                this.hub.Publish(new Game.Systems.GameEvents.LevelCompleted());
+                this.hub.Publish(new GameEvents.LevelCompleted());
                 return;
             }
 
             Destroy(this.gameData.CurrentChallenge);
             this.gameData.CurrentChallengeNumber += 1;
             InitLevel();
-            this.hub.Publish(new Game.Systems.GameEvents.NewChallangeStarted(this.gameData.CurrentChallengeNumber));
+            this.hub.Publish(new GameEvents.NewChallangeStarted(this.gameData.CurrentChallengeNumber));
         }
-
+        /// <summary>
+        /// Destroys the currently active challenge and loads new challenge by provided index
+        /// </summary>
+        /// <param name="challengeNumber">The zero based index of the challenge to be loaded</param>
         public void StartNthChallenge(int challengeNumber)
         {
             if (challengeNumber < 0 || challengeNumber >= this.Challenges.Length)
@@ -91,7 +99,7 @@ namespace Game.Systems
             Destroy(this.gameData.CurrentChallenge);
             this.gameData.CurrentChallengeNumber = challengeNumber;
             InitLevel();
-            this.hub.Publish(new Game.Systems.GameEvents.NewChallangeStarted(challengeNumber));
+            this.hub.Publish(new GameEvents.NewChallangeStarted(challengeNumber));
         }
     }
 }

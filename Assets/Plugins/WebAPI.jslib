@@ -4,27 +4,27 @@ mergeInto(LibraryManager.library, {
     console.log("hello from Unity")
   },
   
-  ChallangeLoaded:function(challangeNumber){
-
+  ChallangeLoaded:function(challengeIndex){
+    window.GameController.challengeLoaded(challengeIndex);
   },
-  ChallangeStarted: function(challangeNumber){
-
+  ChallangeStarted: function(challengeIndex){
+    window.GameController.challengeStarted(challengeIndex);
   },
-  ChallangeRestarted:function(challangeNumber){
-
+  ChallangeRestarted:function(challengeIndex){
+    window.GameController.challengeRestarted(challengeIndex);
   },
-  ChallangeComplete: function(challangeNumber){
-    
+  ChallangeCompleted: function(challengeIndex){
+    window.GameController.challangeCompleted(challengeIndex);
   },
-  LevelStarted: function(LevelNumber){
-
+  LevelStarted: function(levelIndex){
+    window.GameController.levelStarted(levelIndex);
   },
   
-  LevelComplete: function(LevelComplete){
-
+  LevelComplete: function(levelIndex){
+    window.GameController.levelComplete(levelIndex);
   },
   
   PlayerDied: function(){
-
+    window.GameController.playerDied();
   },
 });

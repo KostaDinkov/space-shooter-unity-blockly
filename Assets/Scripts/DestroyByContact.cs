@@ -1,55 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using Easy.MessageHub;
 using UnityEngine;
 using Game.Systems;
 
 public class DestroyByContact : MonoBehaviour
 {
-  public GameObject explosion;
-  public GameObject playerExplosion;
-  private GameController gameController;
-  public int scorePoints = 10;
+    public GameObject explosion;
+    private MessageHub hub;
 
-  void Start()
-  {
-    GameObject gameControllerObj = GameObject.FindWithTag("GameController");
-    if (gameControllerObj != null)
+    void Start()
     {
-      gameController = gameControllerObj.GetComponent<GameController>();
+        this.hub = MessageHub.Instance;
     }
-    else
+    
+    void OnTriggerEnter(Collider other)
     {
-      Debug.Log("Cannot find game object with tag GameController");
+        Debug.Log(other.name);
+        if (explosion != null)
+        {
+            Instantiate(explosion, transform.position, transform.rotation);
+        }
+
+        if (this.CompareTag("Player"))
+        {
+            hub.Publish(new Game.Systems.GameEvents.PlayerDied());
+            this.GetComponent<Playercontroller>().Die();
+            return;
+        }
+        
+        Destroy(this.gameObject);
     }
-  }
-
-  void OnTriggerEnter(Collider other)
-  {
-    if (other.CompareTag("Boundary") || other.CompareTag("Enemy"))
-    {
-      return;
-    }
-
-    if (explosion != null)
-    {
-      Instantiate(explosion, transform.position, transform.rotation);
-    }
-
-
-     if (other.tag == "Player")
-    {
-      Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
-      GameController.Instance.Player.GetComponent<Playercontroller>().Die();
-
-    }
-    else
-    {
-      Destroy(other.gameObject);
-    }
-
-
-
-    Destroy(gameObject);
-  }
 }
