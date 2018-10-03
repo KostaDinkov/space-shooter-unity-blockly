@@ -381,12 +381,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4594732885115206}
-  - component: {fileID: 114191969725858836}
   - component: {fileID: 54877804562316440}
   - component: {fileID: 65656389533563524}
   m_Layer: 0
   m_Name: Target
-  m_TagString: Untagged
+  m_TagString: Target
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1586,8 +1585,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100004, guid: 2857e183f4cd3df4e9096e5b578bd32f, type: 2}
-  playerExplosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
-  scorePoints: 10
 --- !u!114 &114039329428843928
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4852,19 +4849,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100004, guid: 2857e183f4cd3df4e9096e5b578bd32f, type: 2}
-  playerExplosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
-  scorePoints: 10
---- !u!114 &114191969725858836
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1856612456232322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 722be744de2f0244d9fe3f0214b32a07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114215146189546930
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4877,8 +4861,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100004, guid: 2857e183f4cd3df4e9096e5b578bd32f, type: 2}
-  playerExplosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
-  scorePoints: 10
 --- !u!114 &114277448267561130
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4939,8 +4921,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100004, guid: 2857e183f4cd3df4e9096e5b578bd32f, type: 2}
-  playerExplosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
-  scorePoints: 10
 --- !u!114 &114512219932961496
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4953,8 +4933,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100004, guid: 2857e183f4cd3df4e9096e5b578bd32f, type: 2}
-  playerExplosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
-  scorePoints: 10
 --- !u!114 &114574308248265004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4967,8 +4945,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100004, guid: 2857e183f4cd3df4e9096e5b578bd32f, type: 2}
-  playerExplosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
-  scorePoints: 10
 --- !u!114 &114582320167214034
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4981,8 +4957,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100012, guid: 384371afbb4354cc9a3fc68eab303756, type: 2}
-  playerExplosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
-  scorePoints: 0
 --- !u!114 &114599606051565310
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4995,8 +4969,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100012, guid: 384371afbb4354cc9a3fc68eab303756, type: 2}
-  playerExplosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
-  scorePoints: 0
 --- !u!114 &114632622356271864
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5033,8 +5005,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100004, guid: 2857e183f4cd3df4e9096e5b578bd32f, type: 2}
-  playerExplosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
-  scorePoints: 10
 --- !u!114 &114765871051372932
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5047,8 +5017,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100004, guid: 2857e183f4cd3df4e9096e5b578bd32f, type: 2}
-  playerExplosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
-  scorePoints: 10
 --- !u!114 &114855706002262558
 MonoBehaviour:
   m_ObjectHideFlags: 1

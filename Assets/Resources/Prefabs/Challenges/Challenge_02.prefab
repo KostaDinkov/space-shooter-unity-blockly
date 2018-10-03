@@ -107,11 +107,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4336956034901944}
   - component: {fileID: 135680191530788480}
-  - component: {fileID: 114999625456805066}
   - component: {fileID: 54858126354397162}
   m_Layer: 0
   m_Name: Target
-  m_TagString: Untagged
+  m_TagString: Target
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -708,8 +707,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100004, guid: 2857e183f4cd3df4e9096e5b578bd32f, type: 2}
-  playerExplosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
-  scorePoints: 10
 --- !u!114 &114250734089937528
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -734,8 +731,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100004, guid: 2857e183f4cd3df4e9096e5b578bd32f, type: 2}
-  playerExplosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
-  scorePoints: 10
 --- !u!114 &114512219932961496
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -748,8 +743,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100004, guid: 2857e183f4cd3df4e9096e5b578bd32f, type: 2}
-  playerExplosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
-  scorePoints: 10
 --- !u!114 &114819692886197148
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -762,8 +755,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100004, guid: 2857e183f4cd3df4e9096e5b578bd32f, type: 2}
-  playerExplosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
-  scorePoints: 10
 --- !u!114 &114961348048160012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -776,17 +767,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tumble: 1
---- !u!114 &114999625456805066
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1747247099360642}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 722be744de2f0244d9fe3f0214b32a07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!135 &135680191530788480
 SphereCollider:
   m_ObjectHideFlags: 1

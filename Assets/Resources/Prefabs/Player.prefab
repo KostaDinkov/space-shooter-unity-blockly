@@ -38,9 +38,10 @@ GameObject:
   - component: {fileID: 23951535054992558}
   - component: {fileID: 54681057257792494}
   - component: {fileID: 64867393213271596}
-  - component: {fileID: 114496654267180988}
   - component: {fileID: 82580713562259348}
+  - component: {fileID: 114954016083738590}
   - component: {fileID: 114686974395780760}
+  - component: {fileID: 114158025100505344}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -333,7 +334,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &114496654267180988
+--- !u!114 &114158025100505344
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -341,7 +342,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1182544219588242}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc4c5b090c4c8174c9e719f2282f5706, type: 3}
+  m_Script: {fileID: 11500000, guid: 6ff05d8d7add309458fd1c458e2ff0a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
@@ -365,6 +366,18 @@ MonoBehaviour:
   shot: {fileID: 1668585415462516, guid: 10f4fe664e6cf324c8312bd697e71834, type: 2}
   shotSpawn: {fileID: 4992302004352400}
   speed: 10
+--- !u!114 &114954016083738590
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1182544219588242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ff05d8d7add309458fd1c458e2ff0a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosion: {fileID: 0}
 --- !u!198 &198182720134743470
 ParticleSystem:
   m_ObjectHideFlags: 1
