@@ -19,8 +19,8 @@ public class GameControllerTests
     [OneTimeSetUp]
     public void Init()
     {
-        var sharedObjects = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/SharedObjects"));
-        this.gameControllerObj = sharedObjects.transform.Find("Game Controller").gameObject;
+
+        this.gameControllerObj = GameObject.Find("GameController");
         this.gameController = gameControllerObj.GetComponent<GameController>();
         this.gameData = GameData.Instance;
 

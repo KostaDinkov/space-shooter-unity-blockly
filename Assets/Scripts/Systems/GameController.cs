@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using Easy.MessageHub;
+using Game.GameEvents;
+using Game.Objectives;
 
 namespace Game.Systems
 {
@@ -13,6 +15,8 @@ namespace Game.Systems
         private MessageHub hub;
         private BrowserManager browserManager;
         public GameData gameData;
+        private ObjectivesManager objectivesManager;
+        private GameEventManager gameEventManager;
 
         void Awake()
         {
@@ -26,10 +30,15 @@ namespace Game.Systems
                 Destroy(this.gameObject);
                 return;
             }
-
+            this.gameData = GameData.Instance;
+            this.gameEventManager = GameEventManager.Instance;
+            
             this.hub = MessageHub.Instance;
             this.browserManager = new BrowserManager();
-            this.gameData =  GameData.Instance;
+            
+            
+            
+            
         }
 
         void OnEnable()
@@ -40,14 +49,15 @@ namespace Game.Systems
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             hub.Publish(new Game.Systems.GameEvents.SceneLoaded());
-            Debug.Log("Publishing event SceneLoaded");
+            ;
         }
 
         void Start()
         {
             this.gameData.ChallengeCount = this.Challenges.Length;
-            this.hub.Publish(new Game.Systems.GameEvents.NewChallangeStarted(this.gameData.CurrentChallengeNumber));
+            
             InitLevel();
+            this.objectivesManager = new ObjectivesManager();
         }
 
 
@@ -84,6 +94,7 @@ namespace Game.Systems
             InitLevel();
             this.hub.Publish(new GameEvents.NewChallangeStarted(this.gameData.CurrentChallengeNumber));
         }
+
         /// <summary>
         /// Destroys the currently active challenge and loads new challenge by provided index
         /// </summary>
