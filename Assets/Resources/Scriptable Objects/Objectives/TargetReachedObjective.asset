@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e0a3d44909fefd49b47775b5d2ff207, type: 3}
   m_Name: TargetReachedObjective
   m_EditorClassIdentifier: 
-  Description: 
-  CurrentValue: 0
-  TargetValue: 0
-  FireEvent: {fileID: 0}
-  ListenEvent: {fileID: 0}
+  Description: Reach a target destination
+  DefaultValue: 0
+  TargetValue: 1
+  FireEvent: {fileID: 11400000, guid: 51a119fcbce9c9b4ba386d05e5ec544d, type: 2}
+  ListenEvent: {fileID: 11400000, guid: 21e003136d10eb94bb1d01e7c145b908, type: 2}

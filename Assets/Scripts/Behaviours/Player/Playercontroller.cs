@@ -67,7 +67,7 @@ namespace Game.Systems
         {
             if (Input.GetButton("Fire1"))
             {
-                //FireWeapon();
+                FireWeapon();
             }
 
             if (Input.GetKeyDown(KeyCode.I))

@@ -1,13 +1,14 @@
 ﻿
-using System.Collections.Generic;
+using System;
 
-using UnityEngine;
+using Game.GameEvents;
+
 
 namespace Assets.Scripts.GameEvents
 {
-    [CreateAssetMenu]
-    public class GameEvent:ScriptableObject
+   [Serializable]
+    public class GameEvent
     {
-        
+        public GameEventType EventType;
     }
 }

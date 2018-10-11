@@ -1,15 +1,17 @@
-﻿using Easy.MessageHub;
+﻿using Assets.Scripts.GameEvents;
+using Game.GameEvents;
 using UnityEngine;
 using Game.Systems;
 
 public class PlayerCollisions : MonoBehaviour
 {
     public GameObject explosion;
-    private MessageHub hub;
+    private GameEventManager eventManager;
+
 
     void Start()
     {
-        this.hub = MessageHub.Instance;
+        this.eventManager = GameEventManager.Instance;
     }
 
     void OnTriggerEnter(Collider other)
@@ -27,7 +29,8 @@ public class PlayerCollisions : MonoBehaviour
             Instantiate(explosion, transform.position, transform.rotation);
         }
 
-        hub.Publish(new Game.Systems.GameEvents.PlayerDied());
+        //TODO publish player died event 
+        this.eventManager.Publish(new GameEvent {EventType = GameEventType.PlayerDied});
         this.GetComponent<Playercontroller>().Die();
     }
 }

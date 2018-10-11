@@ -11,5 +11,7 @@ namespace Game.Objectives
     {
         
         public List<Objective> ObjectivesList;
+        
+        
     }
 }

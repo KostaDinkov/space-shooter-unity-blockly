@@ -1,14 +1,11 @@
-﻿
-using Assets.Scripts.GameEvents;
-using Easy.MessageHub;
+﻿using Assets.Scripts.GameEvents;
 using Game.GameEvents;
-using Game.Systems.GameEvents;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class DestinationReachedBehaviour : MonoBehaviour
 {
-    public GameEvent Event;
+    
     private GameEventManager eventManager;
     //private MessageHub hub;
     // Start is called before the first frame update
@@ -23,7 +20,7 @@ public class DestinationReachedBehaviour : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             //hub.Publish(new DestinationReached());
-            eventManager.Publish(this.Event);
+            this.eventManager.Publish(new GameEvent {EventType=GameEventType.TargetReached});
             
         }
     }

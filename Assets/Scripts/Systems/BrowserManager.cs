@@ -1,10 +1,12 @@
-﻿using Easy.MessageHub;
-using System.Runtime.InteropServices;
+﻿using Assets.Scripts.GameEvents;
+using Game.GameEvents;
+using UnityEngine;
 
 namespace Game.Systems
 {
     public class BrowserManager
     {
+#if UNITY_WEBGL
         [DllImport("__Internal")]
         private static extern void TestBrowser();
 
@@ -13,17 +15,25 @@ namespace Game.Systems
 
         [DllImport("__Internal")]
         private static extern void PlayerDied();
+#else
+        private void ChallangeCompleted(){
+            Debug.Log("Event Sent To Browser :Challange Completed");    
+        }
+#endif
 
-        private MessageHub hub;
 
+        private GameEventManager eventManager;
+        private GameEvent challangeCompletedEvent;
+        private GameEvent playerDiedEvent;
 
         public BrowserManager()
         {
-            this.hub = MessageHub.Instance;
+            this.eventManager = GameEventManager.Instance;
             
-            hub.Subscribe<Game.Systems.GameEvents.SceneLoaded>(sl => TestBrowser());
-            hub.Subscribe<Game.Systems.GameEvents.ChallengeCompleted>(sl => ChallangeCompleted());
-            hub.Subscribe<Game.Systems.GameEvents.PlayerDied>(sl => PlayerDied());
+
+            eventManager.Subscribe(new GameEvent(){EventType = GameEventType.ChallangeCompleted},()=>ChallangeCompleted());
+            //eventManager.Subscribe(sl => PlayerDied());
+
         }
     }
 }

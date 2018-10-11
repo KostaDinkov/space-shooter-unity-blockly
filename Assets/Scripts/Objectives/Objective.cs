@@ -1,48 +1,45 @@
-﻿using System;
-using Assets.Scripts.GameEvents;
-using Easy.MessageHub;
+﻿using Assets.Scripts.GameEvents;
 using Game.GameEvents;
-using Game.Systems.GameEvents;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Game.Objectives
 {
     /// <summary>
-    /// Base Objective class.
+    ///     Base Objective class.
     /// </summary>
-    /// 
     [CreateAssetMenu]
-    class Objective : ScriptableObject
+    internal class Objective : ScriptableObject
     {
+        private int currentValue;
+        public int DefaultValue;
         public string Description;
-        public int CurrentValue;
-        public int TargetValue;
-        public GameEvent FireEvent;
-        public GameEvent ListenEvent;
         private GameEventManager eventManager;
+
+        [Tooltip("The Event that will triger this objective to update it's state.")]
+        public GameEvent ListenEvent;
+
+        public int TargetValue;
 
 
         public void Init()
         {
+            this.currentValue = this.DefaultValue;
             this.eventManager = GameEventManager.Instance;
-            this.eventManager.Subscribe(ListenEvent, ObjectiveUpdated);
+            this.eventManager.Subscribe(this.ListenEvent, this.ObjectiveUpdated);
         }
 
         private void ObjectiveUpdated()
         {
-            this.CurrentValue += 1;
+            this.currentValue += 1;
             if (this.IsComplete())
             {
-                this.eventManager.Publish(FireEvent);
-
-                return;
+                this.eventManager.Publish(new GameEvent {EventType = GameEventType.ObjectiveCompleted});
             }
         }
 
         public bool IsComplete()
         {
-            return this.CurrentValue >= this.TargetValue;
+            return this.currentValue >= this.TargetValue;
         }
     }
 }

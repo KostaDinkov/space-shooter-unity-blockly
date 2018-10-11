@@ -1,24 +1,23 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
-using Easy.MessageHub;
-using Game.GameEvents;
+﻿using Game.GameEvents;
 using Game.Objectives;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Game.Systems
 {
     public class GameController : MonoBehaviour
     {
-        public GameObject Player;
-        public GameObject[] Challenges;
         public static GameController Instance;
-        private bool gameOver = false;
-        private MessageHub hub;
-        private BrowserManager browserManager;
-        public GameData gameData;
-        private ObjectivesManager objectivesManager;
-        private GameEventManager gameEventManager;
 
-        void Awake()
+        private BrowserManager browserManager;
+        public GameObject[] Challenges;
+        public GameData gameData;
+        private GameEventManager gameEventManager;
+        private bool gameOver = false;
+        private ObjectivesManager objectivesManager;
+        public GameObject Player;
+
+        private void Awake()
         {
             //Make sure there is only one instance of the GameController class (Singleton)
             if (Instance == null)
@@ -27,90 +26,88 @@ namespace Game.Systems
             }
             else if (Instance != this)
             {
-                Destroy(this.gameObject);
+                Destroy(gameObject);
                 return;
             }
-            this.gameData = GameData.Instance;
-            this.gameEventManager = GameEventManager.Instance;
-            
-            this.hub = MessageHub.Instance;
-            this.browserManager = new BrowserManager();
-            
-            
-            
-            
+
+            gameData = GameData.Instance;
+            gameEventManager = GameEventManager.Instance;
+            browserManager = new BrowserManager();
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
-        void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            hub.Publish(new Game.Systems.GameEvents.SceneLoaded());
-            ;
+            //TODO: publish event
         }
 
-        void Start()
+        private void Start()
         {
-            this.gameData.ChallengeCount = this.Challenges.Length;
-            
+            gameData.ChallengeCount = Challenges.Length;
+
             InitLevel();
-            this.objectivesManager = new ObjectivesManager();
+            objectivesManager = new ObjectivesManager();
         }
 
 
-        void InitLevel()
+        private void InitLevel()
         {
-            this.Player.transform.position = new Vector3(0, 0, 0);
-            this.Player.transform.rotation = Quaternion.identity;
-            this.gameData.CurrentChallenge = Instantiate(Challenges[this.gameData.CurrentChallengeNumber]);
+            Player.transform.position = new Vector3(0, 0, 0);
+            Player.transform.rotation = Quaternion.identity;
+            gameData.CurrentChallenge = Instantiate(Challenges[gameData.CurrentChallengeNumber]);
         }
 
         /// <summary>
-        /// Resets / reloads the currently active challenge.
+        ///     Resets / reloads the currently active challenge.
         /// </summary>
         public void RestartChallenge()
         {
-            Destroy(this.gameData.CurrentChallenge);
+            Destroy(gameData.CurrentChallenge);
             Player.SetActive(true);
             InitLevel();
         }
 
         /// <summary>
-        /// Destroys the currently active challenge and instantiates the next one.
+        ///     Destroys the currently active challenge and instantiates the next one.
         /// </summary>
         public void NextChallenge()
         {
-            if (this.gameData.CurrentChallengeNumber + 1 >= this.Challenges.Length)
+            if (gameData.CurrentChallengeNumber + 1 >= Challenges.Length)
             {
-                this.hub.Publish(new GameEvents.LevelCompleted());
+                //TODO publish event
+                //this.gameEventManager.Publish(LevelCompletedEvent);
                 return;
             }
 
-            Destroy(this.gameData.CurrentChallenge);
-            this.gameData.CurrentChallengeNumber += 1;
+            Destroy(gameData.CurrentChallenge);
+            gameData.CurrentChallengeNumber += 1;
             InitLevel();
-            this.hub.Publish(new GameEvents.NewChallangeStarted(this.gameData.CurrentChallengeNumber));
+            //TODO publish event
+            //this.gameEventManager.Publish(ChallangeStartedEvent);
         }
 
         /// <summary>
-        /// Destroys the currently active challenge and loads new challenge by provided index
+        ///     Destroys the currently active challenge and loads new challenge by provided index
         /// </summary>
         /// <param name="challengeNumber">The zero based index of the challenge to be loaded</param>
         public void StartNthChallenge(int challengeNumber)
         {
-            if (challengeNumber < 0 || challengeNumber >= this.Challenges.Length)
+            if (challengeNumber < 0 || challengeNumber >= Challenges.Length)
             {
                 Debug.Log($"Challange number out of range: {challengeNumber}");
                 return;
             }
 
-            Destroy(this.gameData.CurrentChallenge);
-            this.gameData.CurrentChallengeNumber = challengeNumber;
+            Destroy(gameData.CurrentChallenge);
+            gameData.CurrentChallengeNumber = challengeNumber;
             InitLevel();
-            this.hub.Publish(new GameEvents.NewChallangeStarted(challengeNumber));
+            //TODO publish event
+            //this.gameEventManager.Publish(ChallangeStartedEvent);
+            
         }
     }
 }

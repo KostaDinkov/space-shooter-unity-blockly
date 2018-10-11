@@ -1,30 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Assets.Scripts.GameEvents;
 using UnityEngine;
-using UnityEngine.XR.WSA.Persistence;
+using Object = UnityEngine.Object;
 
 namespace Game.GameEvents
 {
-    class GameEventManager
+    internal class GameEventManager
     {
-        private Dictionary<GameEvent, Dictionary<int,Action>> events;
         private static GameEventManager instance;
+        private readonly Dictionary<GameEventType, Dictionary<int, Action>> events;
 
         private GameEventManager()
         {
-            if (instance == null)
+            if (instance == null) instance = this;
+
+            this.events = new Dictionary<GameEventType, Dictionary<int, Action>>();
+            foreach (var gameEventType in (GameEventType[]) Enum.GetValues(typeof(GameEventType)))
             {
-                instance = this;
-            }
-            var allEvents = Resources.LoadAll<GameEvent>("Scriptable Objects/GameEvents");
-            this.events = new Dictionary<GameEvent, Dictionary<int, Action>>();           
-            foreach (var gameEvent in allEvents)
-            {
-                events.Add(gameEvent,new Dictionary<int,Action>());
+                this.events.Add(gameEventType, new Dictionary<int, Action>());
             }
         }
 
@@ -32,10 +26,7 @@ namespace Game.GameEvents
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new GameEventManager();
-                }
+                if (instance == null) instance = new GameEventManager();
 
                 return instance;
             }
@@ -43,48 +34,47 @@ namespace Game.GameEvents
 
         public void Publish(GameEvent gameEvent)
         {
-            Debug.Log($"Event fired {gameEvent.name}");
-            foreach (var action in events[gameEvent].Values)
+            Debug.Log($"Event fired {gameEvent.EventType.ToString()}");
+            foreach (var action in this.events[gameEvent.EventType].Values)
             {
                 action.Invoke();
             }
+
+            
         }
 
         public int Subscribe(GameEvent gameEvent, Action action)
         {
             var token = action.GetHashCode();
-            events[gameEvent].Add(token,action);
-            
-            return token;
-        }
-        public int Subscribe<T>(Action action)
-        {
-            var token = action.GetHashCode();
-            foreach (var gameEvent in events.Keys)
-            {
-                if (gameEvent.GetType() == typeof(T))
-                {
-                    events[gameEvent].Add(token, action);
-                }
-            }
+            this.events[gameEvent.EventType].Add(token, action);
+           
             return token;
         }
 
-        public void Unsubscribe(GameEvent gameEvent , int token)
+        public int Subscribe<T>(Action action)
         {
-            events[gameEvent].Remove(token);
+            var token = action.GetHashCode();
+            foreach (var gameEvent in this.events.Keys)
+                if (gameEvent.GetType() == typeof(T))
+                    this.events[gameEvent].Add(token, action);
+            return token;
+        }
+
+        public void Unsubscribe(GameEvent gameEvent, int token)
+        {
+            this.events[gameEvent.EventType].Remove(token);
+            
         }
 
         public void Unsubscribe<T>(int token)
         {
-            foreach (var gameEvent in events.Keys)
+            foreach (var gameEvent in this.events.Keys)
             {
                 if (gameEvent.GetType() == typeof(T))
                 {
-                    events[gameEvent].Remove(token);
+                    this.events[gameEvent].Remove(token);
                 }
             }
-            
         }
     }
 }

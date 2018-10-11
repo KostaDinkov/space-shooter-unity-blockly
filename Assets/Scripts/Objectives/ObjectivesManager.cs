@@ -1,40 +1,36 @@
 ﻿using Assets.Scripts.GameEvents;
 using Game.GameEvents;
 using Game.Systems;
-using UnityEngine;
-
 
 namespace Game.Objectives
 {
     /// <summary>
-    /// Keeps track of the completeness of a challenge based on the completed objectives;
+    ///     Keeps track of the completeness of a challenge based on the completed objectives;
     /// </summary>
     public class ObjectivesManager
     {
-        private readonly GameEventManager eventManager;
-        private readonly Objectives objectives;
-        private readonly GameEvent objectiveCompletedEvent;
         private readonly GameEvent challangeCompletedEvent;
+        private readonly GameEventManager eventManager;
+        private readonly GameEvent objectiveCompletedEvent;
+        private readonly Objectives objectives;
 
         public ObjectivesManager()
         {
-            objectives = GameData.Instance.CurrentChallenge.GetComponent<Objectives>();
-            foreach (var objective in objectives.ObjectivesList)
+            this.objectives = GameData.Instance.CurrentChallenge.GetComponent<Objectives>();
+            foreach (var objective in this.objectives.ObjectivesList)
             {
                 objective.Init();
             }
 
-            this.objectiveCompletedEvent =
-                (GameEvent) Resources.Load("Scriptable Objects/GameEvents/ObjectiveCompleted");
-            this.challangeCompletedEvent =
-                (GameEvent) Resources.Load("Scriptable Objects/GameEvents/ChallangeCompleted");
+
             this.eventManager = GameEventManager.Instance;
-            this.eventManager.Subscribe(objectiveCompletedEvent, IsChallangeCompleted);
+            this.eventManager.Subscribe(
+                new GameEvent {EventType = GameEventType.ObjectiveCompleted}, this.IsChallangeCompleted);
         }
 
-        void IsChallangeCompleted()
+        private void IsChallangeCompleted()
         {
-            foreach (var objective in objectives.ObjectivesList)
+            foreach (var objective in this.objectives.ObjectivesList)
             {
                 if (!objective.IsComplete())
                 {
@@ -42,7 +38,7 @@ namespace Game.Objectives
                 }
             }
 
-            eventManager.Publish(challangeCompletedEvent);
+            this.eventManager.Publish(new GameEvent {EventType = GameEventType.ChallangeCompleted});
         }
     }
 }
