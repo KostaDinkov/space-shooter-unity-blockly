@@ -5,11 +5,11 @@ using UnityEngine;
 public class Mover : MonoBehaviour
 {
 
-    public float speed;
+    public float Speed;
 	// Use this for initialization
 	void Start ()
 	{
-	    GetComponent<Rigidbody>().velocity = transform.forward * speed * Time.deltaTime;
+	    this.GetComponent<Rigidbody>().velocity = this.transform.forward * this.Speed * Time.deltaTime;
 	}
 	
 	

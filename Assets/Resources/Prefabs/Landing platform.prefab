@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4272209122616086}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sci-Fi-Floor-1-OBJ
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 4563215019839498}
   - component: {fileID: 33335292746004888}
   - component: {fileID: 23062872598498568}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,9 +120,9 @@ GameObject:
   - component: {fileID: 54092377084078892}
   - component: {fileID: 4461119516272419491}
   - component: {fileID: 7369593322262107076}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Landing platform
-  m_TagString: Target
+  m_TagString: Landing
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -170,7 +170,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 457f45b153ba93f41a465c230c448149, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 21e003136d10eb94bb1d01e7c145b908, type: 2}
 --- !u!65 &7369593322262107076
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -16,20 +16,17 @@ public class PlayerCollisions : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        
-
-        if (other.CompareTag("Target"))
+        Debug.Log($"Player colission: {other.name}");
+        if (other.CompareTag("Boundary") || other.CompareTag("Landing"))
         {
-            
             return;
         }
-
         if (explosion != null)
         {
             Instantiate(explosion, transform.position, transform.rotation);
         }
 
-        //TODO publish player died event 
+
         this.eventManager.Publish(new GameEvent {EventType = GameEventType.PlayerDied});
         this.GetComponent<Playercontroller>().Die();
     }

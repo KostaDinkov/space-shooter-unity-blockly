@@ -15,11 +15,24 @@ public class ShowTextOnChallengeComplete : MonoBehaviour
         this.textMesh = GetComponent<Text>();
         this.eventManager = GameEventManager.Instance;
         textMesh.enabled = false;
-        eventManager.Subscribe(new GameEvent{EventType = GameEventType.ChallangeCompleted} , this.ShowText);
+        eventManager.Subscribe(new GameEvent{EventType = GameEventType.ChallangeCompleted} , this.ShowChallangeCompletedText);
+        eventManager.Subscribe(new GameEvent { EventType = GameEventType.PlayerDied }, this.ShowPlayerDiedText);
+        eventManager.Subscribe(new GameEvent { EventType = GameEventType.ChallangeStarted }, this.HideText);
     }
 
-    public void ShowText()
+    public void ShowChallangeCompletedText()
     {
+        textMesh.text = "ChallangeCompleted";
         textMesh.enabled = true;
+    }
+    public void ShowPlayerDiedText()
+    {
+        textMesh.text = "Player Died.\nRestart Challange.";
+        textMesh.enabled = true;
+    }
+    public void HideText()
+    {
+        textMesh.text = "";
+        textMesh.enabled = false;
     }
 }

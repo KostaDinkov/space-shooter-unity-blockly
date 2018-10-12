@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using Assets.Scripts.GameEvents;
+using Game.GameEvents;
 using Game.Systems.GameEvents.Commands;
 using Game.Systems.GameEvents.Commands.PlayerCommands;
 using UnityEngine;
@@ -27,22 +29,29 @@ namespace Game.Systems
         public GameObject shot;
         public Transform shotSpawn;
         public float speed;
+        private bool isDisabled;
 
         public MoveForward MoveForwardCommand;
         public RotateLeft RotateLeftCommand;
         public RotateRight RotateRightCommand;
         private float unitSize = 1;
         private GameData gameData;
+        private GameEventManager eventManager;
 
         public void Awake()
         {
             this.gameData = GameData.Instance;
+            
+            isDisabled = false;
         }
-        public Playercontroller()
+        public void Start()
         {
             this.MoveForwardCommand = new MoveForward(this);
             this.RotateLeftCommand = new RotateLeft(this);
             this.RotateRightCommand = new RotateRight(this);
+            eventManager = GameEventManager.Instance;
+            eventManager.Subscribe(new GameEvent() {EventType = GameEventType.ChallangeCompleted}, OnChallangeCompleted);
+            eventManager.Subscribe(new GameEvent() { EventType = GameEventType.ChallangeStarted }, () => isDisabled = false);
         }
 
         private void Update()
@@ -63,8 +72,19 @@ namespace Game.Systems
             ReadInput();
         }
 
+        private void OnChallangeCompleted()
+        {
+            isDisabled = true;
+            commandQueue.Clear();
+        }
+
         private void ReadInput()
         {
+            if (isDisabled)
+            {
+                return;
+
+            }
             if (Input.GetButton("Fire1"))
             {
                 FireWeapon();

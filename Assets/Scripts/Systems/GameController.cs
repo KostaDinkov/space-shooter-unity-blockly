@@ -1,4 +1,6 @@
-﻿using Game.GameEvents;
+﻿#define isDebug
+using Assets.Scripts.GameEvents;
+using Game.GameEvents;
 using Game.Objectives;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -66,9 +68,13 @@ namespace Game.Systems
         /// </summary>
         public void RestartChallenge()
         {
+#if isDebug
+            Debug.Log("Restart Challange Called");
+#endif
             Destroy(gameData.CurrentChallenge);
             Player.SetActive(true);
             InitLevel();
+            this.gameEventManager.Publish(new GameEvent() { EventType = GameEventType.ChallangeStarted });
         }
 
         /// <summary>
@@ -86,8 +92,8 @@ namespace Game.Systems
             Destroy(gameData.CurrentChallenge);
             gameData.CurrentChallengeNumber += 1;
             InitLevel();
-            //TODO publish event
-            //this.gameEventManager.Publish(ChallangeStartedEvent);
+            
+            this.gameEventManager.Publish(new GameEvent() { EventType = GameEventType.ChallangeStarted });
         }
 
         /// <summary>
@@ -105,8 +111,8 @@ namespace Game.Systems
             Destroy(gameData.CurrentChallenge);
             gameData.CurrentChallengeNumber = challengeNumber;
             InitLevel();
-            //TODO publish event
-            //this.gameEventManager.Publish(ChallangeStartedEvent);
+            
+            this.gameEventManager.Publish(new GameEvent(){EventType = GameEventType.ChallangeStarted});
             
         }
     }
