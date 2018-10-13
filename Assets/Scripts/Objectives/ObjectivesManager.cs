@@ -1,6 +1,9 @@
-﻿using Assets.Scripts.GameEvents;
+﻿using System.Collections.Generic;
+using Assets.Scripts.GameEvents;
 using Game.GameEvents;
 using Game.Systems;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game.Objectives
 {
@@ -13,24 +16,76 @@ namespace Game.Objectives
         private readonly GameEventManager eventManager;
         private readonly GameEvent objectiveCompletedEvent;
         private readonly Objectives objectives;
+        private GameObject objectivesListView;
+        private Dictionary<Objective, UnityEngine.UI.Text> objectivesTexts;
 
         public ObjectivesManager()
         {
-            this.objectives = GameData.Instance.CurrentChallenge.GetComponent<Objectives>();
-            foreach (var objective in this.objectives.ObjectivesList)
+            objectivesTexts = new Dictionary<Objective, UnityEngine.UI.Text>();
+            objectives = GameData.Instance.CurrentChallenge.GetComponent<Objectives>();
+            objectivesListView = GameObject.Find("ObjectivesListView");
+            InitChallanges(0);
+
+            eventManager = GameEventManager.Instance;
+            eventManager.Subscribe(GameEventType.ObjectiveCompleted, IsChallangeCompleted);
+            eventManager.Subscribe(GameEventType.ChallangeStarted, InitChallanges);
+            eventManager.Subscribe(GameEventType.ObjectiveUpdated, UpdateUI);
+        }
+
+        private void InitUI()
+        {
+            //clear children in any
+            objectivesTexts.Clear();
+            foreach (Transform transform in objectivesListView.transform)
+            {
+                GameObject.Destroy(transform.gameObject);
+            }
+            foreach (var objective in objectives.ObjectivesList)
+            {
+            
+                GameObject textContainer = new GameObject(objective.Description);
+                var rectTransform = textContainer.AddComponent<RectTransform>();
+                rectTransform.SetParent(objectivesListView.GetComponent<RectTransform>());
+                rectTransform.localPosition = Vector3.zero;
+                rectTransform.localRotation = Quaternion.Euler(0,0,0);
+                rectTransform.localScale = new Vector3(1,1,1);
+                Text textComponent = textContainer.AddComponent<Text>();
+                textComponent.font = Font.CreateDynamicFontFromOSFont("Arial",14);
+                textComponent.color = new Color32(35,190,255,255);
+                textComponent.text = $"{objective.Description} : {objective.CurrentValue} of {objective.TargetValue}";
+                objectivesTexts.Add(objective, textComponent);
+            }
+        }
+
+        private void UpdateUI(int  value)
+        {
+            foreach (var objective in objectivesTexts.Keys)
+            {
+                if (objective.IsComplete())
+                {
+                    objectivesTexts[objective].color = new Color32(168,224,65,255);
+                }
+                else
+                {
+                    objectivesTexts[objective].color = new Color32(35, 190, 255, 255);
+                }
+                objectivesTexts[objective].text = $"{objective.Description} : {objective.CurrentValue} of {objective.TargetValue}";
+                
+            }
+        }
+
+        private void InitChallanges(int value)
+        {
+            foreach (var objective in objectives.ObjectivesList)
             {
                 objective.Init();
             }
-
-
-            this.eventManager = GameEventManager.Instance;
-            this.eventManager.Subscribe(
-                new GameEvent {EventType = GameEventType.ObjectiveCompleted}, this.IsChallangeCompleted);
+            InitUI();
         }
 
-        private void IsChallangeCompleted()
+        private void IsChallangeCompleted(int value)
         {
-            foreach (var objective in this.objectives.ObjectivesList)
+            foreach (var objective in objectives.ObjectivesList)
             {
                 if (!objective.IsComplete())
                 {
@@ -38,7 +93,7 @@ namespace Game.Objectives
                 }
             }
 
-            this.eventManager.Publish(new GameEvent {EventType = GameEventType.ChallangeCompleted});
+            eventManager.Publish(new GameEvent {EventType = GameEventType.ChallangeCompleted});
         }
     }
 }

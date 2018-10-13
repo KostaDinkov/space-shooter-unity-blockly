@@ -10,36 +10,38 @@ namespace Game.Objectives
     [CreateAssetMenu]
     internal class Objective : ScriptableObject
     {
-        private int currentValue;
         public int DefaultValue;
         public string Description;
         private GameEventManager eventManager;
 
         [Tooltip("The Event that will triger this objective to update it's state.")]
-        public GameEvent ListenEvent;
+        public GameEventType ListenEvent;
 
         public int TargetValue;
+        public int CurrentValue { get; private set; }
 
 
         public void Init()
         {
-            this.currentValue = this.DefaultValue;
-            this.eventManager = GameEventManager.Instance;
-            this.eventManager.Subscribe(this.ListenEvent, this.ObjectiveUpdated);
+            CurrentValue = DefaultValue;
+            eventManager = GameEventManager.Instance;
+            eventManager.Subscribe(ListenEvent, ObjectiveUpdated);
         }
 
-        private void ObjectiveUpdated()
+        private void ObjectiveUpdated(int value)
         {
-            this.currentValue += 1;
-            if (this.IsComplete())
+            CurrentValue += value;
+            if (IsComplete())
             {
-                this.eventManager.Publish(new GameEvent {EventType = GameEventType.ObjectiveCompleted});
+                eventManager.Publish(new GameEvent {EventType = GameEventType.ObjectiveCompleted});
             }
+
+            eventManager.Publish(new GameEvent {EventType = GameEventType.ObjectiveUpdated});
         }
 
         public bool IsComplete()
         {
-            return this.currentValue >= this.TargetValue;
+            return CurrentValue >= TargetValue;
         }
     }
 }

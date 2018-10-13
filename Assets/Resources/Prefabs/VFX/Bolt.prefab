@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 54189268452286964}
   - component: {fileID: 136753864473664294}
   - component: {fileID: 114431699450979566}
-  - component: {fileID: 3561437557524938749}
+  - component: {fileID: 8502620188249322555}
   m_Layer: 0
   m_Name: Bolt
   m_TagString: Untagged
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 1000
---- !u!114 &3561437557524938749
+--- !u!114 &8502620188249322555
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -164,7 +164,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1668585415462516}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4f7962400c950748b3efe1cc49d9216, type: 3}
+  m_Script: {fileID: 11500000, guid: 7bdbee80232d80c45b04082f6063180f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 0}

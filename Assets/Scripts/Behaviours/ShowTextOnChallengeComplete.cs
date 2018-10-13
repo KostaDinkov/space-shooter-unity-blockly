@@ -1,36 +1,36 @@
-﻿using Assets.Scripts.GameEvents;
-using Game.GameEvents;
+﻿using Game.GameEvents;
 using UnityEngine;
 using UnityEngine.UI;
-
 
 public class ShowTextOnChallengeComplete : MonoBehaviour
 {
     private GameEventManager eventManager;
     private Text textMesh;
-    
 
-    void Start()
+
+    private void Start()
     {
-        this.textMesh = GetComponent<Text>();
-        this.eventManager = GameEventManager.Instance;
+        textMesh = GetComponent<Text>();
+        eventManager = GameEventManager.Instance;
         textMesh.enabled = false;
-        eventManager.Subscribe(new GameEvent{EventType = GameEventType.ChallangeCompleted} , this.ShowChallangeCompletedText);
-        eventManager.Subscribe(new GameEvent { EventType = GameEventType.PlayerDied }, this.ShowPlayerDiedText);
-        eventManager.Subscribe(new GameEvent { EventType = GameEventType.ChallangeStarted }, this.HideText);
+        eventManager.Subscribe(GameEventType.ChallangeCompleted, ShowChallangeCompletedText);
+        eventManager.Subscribe(GameEventType.PlayerDied, ShowPlayerDiedText);
+        eventManager.Subscribe(GameEventType.ChallangeStarted, HideText);
     }
 
-    public void ShowChallangeCompletedText()
+    public void ShowChallangeCompletedText(int value)
     {
         textMesh.text = "ChallangeCompleted";
         textMesh.enabled = true;
     }
-    public void ShowPlayerDiedText()
+
+    public void ShowPlayerDiedText(int value)
     {
         textMesh.text = "Player Died.\nRestart Challange.";
         textMesh.enabled = true;
     }
-    public void HideText()
+
+    public void HideText(int value)
     {
         textMesh.text = "";
         textMesh.enabled = false;

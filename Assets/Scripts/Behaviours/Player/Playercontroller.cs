@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Assets.Scripts.GameEvents;
 using Game.GameEvents;
 using Game.Systems.GameEvents.Commands;
 using Game.Systems.GameEvents.Commands.PlayerCommands;
@@ -16,48 +15,49 @@ namespace Game.Systems
 
     public class Playercontroller : MonoBehaviour
     {
-        public Boundary boundary;
-        public float fireRate = 0.5f;
-
-        private float gameSpeed = 5f;
-        private CommandQueue commandQueue = new CommandQueue();
-
-        private bool isIdle = true;
-        private float nextfire;
         private readonly float playerRotationSpeed = 200;
         private readonly float playerSpeed = 4;
+        public Boundary boundary;
+        private readonly CommandQueue commandQueue = new CommandQueue();
+        private GameEventManager eventManager;
+        public float fireRate = 0.5f;
+        private GameData gameData;
+
+        //private float gameSpeed = 5f;
+        private bool isDisabled;
+
+        private bool isIdle = true;
+
+        public MoveForward MoveForwardCommand;
+        private float nextfire;
+        public RotateLeft RotateLeftCommand;
+        public RotateRight RotateRightCommand;
         public GameObject shot;
         public Transform shotSpawn;
         public float speed;
-        private bool isDisabled;
-
-        public MoveForward MoveForwardCommand;
-        public RotateLeft RotateLeftCommand;
-        public RotateRight RotateRightCommand;
         private float unitSize = 1;
-        private GameData gameData;
-        private GameEventManager eventManager;
 
         public void Awake()
         {
-            this.gameData = GameData.Instance;
-            
+            gameData = GameData.Instance;
+
             isDisabled = false;
         }
+
         public void Start()
         {
-            this.MoveForwardCommand = new MoveForward(this);
-            this.RotateLeftCommand = new RotateLeft(this);
-            this.RotateRightCommand = new RotateRight(this);
+            MoveForwardCommand = new MoveForward(this);
+            RotateLeftCommand = new RotateLeft(this);
+            RotateRightCommand = new RotateRight(this);
             eventManager = GameEventManager.Instance;
-            eventManager.Subscribe(new GameEvent() {EventType = GameEventType.ChallangeCompleted}, OnChallangeCompleted);
-            eventManager.Subscribe(new GameEvent() { EventType = GameEventType.ChallangeStarted }, () => isDisabled = false);
+            eventManager.Subscribe(GameEventType.ChallangeCompleted, OnChallangeCompleted);
+            eventManager.Subscribe(GameEventType.ChallangeStarted, value => isDisabled = false);
         }
 
         private void Update()
         {
             //execute the next command in the command queue
-            if (this.isIdle && !this.commandQueue.IsEmpty())
+            if (isIdle && !commandQueue.IsEmpty())
             {
                 commandQueue.Execute();
             }
@@ -72,7 +72,7 @@ namespace Game.Systems
             ReadInput();
         }
 
-        private void OnChallangeCompleted()
+        private void OnChallangeCompleted(int value)
         {
             isDisabled = true;
             commandQueue.Clear();
@@ -83,8 +83,8 @@ namespace Game.Systems
             if (isDisabled)
             {
                 return;
-
             }
+
             if (Input.GetButton("Fire1"))
             {
                 FireWeapon();
@@ -109,24 +109,24 @@ namespace Game.Systems
 
         public void Die()
         {
-            this.isIdle = true;
-            this.commandQueue.Clear();
-            this.gameObject.SetActive(false);
+            isIdle = true;
+            commandQueue.Clear();
+            gameObject.SetActive(false);
         }
 
         public void MoveForward()
         {
-            this.commandQueue.Enqueue(MoveForwardCommand);
+            commandQueue.Enqueue(MoveForwardCommand);
         }
 
         public void RotateLeft()
         {
-            this.commandQueue.Enqueue(RotateLeftCommand);
+            commandQueue.Enqueue(RotateLeftCommand);
         }
 
         public void RotateRight()
         {
-            this.commandQueue.Enqueue(RotateRightCommand);
+            commandQueue.Enqueue(RotateRightCommand);
         }
 
         internal void FireWeapon()
@@ -140,19 +140,19 @@ namespace Game.Systems
         }
 
         /// <summary>
-        /// Moves the player squares count in the player forward direction
+        ///     Moves the player squares count in the player forward direction
         /// </summary>
         /// <param name="squares">The number of grid squares to move</param>
         internal IEnumerator MoveForwardProcedure(int squares = 1)
         {
             isIdle = false;
-            var endPosition = this.transform.position + transform.forward * this.gameData.GridSize * squares;
+            var endPosition = transform.position + transform.forward * gameData.GridSize * squares;
             endPosition = CheckBoundaries(endPosition);
 
-            while (this.transform.position != endPosition)
+            while (transform.position != endPosition)
             {
-                this.transform.position =
-                    Vector3.MoveTowards(this.transform.position, endPosition, speed * Time.deltaTime);
+                transform.position =
+                    Vector3.MoveTowards(transform.position, endPosition, speed * Time.deltaTime);
                 yield return new WaitForEndOfFrame();
             }
 

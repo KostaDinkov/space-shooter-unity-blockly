@@ -1,4 +1,5 @@
 ﻿#define isDebug
+
 using Assets.Scripts.GameEvents;
 using Game.GameEvents;
 using Game.Objectives;
@@ -45,6 +46,7 @@ namespace Game.Systems
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             //TODO: publish event
+            
         }
 
         private void Start()

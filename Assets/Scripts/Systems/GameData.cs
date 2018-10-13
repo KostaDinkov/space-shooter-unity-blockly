@@ -9,7 +9,9 @@ namespace Game.Systems
     {
         private static readonly GameData instance = new GameData();
         
-        public int CurrentChallengeNumber = 0;
+
+        //Todo Change this to 0 after testing
+        public int CurrentChallengeNumber = 1;
         public GameObject CurrentChallenge;
         public int ChallengeCount = 0;
         public int GridSize = 2;

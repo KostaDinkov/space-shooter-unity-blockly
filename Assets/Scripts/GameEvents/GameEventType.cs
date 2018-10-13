@@ -8,6 +8,7 @@ namespace Game.GameEvents
         LevelStarted,
         ChallangeStarted,
         ObjectiveCompleted,
+        ObjectiveUpdated,
         ChallangeCompleted,
         LevelCompleted,
         TargetReached,
@@ -16,5 +17,6 @@ namespace Game.GameEvents
         EnemyDestroyed,
         TargetPickedUp,
         AchievementEarned,
+        AsteroidDestroyed
      }
 }

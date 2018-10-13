@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: TargetReachedObjective
   m_EditorClassIdentifier: 
   DefaultValue: 0
-  Description: Reach a target destination
-  ListenEvent:
-    EventType: 5
+  Description: Reach the landing
+  ListenEvent: 6
   TargetValue: 1

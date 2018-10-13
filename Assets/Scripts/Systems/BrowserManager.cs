@@ -16,7 +16,7 @@ namespace Game.Systems
         [DllImport("__Internal")]
         private static extern void PlayerDied();
 #else
-        private void ChallangeCompleted(){
+        private void ChallangeCompleted(int value){
             Debug.Log("Event Sent To Browser :Challange Completed");    
         }
 #endif
@@ -31,7 +31,7 @@ namespace Game.Systems
             this.eventManager = GameEventManager.Instance;
             
 
-            eventManager.Subscribe(new GameEvent(){EventType = GameEventType.ChallangeCompleted},()=>ChallangeCompleted());
+            eventManager.Subscribe( GameEventType.ChallangeCompleted, ChallangeCompleted);
             //eventManager.Subscribe(sl => PlayerDied());
 
         }

@@ -1,7 +1,7 @@
 ﻿
 using System;
-
 using Game.GameEvents;
+
 
 
 namespace Assets.Scripts.GameEvents
@@ -10,5 +10,6 @@ namespace Assets.Scripts.GameEvents
     public class GameEvent
     {
         public GameEventType EventType;
+        public int EventValue;
     }
 }

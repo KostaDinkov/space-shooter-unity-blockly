@@ -1,0 +1,26 @@
+﻿using Assets.Scripts.GameEvents;
+using Game.GameEvents;
+using UnityEngine;
+
+public class DestroyOnCollision : MonoBehaviour
+{
+    public GameObject explosion;
+    [Tooltip("The event type to fire when the object is destroyed.")]
+    public GameEventType EventType;
+    private GameEventManager eventManager = GameEventManager.Instance;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Boundary"))
+        {
+            return;
+        }
+        if (explosion != null)
+        {
+            Instantiate(explosion, transform.position, transform.rotation);
+        }
+
+        gameObject.SetActive(false);
+        eventManager.Publish(new GameEvent(){EventType = EventType, EventValue = 1});
+    }
+}

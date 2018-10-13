@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-public class ObjectCollisions : MonoBehaviour
+public class DestroyOnCollisionNoEvent : MonoBehaviour
 {
     public GameObject explosion;
-
+   
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Boundary"))
@@ -16,5 +16,6 @@ public class ObjectCollisions : MonoBehaviour
         }
 
         Destroy(gameObject);
+        
     }
 }
