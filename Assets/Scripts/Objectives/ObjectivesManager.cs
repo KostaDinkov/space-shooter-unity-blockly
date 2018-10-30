@@ -15,25 +15,27 @@ namespace Game.Objectives
         private readonly GameEvent challangeCompletedEvent;
         private readonly GameEventManager eventManager;
         private readonly GameEvent objectiveCompletedEvent;
-        private readonly Objectives objectives;
+        private Objectives objectives;
         private GameObject objectivesListView;
         private Dictionary<Objective, UnityEngine.UI.Text> objectivesTexts;
 
         public ObjectivesManager()
         {
             objectivesTexts = new Dictionary<Objective, UnityEngine.UI.Text>();
-            objectives = GameData.Instance.CurrentChallenge.GetComponent<Objectives>();
+            
             objectivesListView = GameObject.Find("ObjectivesListView");
-            InitChallanges(0);
+            InitUI(0);
 
             eventManager = GameEventManager.Instance;
             eventManager.Subscribe(GameEventType.ObjectiveCompleted, IsChallangeCompleted);
-            eventManager.Subscribe(GameEventType.ChallangeStarted, InitChallanges);
+            eventManager.Subscribe(GameEventType.ChallangeStarted, InitUI);
             eventManager.Subscribe(GameEventType.ObjectiveUpdated, UpdateUI);
         }
 
-        private void InitUI()
+        public void InitUI(int value)
         {
+            objectives = GameData.Instance.CurrentChallenge.GetComponent<Objectives>();
+            InitChallanges(0);
             //clear children in any
             objectivesTexts.Clear();
             foreach (Transform transform in objectivesListView.transform)
@@ -80,7 +82,7 @@ namespace Game.Objectives
             {
                 objective.Init();
             }
-            InitUI();
+            
         }
 
         private void IsChallangeCompleted(int value)

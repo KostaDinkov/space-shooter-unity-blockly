@@ -46,6 +46,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4995073860958684}
   - component: {fileID: 7585854847237122891}
+  - component: {fileID: 4132381867890358314}
   m_Layer: 0
   m_Name: Challenge_02
   m_TagString: Untagged
@@ -88,6 +89,19 @@ MonoBehaviour:
   ObjectivesList:
   - {fileID: 11400000, guid: 144f7c06abd805449a9af2aafd03aea0, type: 2}
   - {fileID: 11400000, guid: 5e4bf3b121c7f78458b36684ef93be67, type: 2}
+--- !u!114 &4132381867890358314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1199039358313412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e79474d6247cb604ba0c5eb6ba0be345, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsComplete: 0
 --- !u!1001 &2911112406225263722
 PrefabInstance:
   m_ObjectHideFlags: 0

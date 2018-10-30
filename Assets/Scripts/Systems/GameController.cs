@@ -90,6 +90,10 @@ namespace Game.Systems
                 //this.gameEventManager.Publish(LevelCompletedEvent);
                 return;
             }
+            if(!gameData.CurrentChallenge.GetComponent<ChallangeState>().IsComplete)
+            {
+                return;
+            }
 
             Destroy(gameData.CurrentChallenge);
             gameData.CurrentChallengeNumber += 1;

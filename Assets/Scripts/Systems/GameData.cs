@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using UnityEngine;
 
 
@@ -11,7 +10,7 @@ namespace Game.Systems
         
 
         //Todo Change this to 0 after testing
-        public int CurrentChallengeNumber = 1;
+        public int CurrentChallengeNumber = 0;
         public GameObject CurrentChallenge;
         public int ChallengeCount = 0;
         public int GridSize = 2;
