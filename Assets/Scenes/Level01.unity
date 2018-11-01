@@ -618,7 +618,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -635,7 +635,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 62392294}
         m_MethodName: NextChallenge
         m_Mode: 1
         m_Arguments:
@@ -978,6 +978,12 @@ PrefabInstance:
       propertyPath: Player
       value: 
       objectReference: {fileID: 1949357952}
+    - target: {fileID: 114552698680974058, guid: ae7d20936d6c9b742bc4e835021da3ba,
+        type: 3}
+      propertyPath: Challenges.Array.data[1]
+      value: 
+      objectReference: {fileID: 4569201511334550708, guid: 0443ae7e1be234547b5a24b60040639a,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae7d20936d6c9b742bc4e835021da3ba, type: 3}
 --- !u!1 &1853031236

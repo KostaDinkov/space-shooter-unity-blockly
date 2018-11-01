@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using Game.GameEvents;
 
-public class ChallangeState : MonoBehaviour
+public class ChallangeState :MonoBehaviour
 {
     private GameEventManager eventManager = GameEventManager.Instance;
 
