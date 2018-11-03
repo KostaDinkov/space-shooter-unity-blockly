@@ -1,6 +1,6 @@
-# Space puzzle game
 
-## *Game Design Document*
+### *Game Design Document*
+# Space puzzle game
 
 ## Project Goals
 
@@ -52,10 +52,8 @@ Top down orthographic camera, showing the 2d plane of the puzzle grid with the
 3d models arranged based on the challenge specification.
 
 # Feature Set
----
 
-## *Gameplay Features*
-
+### *Gameplay Features*
 
 ## Learn programming concepts by playing a game
 
@@ -86,7 +84,7 @@ scores, solving the problems in a given times …
 
 Players are ranked based on game points. e
 
-## *Technical Features*
+### *Technical Features*
 
 
 ## Web application
