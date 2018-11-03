@@ -11,4 +11,25 @@ Example objectives:
 * Destroy N asteroids
 * Reach a target destination
 * Don't crash the ship
- 
+
+## Level 2: Loops
+*// Todo*
+## Level 3: Conditional Statements
+*// Todo*
+## Level 4: Advanced Loops
+*// Todo*
+## Level 5: Advanced Conditional Statements
+*// Todo*
+## Level 6: Master Challange 1
+*// Todo*
+## Level 7: Variables
+*// Todo*
+## Level 8: Functions
+*// Todo*
+## Level 9: Functions with parameters
+*// Todo*
+## Level 10: Master Challange 2
+*// Todo*
+## Level 11: Data Structures - Arrays
+*// Todo*
+## Level 12: 
