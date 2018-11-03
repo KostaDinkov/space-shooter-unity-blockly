@@ -1,3 +1,4 @@
+<link href="style.css" rel="stylesheet"></link>
 
 ### *Game Design Document*
 # Space puzzle game
