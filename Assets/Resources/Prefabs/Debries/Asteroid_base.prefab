@@ -1,0 +1,121 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &8505135245271057478
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6462243160998887444, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6462243160998887444, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6462243160998887444, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6462243160998887444, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6462243160998887444, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6462243160998887444, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6462243160998887444, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6462243160998887444, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6462243160998887444, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6462243160998887444, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6462243160998887444, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364094425263235254, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_Name
+      value: Asteroid_base
+      objectReference: {fileID: 0}
+    - target: {fileID: 6658290259237533128, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.5183209
+      objectReference: {fileID: 0}
+    - target: {fileID: 6658290259237533128, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_Height
+      value: 1.6009884
+      objectReference: {fileID: 0}
+    - target: {fileID: 6658290259237533128, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_Center.z
+      value: 0.018397808
+      objectReference: {fileID: 0}
+    - target: {fileID: 6658290259237533128, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_Direction
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6658290259237533128, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_Center.x
+      value: -0.012265086
+      objectReference: {fileID: 0}
+    - target: {fileID: 6658290259237533128, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_Center.y
+      value: -0.03891611
+      objectReference: {fileID: 0}
+    - target: {fileID: 1629065488928487137, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: explosion
+      value: 
+      objectReference: {fileID: 100004, guid: 2857e183f4cd3df4e9096e5b578bd32f, type: 3}
+    - target: {fileID: 1629065488928487137, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: EventType
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1637720772404005742, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6091938565912503606, guid: 96caa3ce59e3edd4fb56504de1f33ec2,
+        type: 3}
+      propertyPath: tumble
+      value: 0.1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 96caa3ce59e3edd4fb56504de1f33ec2, type: 3}

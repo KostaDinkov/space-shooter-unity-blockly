@@ -1,7 +1,9 @@
 ﻿using Assets.Scripts.GameEvents;
 using Game.GameEvents;
+using Game.SpaceObject;
 using UnityEngine;
 
+[RequireComponent(typeof (ISpaceObject))]
 public class DestroyOnCollision : MonoBehaviour
 {
     public GameObject explosion;
@@ -12,6 +14,11 @@ public class DestroyOnCollision : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Boundary"))
+        {
+            return;
+        }
+
+        if (!this.GetComponent<ISpaceObject>().IsDestroyable)
         {
             return;
         }
