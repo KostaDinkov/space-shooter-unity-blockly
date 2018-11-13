@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.GameEvents;
+﻿using System;
+using Assets.Scripts.GameEvents;
 using Game.GameEvents;
 using UnityEngine;
 
@@ -7,19 +8,19 @@ namespace Game.Objectives
     /// <summary>
     ///     Base Objective class.
     /// </summary>
-    [CreateAssetMenu]
-    internal class Objective : ScriptableObject
+    [Serializable]
+    public class Objective 
     {
-        public int DefaultValue;
         public string Description;
-        private GameEventManager eventManager;
-
+        public int DefaultValue;
+        public int TargetValue;
         [Tooltip("The Event that will triger this objective to update it's state.")]
         public GameEventType ListenEvent;
 
-        public int TargetValue;
-        public int CurrentValue { get; private set; }
-
+        public int CurrentValue;
+        
+        private GameEventManager eventManager;
+        
 
         public void Init()
         {

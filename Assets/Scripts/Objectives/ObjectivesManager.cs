@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿//#define TURNOFF
+
+
+using System.Collections.Generic;
 using Assets.Scripts.GameEvents;
 using Game.GameEvents;
 using Game.Systems;
@@ -12,6 +15,7 @@ namespace Game.Objectives
     /// </summary>
     public class ObjectivesManager
     {
+#if !TURNOFF
         private readonly GameEvent challangeCompletedEvent;
         private readonly GameEventManager eventManager;
         private readonly GameEvent objectiveCompletedEvent;
@@ -42,7 +46,7 @@ namespace Game.Objectives
             {
                 GameObject.Destroy(transform.gameObject);
             }
-            foreach (var objective in objectives.ObjectivesList)
+            foreach (var objective in objectives.ObjectiveList)
             {
             
                 GameObject textContainer = new GameObject(objective.Description);
@@ -78,7 +82,7 @@ namespace Game.Objectives
 
         private void InitChallanges(int value)
         {
-            foreach (var objective in objectives.ObjectivesList)
+            foreach (var objective in objectives.ObjectiveList)
             {
                 objective.Init();
             }
@@ -87,7 +91,7 @@ namespace Game.Objectives
 
         private void IsChallangeCompleted(int value)
         {
-            foreach (var objective in objectives.ObjectivesList)
+            foreach (var objective in objectives.ObjectiveList)
             {
                 if (!objective.IsComplete())
                 {
@@ -97,5 +101,8 @@ namespace Game.Objectives
 
             eventManager.Publish(new GameEvent {EventType = GameEventType.ChallangeCompleted});
         }
+#endif
     }
+
 }
+
