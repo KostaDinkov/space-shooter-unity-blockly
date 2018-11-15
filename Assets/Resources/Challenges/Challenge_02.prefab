@@ -71,7 +71,7 @@ PrefabInstance:
     - target: {fileID: 7311754120534956923, guid: fa9247ac92d25bf46ab54d2dc8dcbd6e,
         type: 3}
       propertyPath: m_Name
-      value: Asteroid_02
+      value: prop_asteroid_02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa9247ac92d25bf46ab54d2dc8dcbd6e, type: 3}
@@ -140,7 +140,7 @@ PrefabInstance:
     - target: {fileID: 5913811646706578990, guid: fbdf64b7c8ce6fa4b8c2d9b19a8d139d,
         type: 3}
       propertyPath: m_Name
-      value: Asteroid_03
+      value: prop_asteroid_03
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fbdf64b7c8ce6fa4b8c2d9b19a8d139d, type: 3}
@@ -209,7 +209,7 @@ PrefabInstance:
     - target: {fileID: 3482115526459870539, guid: f5264a281fd479842b752e15012ba976,
         type: 3}
       propertyPath: m_Name
-      value: Asteroid_01 (1)
+      value: prop_asteroid_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5264a281fd479842b752e15012ba976, type: 3}
@@ -298,6 +298,11 @@ PrefabInstance:
       propertyPath: ObjectiveList.Array.data[0].TargetValue
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 7868116036088228867, guid: a04c6f2957ecb514d92d3e83f8e5b1c1,
+        type: 3}
+      propertyPath: ObjectiveList.Array.data[0].Description
+      value: Destroy all asteroids
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a04c6f2957ecb514d92d3e83f8e5b1c1, type: 3}
 --- !u!1001 &5674651712535486507
@@ -365,7 +370,7 @@ PrefabInstance:
     - target: {fileID: 5913811646706578990, guid: fbdf64b7c8ce6fa4b8c2d9b19a8d139d,
         type: 3}
       propertyPath: m_Name
-      value: Asteroid_03 (1)
+      value: prop_asteroid_03
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fbdf64b7c8ce6fa4b8c2d9b19a8d139d, type: 3}
@@ -434,7 +439,7 @@ PrefabInstance:
     - target: {fileID: 3482115526459870539, guid: f5264a281fd479842b752e15012ba976,
         type: 3}
       propertyPath: m_Name
-      value: Asteroid_01
+      value: prop_asteroid_01
       objectReference: {fileID: 0}
     - target: {fileID: 119060393122308823, guid: f5264a281fd479842b752e15012ba976,
         type: 3}
@@ -445,7 +450,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: a1af3a23943725f458ebb280a0f6ff6c, type: 2}
+      objectReference: {fileID: 2100000, guid: 583ff7026dac91849b7c7b2468ba456b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5264a281fd479842b752e15012ba976, type: 3}
 --- !u!1001 &9123722981900928633
@@ -513,7 +518,7 @@ PrefabInstance:
     - target: {fileID: 7311754120534956923, guid: fa9247ac92d25bf46ab54d2dc8dcbd6e,
         type: 3}
       propertyPath: m_Name
-      value: Asteroid_02 (1)
+      value: prop_asteroid_02
       objectReference: {fileID: 0}
     - target: {fileID: 6092412581008438503, guid: fa9247ac92d25bf46ab54d2dc8dcbd6e,
         type: 3}
@@ -524,6 +529,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: a1af3a23943725f458ebb280a0f6ff6c, type: 2}
+      objectReference: {fileID: 2100000, guid: 578af1667322bab45b652b79a40bb4fb, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa9247ac92d25bf46ab54d2dc8dcbd6e, type: 3}
