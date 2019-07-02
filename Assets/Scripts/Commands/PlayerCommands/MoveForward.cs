@@ -1,16 +1,16 @@
-﻿
-using Game.Systems;
-namespace Game.Systems.GameEvents.Commands.PlayerCommands
-{
-    public class MoveForward:Command
-    {
-        public MoveForward(Playercontroller playerController) : base(playerController)
-        {
-        }
+﻿using Game.Systems;
 
-        public override void Execute()
-        {
-            this.receiver.StartCoroutine(((Playercontroller)this.receiver).MoveForwardProcedure());
-        }
+namespace Game.Commands.PlayerCommands
+{
+  public class MoveForward : Command
+  {
+    public MoveForward(Playercontroller playerController) : base(playerController)
+    {
     }
+
+    public override void Execute()
+    {
+      ((Playercontroller)this.receiver).MoveForwardProcedure();
+    }
+  }
 }

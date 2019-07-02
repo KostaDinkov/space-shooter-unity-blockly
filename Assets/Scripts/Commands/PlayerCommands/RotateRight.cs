@@ -1,15 +1,15 @@
 ﻿using Game.Systems;
-namespace Game.Systems.GameEvents.Commands.PlayerCommands
+namespace Game.Commands.PlayerCommands
 {
-    public class RotateRight : Command
+  public class RotateRight : Command
+  {
+    public RotateRight(Playercontroller playerController) : base(playerController)
     {
-        public RotateRight(Playercontroller playerController) : base(playerController)
-        {
-        }
-
-        public override void Execute()
-        {
-            ((Playercontroller) this.receiver).RotateRightProcedure();
-        }
     }
+
+    public override void Execute()
+    {
+      ((Playercontroller)this.receiver).RotateRightProcedure();
+    }
+  }
 }

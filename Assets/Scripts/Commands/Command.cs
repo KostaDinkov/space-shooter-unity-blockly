@@ -1,22 +1,20 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Game.Systems.GameEvents.Commands
+namespace Game.Commands
 {
-    
-    public abstract class Command
+
+  public abstract class Command
+  {
+    protected MonoBehaviour receiver;
+
+    public Command(MonoBehaviour receiver)
     {
-        protected MonoBehaviour receiver;
-
-        public Command(MonoBehaviour receiver)
-        {
-            this.receiver = receiver;
-        }
-
-        public abstract void Execute();
+      this.receiver = receiver;
 
     }
 
+    public abstract void Execute();
+  }
 }
 
 

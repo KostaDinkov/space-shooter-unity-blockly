@@ -8,6 +8,10 @@ using UnityEngine.SceneManagement;
 
 namespace Game.Systems
 {
+    /// <summary>
+    /// API for controlling the game flow and getting information about
+    /// the current state.
+    /// </summary>
     public class GameController : MonoBehaviour
     {
         public static GameController Instance;
