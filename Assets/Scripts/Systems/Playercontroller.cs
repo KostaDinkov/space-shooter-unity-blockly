@@ -18,7 +18,8 @@ namespace Game.Systems
   public class Playercontroller : MonoBehaviour
   {
     private readonly float playerRotationSpeed = 200;
-    private readonly float playerSpeed = 4;
+    public float playerSpeed = 4;
+
     public Boundary boundary;
     private readonly CommandQueue commandQueue = new CommandQueue();
     private GameEventManager eventManager;
@@ -30,14 +31,12 @@ namespace Game.Systems
 
     private bool isIdle = true;
 
-    public MoveForward MoveForwardCommand;
+
     private float nextfire;
-    public RotateLeft RotateLeftCommand;
-    public RotateRight RotateRightCommand;
-    public FireWeapon FireWeaponCommand;
+
     public GameObject shot;
     public Transform shotSpawn;
-    public float speed;
+
     private float unitSize = 1;
 
     public void Awake()
@@ -49,10 +48,6 @@ namespace Game.Systems
 
     public void Start()
     {
-      MoveForwardCommand = new MoveForward(this);
-      RotateLeftCommand = new RotateLeft(this);
-      RotateRightCommand = new RotateRight(this);
-      FireWeaponCommand = new FireWeapon(this);
       eventManager = GameEventManager.Instance;
       eventManager.Subscribe(GameEventType.ChallangeCompleted, OnChallangeCompleted);
       eventManager.Subscribe(GameEventType.ChallangeStarted, value => isDisabled = false);
@@ -122,29 +117,42 @@ namespace Game.Systems
     /// Moves the player forward by given units distance
     /// </summary>
     /// <param name="dist">The distance to move</param>
-    
-    public void MoveForward(int dist = 1)
+
+    public void MoveForward(int distance = 1)
     {
-      for (int i = 0; i < dist; i++)
-      {
-        commandQueue.Enqueue(MoveForwardCommand);    
-      }
+      commandQueue.Enqueue(new MoveForwardCommand(this, distance, this.playerSpeed));
     }
 
+    internal IEnumerator MoveForwardCoroutine(GameObject objectToMove, int distance, float speed)
+    {
+      isIdle = false;
+      var endPosition = transform.position + transform.forward * gameData.GridSize * distance;
+      endPosition = CheckBoundaries(endPosition);
+
+      while (transform.position != endPosition)
+      {
+        transform.position =
+            Vector3.MoveTowards(transform.position, endPosition, speed * Time.deltaTime);
+        yield return new WaitForEndOfFrame();
+      }
+
+      isIdle = true;
+    }
+    
     /// <summary>
     /// Rotates the player 90 degrees ccw
     /// </summary>
-    public void RotateLeft()
+    public void RotateLeft(float degrees = 90)
     {
-      commandQueue.Enqueue(RotateLeftCommand);
+      commandQueue.Enqueue(new RotateLeftCommand(this, degrees, this.playerRotationSpeed));
     }
 
     /// <summary>
     /// Rotates the player 90 degrees cw
     /// </summary>
-    public void RotateRight()
+    public void RotateRight(float degrees = 90)
     {
-      commandQueue.Enqueue(RotateRightCommand);
+      commandQueue.Enqueue(new RotateRightCommand(this, degrees, this.playerRotationSpeed));
     }
 
     /// <summary>
@@ -160,40 +168,9 @@ namespace Game.Systems
       }
     }
 
-    /// <summary>
-    ///     Moves the player squares count in the player forward direction
-    /// </summary>
-    /// <param name="squares">The number of grid squares to move</param>
-    internal IEnumerator MoveForwardProcedure(int squares = 1)
-    {
-      isIdle = false;
-      var endPosition = transform.position + transform.forward * gameData.GridSize * squares;
-      endPosition = CheckBoundaries(endPosition);
-
-      while (transform.position != endPosition)
-      {
-        transform.position =
-            Vector3.MoveTowards(transform.position, endPosition, speed * Time.deltaTime);
-        yield return new WaitForEndOfFrame();
-      }
-
-      isIdle = true;
-    }
-
-    internal void RotateRightProcedure(float degrees = 90)
-    {
-      var rotation = Quaternion.Euler(0, degrees, 0);
-      StartCoroutine(RotateOverSpeed(gameObject, rotation, playerRotationSpeed));
-    }
-
-    internal void RotateLeftProcedure(float degrees = 90)
-    {
-      var rotation = Quaternion.Euler(0, -degrees, 0);
-      StartCoroutine(RotateOverSpeed(gameObject, rotation, playerRotationSpeed));
-    }
 
 
-    private IEnumerator RotateOverSpeed(GameObject objectToMove, Quaternion end, float speed)
+    internal IEnumerator RotateOverSpeedCoroutine(GameObject objectToMove, Quaternion end, float speed)
     {
       isIdle = false;
       var endRotation = objectToMove.transform.rotation * end;

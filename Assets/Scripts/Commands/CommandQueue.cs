@@ -5,14 +5,14 @@ namespace Game.Commands
 {
     public class CommandQueue
     {
-        private Queue<Command> commands;
+        private Queue<ICommand> commands;
 
         public CommandQueue()
         {
-            this.commands = new Queue<Command>();
+            this.commands = new Queue<ICommand>();
         }
 
-        public void Enqueue(Command command)
+        public void Enqueue(ICommand command)
         {
             this.commands.Enqueue(command);
         }
