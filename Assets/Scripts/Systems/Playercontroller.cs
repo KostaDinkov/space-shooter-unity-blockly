@@ -116,7 +116,7 @@ namespace Game.Systems
     /// <summary>
     /// Moves the player forward by given units distance
     /// </summary>
-    /// <param name="dist">The distance to move</param>
+    /// <param name="dist">The distance to move, defaults to 1</param>
 
     public void MoveForward(int distance = 1)
     {
@@ -140,16 +140,18 @@ namespace Game.Systems
     }
     
     /// <summary>
-    /// Rotates the player 90 degrees ccw
+    /// Rotates the player ccw by a given amount of degrees
     /// </summary>
+    /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
     public void RotateLeft(float degrees = 90)
     {
       commandQueue.Enqueue(new RotateLeftCommand(this, degrees, this.playerRotationSpeed));
     }
 
     /// <summary>
-    /// Rotates the player 90 degrees cw
+    /// Rotates the player cw by a given amount of degrees
     /// </summary>
+    /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
     public void RotateRight(float degrees = 90)
     {
       commandQueue.Enqueue(new RotateRightCommand(this, degrees, this.playerRotationSpeed));
