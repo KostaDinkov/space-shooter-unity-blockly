@@ -1,4 +1,6 @@
 ﻿
+#if UNITY_EDITOR
+
 using Game.Objectives;
 using UnityEditor;
 using UnityEngine;
@@ -55,3 +57,4 @@ public static class EditorList
         
     }
 }
+#endif

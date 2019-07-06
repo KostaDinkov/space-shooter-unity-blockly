@@ -2,8 +2,9 @@
 using Game.SpaceObject;
 using UnityEditor;
 
-
+#if UnityEditor
 [ExecuteInEditMode]
+#endif
 public class IAsteroid : MonoBehaviour
 {
     private Transform asteroid;
@@ -33,12 +34,13 @@ public class IAsteroid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+#if UnityEditor        
         //Updates material while in edit mode. In play mode we do not need to apply material constantly;
         if (!EditorApplication.isPlaying)
         {
             ApplyMaterial();
         }
+#endif
         
     }
 

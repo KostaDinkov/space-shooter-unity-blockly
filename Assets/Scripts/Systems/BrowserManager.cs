@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.GameEvents;
+﻿using System.Runtime.InteropServices;
+using Assets.Scripts.GameEvents;
 using Game.GameEvents;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace Game.Systems
         private static extern void TestBrowser();
 
         [DllImport("__Internal")]
-        private static extern void ChallangeCompleted();
+        private static extern void ChallangeCompleted(int value);
 
         [DllImport("__Internal")]
         private static extern void PlayerDied();
@@ -31,7 +32,7 @@ namespace Game.Systems
             this.eventManager = GameEventManager.Instance;
             
 
-            eventManager.Subscribe( GameEventType.ChallangeCompleted, ChallangeCompleted);
+            //eventManager.Subscribe( GameEventType.ChallangeCompleted, ChallangeCompleted);
             //eventManager.Subscribe(sl => PlayerDied());
 
         }
