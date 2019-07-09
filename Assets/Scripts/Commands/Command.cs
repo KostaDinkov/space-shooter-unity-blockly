@@ -1,19 +1,29 @@
-﻿using UnityEngine;
+﻿using System.Dynamic;
+using System;
+using Game.Systems;
+using UnityEngine;
 
 namespace Game.Commands
 {
 
-  public abstract class Command
+  public class Command:ICommand
   {
-    protected MonoBehaviour receiver;
+    protected Func<ICommandArgs,object> action;
+    protected ICommandArgs args;
 
-    public Command(MonoBehaviour receiver)
+    protected Playercontroller pc;
+
+    public Command(Playercontroller pc, Func <ICommandArgs,object> action, ICommandArgs args)
     {
-      this.receiver = receiver;
-
+      this.action = action;
+      this.args = args;
+      this.pc = pc;
     }
 
-    public abstract void Execute();
+    public  void Execute(){
+      Debug.Log(action.Method.Name);
+      this.pc.StartCoroutine(action.Method.Name,args);
+    }
   }
 }
 

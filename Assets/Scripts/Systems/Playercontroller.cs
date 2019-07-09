@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Dynamic;
 using System.Collections;
 using Game.GameEvents;
 using Game.Commands;
-using Game.Commands.PlayerCommands;
 using UnityEngine;
 
 namespace Game.Systems
@@ -112,80 +112,32 @@ namespace Game.Systems
       commandQueue.Clear();
       gameObject.SetActive(false);
     }
-
-    /// <summary>
-    /// Moves the player forward by given units distance
-    /// </summary>
-    /// <param name="dist">The distance to move, defaults to 1</param>
-
-    public void MoveForward(int distance = 1)
+    public IEnumerator FireWeaponCoroutine(ICommandArgs args = null)
     {
-      commandQueue.Enqueue(new MoveForwardCommand(this, distance, this.playerSpeed));
-    }
-
-    internal IEnumerator MoveForwardCoroutine(GameObject objectToMove, int distance, float speed)
-    {
-      isIdle = false;
-      var endPosition = transform.position + transform.forward * gameData.GridSize * distance;
-      endPosition = CheckBoundaries(endPosition);
-
-      while (transform.position != endPosition)
-      {
-        transform.position =
-            Vector3.MoveTowards(transform.position, endPosition, speed * Time.deltaTime);
-        yield return new WaitForEndOfFrame();
-      }
-
-      isIdle = true;
-    }
-    
-    /// <summary>
-    /// Rotates the player ccw by a given amount of degrees
-    /// </summary>
-    /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
-    public void RotateLeft(float degrees = 90)
-    {
-      commandQueue.Enqueue(new RotateLeftCommand(this, degrees, this.playerRotationSpeed));
-    }
-
-    /// <summary>
-    /// Rotates the player cw by a given amount of degrees
-    /// </summary>
-    /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
-    public void RotateRight(float degrees = 90)
-    {
-      commandQueue.Enqueue(new RotateRightCommand(this, degrees, this.playerRotationSpeed));
-    }
-
-    /// <summary>
-    /// Fires the player weapon once
-    /// </summary>
-    public void FireWeapon()
-    {
+      
       if (Time.time > nextfire)
       {
         nextfire = Time.time + fireRate;
         Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
         GetComponent<AudioSource>().Play();
       }
+      return null;
     }
 
-
-
-    internal IEnumerator RotateOverSpeedCoroutine(GameObject objectToMove, Quaternion end, float speed)
+    internal IEnumerator RotateOverSpeedCoroutine(ICommandArgs args)
     {
+      var end = Quaternion.Euler(0, args.Degrees, 0);
       isIdle = false;
-      var endRotation = objectToMove.transform.rotation * end;
-      while (objectToMove.transform.rotation != endRotation)
+      var endRotation = this.transform.rotation * end;
+      while (this.transform.rotation != endRotation)
       {
-        objectToMove.transform.rotation =
-            Quaternion.RotateTowards(objectToMove.transform.rotation, endRotation, speed * Time.deltaTime);
+        this.transform.rotation =
+            Quaternion.RotateTowards(this.transform.rotation, endRotation, args.Speed * Time.deltaTime);
         yield return new WaitForEndOfFrame();
       }
 
       isIdle = true;
     }
-
 
     private Vector3 CheckBoundaries(Vector3 endPosition)
     {
@@ -211,5 +163,66 @@ namespace Game.Systems
 
       return endPosition;
     }
+
+#region [API]
+    /// <summary>
+    /// Moves the player forward by given units distance
+    /// </summary>
+    /// <param name="dist">The distance to move, defaults to 1</param>
+
+    public void MoveForward(int distance = 1)
+    {
+      var args = new CommandArgs(){Distance=distance, Speed=this.playerSpeed};
+      ICommand command = new Command(this, MoveForwardCoroutine, args );
+      commandQueue.Enqueue(command);
+    }
+
+    internal IEnumerator MoveForwardCoroutine(ICommandArgs args)
+    {
+      this.isIdle = false;
+      var endPosition = this.transform.position + this.transform.forward * this.gameData.GridSize * args.Distance;
+      endPosition = CheckBoundaries(endPosition);
+
+      while (this.transform.position != endPosition)
+      {
+        this.transform.position =
+            Vector3.MoveTowards(transform.position, endPosition, args.Speed * Time.deltaTime);
+        yield return new WaitForEndOfFrame();
+      }
+
+      isIdle = true;
+    }
+    
+    /// <summary>
+    /// Rotates the player ccw by a given amount of degrees
+    /// </summary>
+    /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
+    public void RotateLeft(float degrees = 90)
+    {
+      var args = new CommandArgs(){Degrees = -degrees, Speed = this.playerRotationSpeed};
+      var command = new Command(this, RotateOverSpeedCoroutine, args);
+      commandQueue.Enqueue(command);
+    }
+
+    /// <summary>
+    /// Rotates the player cw by a given amount of degrees
+    /// </summary>
+    /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
+    public void RotateRight(float degrees = 90)
+    {
+      var args = new CommandArgs(){Degrees = degrees, Speed = this.playerRotationSpeed};
+      var command = new Command(this, RotateOverSpeedCoroutine, args);
+      commandQueue.Enqueue(command);
+    }
+
+    /// <summary>
+    /// Fires the player weapon once
+    /// </summary>
+    public void FireWeapon(){
+      var fireCommand = new Command(this,FireWeaponCoroutine, new CommandArgs());
+      this.commandQueue.Enqueue(fireCommand);
+    }
+#endregion
+    
   }
 }
