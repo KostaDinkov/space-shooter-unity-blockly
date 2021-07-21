@@ -9,7 +9,7 @@ namespace Game.Systems
   [Serializable]
   public class Boundary
   {
-    public float xMin, xMax, zMin, zMax;
+    public float xMin, xMax, yMin, yMax;
   }
   /// <summary>
   /// The main functionallity of the player
@@ -165,14 +165,14 @@ namespace Game.Systems
         endPosition.x = boundary.xMin;
       }
 
-      if (endPosition.z < boundary.zMin)
+      if (endPosition.y < boundary.yMin)
       {
-        endPosition.z = boundary.zMin;
+        endPosition.y = boundary.yMin;
       }
 
-      if (endPosition.z > boundary.zMax)
+      if (endPosition.y > boundary.yMax)
       {
-        endPosition.z = boundary.zMax;
+        endPosition.y = boundary.yMax;
       }
 
       return endPosition;
