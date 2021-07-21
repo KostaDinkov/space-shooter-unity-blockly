@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Dynamic;
 using System.Collections;
 using Game.GameEvents;
 using Game.Commands;
@@ -41,16 +40,16 @@ namespace Game.Systems
 
     public void Awake()
     {
-      gameData = GameData.Instance;
+      this.gameData = GameData.Instance;
 
-      isDisabled = false;
+      this.isDisabled = false;
     }
 
     public void Start()
     {
       eventManager = GameEventManager.Instance;
       eventManager.Subscribe(GameEventType.ChallangeCompleted, OnChallangeCompleted);
-      eventManager.Subscribe(GameEventType.ChallangeStarted, value => isDisabled = false);
+      eventManager.Subscribe(GameEventType.ChallangeStarted, (value) => {isDisabled = false;});
     }
 
     private void Update()
@@ -112,9 +111,9 @@ namespace Game.Systems
       commandQueue.Clear();
       gameObject.SetActive(false);
     }
-    public IEnumerator FireWeaponCoroutine(ICommandArgs args = null)
+    internal IEnumerator FireWeaponCoroutine(ICommandArgs args = null)
     {
-      
+
       if (Time.time > nextfire)
       {
         nextfire = Time.time + fireRate;
@@ -133,6 +132,21 @@ namespace Game.Systems
       {
         this.transform.rotation =
             Quaternion.RotateTowards(this.transform.rotation, endRotation, args.Speed * Time.deltaTime);
+        yield return new WaitForEndOfFrame();
+      }
+
+      isIdle = true;
+    }
+    internal IEnumerator MoveForwardCoroutine(ICommandArgs args)
+    {
+      this.isIdle = false;
+      var endPosition = this.transform.position + this.transform.forward * this.gameData.GridSize * args.Distance;
+      endPosition = CheckBoundaries(endPosition);
+
+      while (this.transform.position != endPosition)
+      {
+        this.transform.position =
+            Vector3.MoveTowards(transform.position, endPosition, args.Speed * Time.deltaTime);
         yield return new WaitForEndOfFrame();
       }
 
@@ -164,7 +178,7 @@ namespace Game.Systems
       return endPosition;
     }
 
-#region [API]
+    #region [API]
     /// <summary>
     /// Moves the player forward by given units distance
     /// </summary>
@@ -172,34 +186,18 @@ namespace Game.Systems
 
     public void MoveForward(int distance = 1)
     {
-      var args = new CommandArgs(){Distance=distance, Speed=this.playerSpeed};
-      ICommand command = new Command(this, MoveForwardCoroutine, args );
+      var args = new CommandArgs() { Distance = distance, Speed = this.playerSpeed };
+      ICommand command = new Command(this, MoveForwardCoroutine, args);
       commandQueue.Enqueue(command);
     }
 
-    internal IEnumerator MoveForwardCoroutine(ICommandArgs args)
-    {
-      this.isIdle = false;
-      var endPosition = this.transform.position + this.transform.forward * this.gameData.GridSize * args.Distance;
-      endPosition = CheckBoundaries(endPosition);
-
-      while (this.transform.position != endPosition)
-      {
-        this.transform.position =
-            Vector3.MoveTowards(transform.position, endPosition, args.Speed * Time.deltaTime);
-        yield return new WaitForEndOfFrame();
-      }
-
-      isIdle = true;
-    }
-    
     /// <summary>
     /// Rotates the player ccw by a given amount of degrees
     /// </summary>
     /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
     public void RotateLeft(float degrees = 90)
     {
-      var args = new CommandArgs(){Degrees = -degrees, Speed = this.playerRotationSpeed};
+      var args = new CommandArgs() { Degrees = -degrees, Speed = this.playerRotationSpeed };
       var command = new Command(this, RotateOverSpeedCoroutine, args);
       commandQueue.Enqueue(command);
     }
@@ -210,7 +208,7 @@ namespace Game.Systems
     /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
     public void RotateRight(float degrees = 90)
     {
-      var args = new CommandArgs(){Degrees = degrees, Speed = this.playerRotationSpeed};
+      var args = new CommandArgs() { Degrees = degrees, Speed = this.playerRotationSpeed };
       var command = new Command(this, RotateOverSpeedCoroutine, args);
       commandQueue.Enqueue(command);
     }
@@ -218,11 +216,11 @@ namespace Game.Systems
     /// <summary>
     /// Fires the player weapon once
     /// </summary>
-    public void FireWeapon(){
-      var fireCommand = new Command(this,FireWeaponCoroutine, new CommandArgs());
+    public void FireWeapon()
+    {
+      var fireCommand = new Command(this, FireWeaponCoroutine, new CommandArgs());
       this.commandQueue.Enqueue(fireCommand);
     }
-#endregion
-    
+    #endregion
   }
 }
