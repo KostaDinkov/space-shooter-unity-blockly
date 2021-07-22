@@ -7,5 +7,9 @@ namespace Game.SpaceObject
         Junk,
         Gas,
         Container,
+        Mineral,
+        Electronics,
+        Treasure,
+
     }
 }

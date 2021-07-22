@@ -21,7 +21,7 @@ namespace Game.Commands
         {
             
             var command = commands.Dequeue();
-            command.Execute();
+            var result = command.Execute();
         }
 
         public bool IsEmpty()
