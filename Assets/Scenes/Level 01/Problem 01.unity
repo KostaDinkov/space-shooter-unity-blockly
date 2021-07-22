@@ -5583,13 +5583,13 @@ PrefabInstance:
     - target: {fileID: 114552698680974058, guid: ae7d20936d6c9b742bc4e835021da3ba,
         type: 3}
       propertyPath: Challenges.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114552698680974058, guid: ae7d20936d6c9b742bc4e835021da3ba,
         type: 3}
       propertyPath: Challenges.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1836326707}
     - target: {fileID: 114552698680974058, guid: ae7d20936d6c9b742bc4e835021da3ba,
         type: 3}
       propertyPath: Challenges.Array.data[1]
@@ -5598,6 +5598,12 @@ PrefabInstance:
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae7d20936d6c9b742bc4e835021da3ba, type: 3}
+--- !u!1 &1836326707 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2987065224748911435, guid: bc9b1ee25cf8dca43814be7b65f30606,
+    type: 3}
+  m_PrefabInstance: {fileID: 1318276538}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1853031236
 GameObject:
   m_ObjectHideFlags: 0

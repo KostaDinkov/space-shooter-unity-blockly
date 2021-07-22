@@ -155,26 +155,10 @@ namespace Game.Systems
 
     private Vector3 CheckBoundaries(Vector3 endPosition)
     {
-      if (endPosition.x > boundary.xMax)
-      {
-        endPosition.x = boundary.xMax;
-      }
-
-      if (endPosition.x < boundary.xMin)
-      {
-        endPosition.x = boundary.xMin;
-      }
-
-      if (endPosition.y < boundary.yMin)
-      {
-        endPosition.y = boundary.yMin;
-      }
-
-      if (endPosition.y > boundary.yMax)
-      {
-        endPosition.y = boundary.yMax;
-      }
-
+      if (endPosition.x > boundary.xMax) endPosition.x = boundary.xMax;
+      if (endPosition.x < boundary.xMin) endPosition.x = boundary.xMin;
+      if (endPosition.y < boundary.yMin) endPosition.y = boundary.yMin;
+      if (endPosition.y > boundary.yMax) endPosition.y = boundary.yMax;
       return endPosition;
     }
 
