@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Game.GameEvents;
 using Game.Commands;
 using Game.SpaceObject;
@@ -81,7 +82,7 @@ namespace Game.Systems
             commandQueue.Clear();
         }
 
-        private void ReadInput()
+        private async void ReadInput()
         {
             if (isDisabled)
             {
@@ -101,17 +102,18 @@ namespace Game.Systems
 
             if (Input.GetKeyDown(KeyCode.J))
             {
-                RotateLeft();
+                //RotateLeft();
             }
 
             if (Input.GetKeyDown(KeyCode.L))
             {
-                RotateRight();
+                //RotateRight();
             }
 
             if (Input.GetKeyDown(KeyCode.U))
             {
-                this.ScanAhead();
+                var result = await this.ScanAhead();
+                Debug.Log(result);
             }
         }
 
@@ -124,7 +126,7 @@ namespace Game.Systems
 
         #region [Coroutines]
 
-        internal IEnumerator FireWeaponCoroutine(ICommandArgs args = null)
+        internal async Task<string> FireWeaponAsync()
         {
             if (Time.time > nextfire)
             {
@@ -133,12 +135,14 @@ namespace Game.Systems
                 GetComponent<AudioSource>().Play();
             }
 
-            return null;
+            await Task.Delay(1000);
+            return "shot fired";
         }
 
-        internal string ScanAheadSync(ICommandArgs args)
+        internal async Task<string> ScanAheadAsync()
         {
             this.isIdle = false;
+            await Task.Delay(3000);
             RaycastHit hitResult;
             this.StartCoroutine(ScanAheadCoroutine(new CommandArgs()));
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 2, Color.yellow, 2, false);
@@ -151,7 +155,9 @@ namespace Game.Systems
                 return this.lastScanned.GetComponent<ISpaceObject>().SpaceObjectType.ToString();
             }
 
+            this.isIdle = true;
             return "Scanner found no object";
+
 
         }
 
@@ -162,35 +168,40 @@ namespace Game.Systems
             this.isIdle = true;
         }
 
-        internal IEnumerator RotateOverSpeedCoroutine(ICommandArgs args)
+        internal async Task<string> RotateOverSpeedAsync(object args)
         {
-            var end = Quaternion.Euler(0, args.Degrees, 0);
+
+            var end = Quaternion.Euler(0, ((CommandArgs)args).Degrees, 0);
             isIdle = false;
             var endRotation = this.transform.rotation * end;
             while (this.transform.rotation != endRotation)
             {
                 this.transform.rotation =
-                    Quaternion.RotateTowards(this.transform.rotation, endRotation, args.Speed * Time.deltaTime);
-                yield return new WaitForEndOfFrame();
+                    Quaternion.RotateTowards(this.transform.rotation, endRotation, ((CommandArgs)args).Speed * Time.deltaTime);
+                await UniTask.WaitForEndOfFrame();
             }
 
             isIdle = true;
+            return "rotated";
+
         }
 
-        internal IEnumerator MoveForwardCoroutine(ICommandArgs args)
+        internal async Task<string> MoveForwardAsync()
         {
             this.isIdle = false;
-            var endPosition = this.transform.position + this.transform.forward * this.gameData.GridSize * args.Distance;
+            var endPosition = this.transform.position + this.transform.forward * this.gameData.GridSize *1;
             endPosition = CheckBoundaries(endPosition);
 
             while (this.transform.position != endPosition)
             {
                 this.transform.position =
-                    Vector3.MoveTowards(transform.position, endPosition, args.Speed * Time.deltaTime);
-                yield return new WaitForEndOfFrame();
+                    Vector3.MoveTowards(transform.position, endPosition, 1 * Time.deltaTime);
+                await UniTask.Delay(10);
+
             }
 
             isIdle = true;
+            return "finished moving";
         }
 
         private Vector3 CheckBoundaries(Vector3 endPosition)
@@ -210,58 +221,65 @@ namespace Game.Systems
         /// Moves the player forward by given units distance
         /// </summary>
         /// <param name="dist">The distance to move, defaults to 1</param>
-        public void MoveForward(int distance = 1)
+        public async Task<string> MoveForward()
         {
-            var args = new CommandArgs() {Distance = distance, Speed = this.playerSpeed};
-            ICommand command = new Command(this, MoveForwardCoroutine, args);
-            commandQueue.Enqueue(command);
+            var task = new Task<Task<string>>(this.MoveForwardAsync);
+            commandQueue.Enqueue(task);
+            var taskResult = await task.Unwrap();
+            return taskResult;
         }
 
         /// <summary>
         /// Rotates the player ccw by a given amount of degrees
         /// </summary>
         /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
-        public void RotateLeft(float degrees = 90)
+        public async Task<string> RotateLeft(float degrees = 90)
         {
-            var args = new CommandArgs() {Degrees = -degrees, Speed = this.playerRotationSpeed};
-            var command = new Command(this, RotateOverSpeedCoroutine, args);
-            commandQueue.Enqueue(command);
+            var args = new CommandArgs() { Degrees = -degrees, Speed = this.playerRotationSpeed };
+            var task = new Task<Task<string>>(RotateOverSpeedAsync, args);
+            commandQueue.Enqueue(task);
+            var taskResult = await task.Unwrap();
+            return taskResult;
         }
 
         /// <summary>
         /// Rotates the player cw by a given amount of degrees
         /// </summary>
         /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
-        public void RotateRight(float degrees = 90)
+        public async Task<string> RotateRight()
         {
-            var args = new CommandArgs() {Degrees = degrees, Speed = this.playerRotationSpeed};
-            var command = new Command(this, RotateOverSpeedCoroutine, args);
-            commandQueue.Enqueue(command);
+            var task = new Task<Task<string>>(this.RotateOverSpeedAsync, new CommandArgs{Degrees = 90, Speed = this.playerRotationSpeed});
+            commandQueue.Enqueue(task);
+            var taskResult = await task.Unwrap();
+            return taskResult;
         }
 
         /// <summary>
         /// Fires the player weapon once
         /// </summary>
-        public void FireWeapon()
+        public async Task<string> FireWeapon()
         {
-            var fireCommand = new Command(this, FireWeaponCoroutine, new CommandArgs());
-            this.commandQueue.Enqueue(fireCommand);
+            var task = new Task<Task<string>>(FireWeaponAsync);
+            this.commandQueue.Enqueue(task);
+            var taskResult = await task.Unwrap();
+            return taskResult;
         }
 
 
-        public  void ScanAhead()
+        public async Task<string> ScanAhead()
         {
             
-            var scanAheadCommand = new Command(this, this.ScanAheadSync, new CommandArgs(),false);
-            this.commandQueue.Enqueue(scanAheadCommand);
-            
+            var task = new Task<Task<string>>(ScanAheadAsync);
+            this.commandQueue.Enqueue(task);
+            var taskResult = await task.Unwrap();
+            return taskResult;
+
         }
 
-        private string GetScanResult(string result)
-        {
-            return result;
-        }
+        
 
         #endregion
+
+        
     }
 }

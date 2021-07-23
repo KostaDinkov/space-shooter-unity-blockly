@@ -1,27 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 
 namespace Game.Commands
 {
     public class CommandQueue
     {
-        private Queue<ICommand> commands;
+        private Queue<Task<Task<string>>> commands;
 
         public CommandQueue()
         {
-            this.commands = new Queue<ICommand>();
+            
+            this.commands = new Queue<Task<Task<string>>>();
         }
 
-        public void Enqueue(ICommand command)
+        
+
+        public void Enqueue(Task<Task<string>> task)
         {
-            this.commands.Enqueue(command);
+            this.commands.Enqueue(task);
+            
         }
+
+        
 
         public void Execute()
         {
             
-            var command = commands.Dequeue();
-            var result = command.Execute();
+            var commandTask = commands.Dequeue();
+            commandTask.RunSynchronously();
+            
         }
 
         public bool IsEmpty()

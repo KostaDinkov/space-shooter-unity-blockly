@@ -7,14 +7,14 @@ namespace Game.Commands
 {
     public class Command : ICommand
     {
-        protected Func<ICommandArgs, object> action;
+        public Func<object, string> Action { get; private set; }
         protected ICommandArgs args;
         protected bool isAsync;
         protected Playercontroller pc;
 
-        public Command(Playercontroller pc, Func<ICommandArgs, object> action, ICommandArgs args, bool isAsync = true)
+        public Command(Playercontroller pc, Func<object, string> action, ICommandArgs args, bool isAsync = true)
         {
-            this.action = action;
+            this.Action = action;
             this.args = args;
             this.pc = pc;
             this.isAsync = isAsync;
@@ -22,14 +22,14 @@ namespace Game.Commands
 
         public object Execute()
         {
-            Debug.Log(action.Method.Name);
+            Debug.Log(this.Action.Method.Name);
             if (this.isAsync)
             {
-                this.pc.StartCoroutine(action.Method.Name, args);
+                this.pc.StartCoroutine(this.Action.Method.Name, args);
                 return null;
             }
             
-            return this.action(args);
+            return this.Action(args);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Game.Objectives
     /// <summary>
     /// A container class that holds all objectives for a given challange
     /// </summary>
-    class Objectives : MonoBehaviour
+    public class Objectives : MonoBehaviour
     {
 
         public List<Objective> ObjectiveList = new List<Objective>()
