@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Game.Commands;
 using Game.Systems;
 using UnityEngine;
 
@@ -13,31 +9,19 @@ public class ScriptControl : MonoBehaviour
     async void Start()
     {
         // Test sequence;
-        var result = await this.player.MoveForward();
+        var result = await this.player.MoveForwardAsync();
         Debug.Log($"After awaiting result: {result}");
-        result = await this.player.MoveForward();
+        result = await this.player.MoveForwardAsync();
         Debug.Log($"After awaiting result: {result}");
-        result = await this.player.RotateLeft();
+        result = await this.player.RotateLeftAsync();
         Debug.Log($"After awaiting result: {result}");
-        result = await this.player.MoveForward();
+        result = await this.player.MoveForwardAsync();
+        Debug.Log($"<color=orange>After awaiting result:</color> {result}");
+        result = await this.player.ScanAheadAsync();
         Debug.Log($"After awaiting result: {result}");
-        result = await this.player.ScanAhead();
+        result = await this.player.FireWeaponAsync();
         Debug.Log($"After awaiting result: {result}");
     }
 
-    private async Task<string> ScanTest()
-    {
-        await Task.Delay(3000);
-        Debug.Log("Working in scanTest ...");
-        var sceneName = this.gameObject.scene.name;
-        Debug.Log(sceneName);
-        return "result from task";
-    }
 
-    // Update is called once per frame
-    async void  Update()
-    {
-      
-        
-    }
 }
