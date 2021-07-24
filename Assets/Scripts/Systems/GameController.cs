@@ -64,9 +64,9 @@ namespace Game.Systems
 
         private void InitLevel()
         {
-            Player.transform.position = new Vector3(0, 0, 0);
-            Player.transform.rotation = Quaternion.identity;
-            gameData.CurrentChallenge = Instantiate(Challenges[gameData.CurrentChallengeNumber]);
+            //Player.transform.position = new Vector3(12, 0, 0);
+            //Player.transform.rotation = Quaternion.Euler(-90,0,0);
+            gameData.CurrentChallenge = Challenges[0];
         }
 
         /// <summary>

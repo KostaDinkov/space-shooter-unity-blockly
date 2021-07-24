@@ -1,226 +1,225 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Game.GameEvents;
 using Game.Commands;
+using Game.SpaceObject;
 using UnityEngine;
 
 namespace Game.Systems
 {
-  [Serializable]
-  public class Boundary
-  {
-    public float xMin, xMax, zMin, zMax;
-  }
-  /// <summary>
-  /// The main functionallity of the player
-  /// </summary>
-  public class Playercontroller : MonoBehaviour
-  {
-    private readonly float playerRotationSpeed = 200;
-    public float playerSpeed = 4;
-
-    public Boundary boundary;
-    private readonly CommandQueue commandQueue = new CommandQueue();
-    private GameEventManager eventManager;
-    public float fireRate = 0.5f;
-    private GameData gameData;
-
-    //private float gameSpeed = 5f;
-    private bool isDisabled;
-
-    private bool isIdle = true;
-
-
-    private float nextfire;
-
-    public GameObject shot;
-    public Transform shotSpawn;
-
-    private float unitSize = 1;
-
-    public void Awake()
+    [Serializable]
+    public class Boundary
     {
-      this.gameData = GameData.Instance;
-
-      this.isDisabled = false;
-    }
-
-    public void Start()
-    {
-      eventManager = GameEventManager.Instance;
-      eventManager.Subscribe(GameEventType.ChallangeCompleted, OnChallangeCompleted);
-      eventManager.Subscribe(GameEventType.ChallangeStarted, (value) => {isDisabled = false;});
-    }
-
-    private void Update()
-    {
-      //execute the next command in the command queue
-      if (isIdle && !commandQueue.IsEmpty())
-      {
-        commandQueue.Execute();
-      }
-
-      var particleSystems = GetComponentsInChildren<ParticleSystem>();
-      foreach (var psys in particleSystems)
-      {
-        var newMain = psys.main;
-        newMain.startRotation = transform.rotation.eulerAngles.y * Mathf.Deg2Rad;
-      }
-
-      ReadInput();
-    }
-
-    private void OnChallangeCompleted(int value)
-    {
-      isDisabled = true;
-      commandQueue.Clear();
-    }
-
-    private void ReadInput()
-    {
-      if (isDisabled)
-      {
-        return;
-      }
-
-      if (Input.GetButton("Fire1"))
-      {
-        FireWeapon();
-      }
-
-      if (Input.GetKeyDown(KeyCode.I))
-      {
-        //test sequence
-        MoveForward();
-      }
-
-      if (Input.GetKeyDown(KeyCode.J))
-      {
-        RotateLeft();
-      }
-
-      if (Input.GetKeyDown(KeyCode.L))
-      {
-        RotateRight();
-      }
-    }
-
-    public void Die()
-    {
-      isIdle = true;
-      commandQueue.Clear();
-      gameObject.SetActive(false);
-    }
-    internal IEnumerator FireWeaponCoroutine(ICommandArgs args = null)
-    {
-
-      if (Time.time > nextfire)
-      {
-        nextfire = Time.time + fireRate;
-        Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-        GetComponent<AudioSource>().Play();
-      }
-      return null;
-    }
-
-    internal IEnumerator RotateOverSpeedCoroutine(ICommandArgs args)
-    {
-      var end = Quaternion.Euler(0, args.Degrees, 0);
-      isIdle = false;
-      var endRotation = this.transform.rotation * end;
-      while (this.transform.rotation != endRotation)
-      {
-        this.transform.rotation =
-            Quaternion.RotateTowards(this.transform.rotation, endRotation, args.Speed * Time.deltaTime);
-        yield return new WaitForEndOfFrame();
-      }
-
-      isIdle = true;
-    }
-    internal IEnumerator MoveForwardCoroutine(ICommandArgs args)
-    {
-      this.isIdle = false;
-      var endPosition = this.transform.position + this.transform.forward * this.gameData.GridSize * args.Distance;
-      endPosition = CheckBoundaries(endPosition);
-
-      while (this.transform.position != endPosition)
-      {
-        this.transform.position =
-            Vector3.MoveTowards(transform.position, endPosition, args.Speed * Time.deltaTime);
-        yield return new WaitForEndOfFrame();
-      }
-
-      isIdle = true;
-    }
-
-    private Vector3 CheckBoundaries(Vector3 endPosition)
-    {
-      if (endPosition.x > boundary.xMax)
-      {
-        endPosition.x = boundary.xMax;
-      }
-
-      if (endPosition.x < boundary.xMin)
-      {
-        endPosition.x = boundary.xMin;
-      }
-
-      if (endPosition.z < boundary.zMin)
-      {
-        endPosition.z = boundary.zMin;
-      }
-
-      if (endPosition.z > boundary.zMax)
-      {
-        endPosition.z = boundary.zMax;
-      }
-
-      return endPosition;
-    }
-
-    #region [API]
-    /// <summary>
-    /// Moves the player forward by given units distance
-    /// </summary>
-    /// <param name="dist">The distance to move, defaults to 1</param>
-
-    public void MoveForward(int distance = 1)
-    {
-      var args = new CommandArgs() { Distance = distance, Speed = this.playerSpeed };
-      ICommand command = new Command(this, MoveForwardCoroutine, args);
-      commandQueue.Enqueue(command);
+        public float xMin, xMax, yMin, yMax;
     }
 
     /// <summary>
-    /// Rotates the player ccw by a given amount of degrees
+    /// The main functionality of the player
     /// </summary>
-    /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
-    public void RotateLeft(float degrees = 90)
+    public class Playercontroller : MonoBehaviour
     {
-      var args = new CommandArgs() { Degrees = -degrees, Speed = this.playerRotationSpeed };
-      var command = new Command(this, RotateOverSpeedCoroutine, args);
-      commandQueue.Enqueue(command);
-    }
+        #region [Fields]
 
-    /// <summary>
-    /// Rotates the player cw by a given amount of degrees
-    /// </summary>
-    /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
-    public void RotateRight(float degrees = 90)
-    {
-      var args = new CommandArgs() { Degrees = degrees, Speed = this.playerRotationSpeed };
-      var command = new Command(this, RotateOverSpeedCoroutine, args);
-      commandQueue.Enqueue(command);
-    }
+        private readonly float playerRotationSpeed = 200;
+        public float playerSpeed = 4;
+        private GameObject lastScanned;
+        public Boundary boundary;
 
-    /// <summary>
-    /// Fires the player weapon once
-    /// </summary>
-    public void FireWeapon()
-    {
-      var fireCommand = new Command(this, FireWeaponCoroutine, new CommandArgs());
-      this.commandQueue.Enqueue(fireCommand);
+        private GameEventManager eventManager;
+        public float fireRate = 0.5f;
+        private GameData gameData;
+        public List<GameObject> CargoBay;
+
+        //private float gameSpeed = 5f;
+        private bool isDisabled;
+
+        private bool isIdle = true;
+        private float nextFire;
+
+        public GameObject shot;
+        public Transform shotSpawn;
+
+        private float unitSize = 1;
+
+        #endregion
+
+        public void Awake()
+        {
+            this.gameData = GameData.Instance;
+            this.isDisabled = false;
+        }
+
+        public void Start()
+        {
+            eventManager = GameEventManager.Instance;
+            eventManager.Subscribe(GameEventType.ChallangeCompleted, this.OnChallengeCompleted);
+            eventManager.Subscribe(GameEventType.ChallangeStarted, (value) => { isDisabled = false; });
+        }
+
+        private void Update()
+        {
+            ReadInput();
+        }
+
+        private void OnChallengeCompleted(int value)
+        {
+            isDisabled = true;
+        }
+
+        private void ReadInput()
+        {
+            if (isDisabled)
+            {
+                return;
+            }
+
+            if (Input.GetButton("Fire1"))
+            {
+                //FireWeapon();
+            }
+
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                //test sequence
+                //MoveForward();
+            }
+
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                //RotateLeftAsync();
+            }
+
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                //RotateRightAsync();
+            }
+
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                //var result = await this.ScanAhead();
+                //Debug.Log(result);
+            }
+        }
+
+        public void Die()
+        {
+            isIdle = true;
+            gameObject.SetActive(false);
+        }
+
+        #region [API]
+
+        /// <summary>
+        /// Fires the player weapon once
+        /// </summary>
+        public async UniTask<string> FireWeaponAsync()
+        {
+            if (Time.time > this.nextFire)
+            {
+                this.nextFire = Time.time + fireRate;
+                Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+
+                //GetComponent<AudioSource>().Play();
+            }
+
+            return "shot fired";
+        }
+
+        /// <summary>
+        /// Scans for objects 1 unit ahead of the player
+        /// </summary>
+        /// <returns>The the space object type</returns>
+        public async UniTask<string> ScanAheadAsync()
+        {
+            this.isIdle = false;
+            await Task.Delay(3000);
+
+            //TODO play scan animation
+            Debug.DrawRay(this.transform.position, transform.TransformDirection(Vector3.forward) * 2, Color.yellow, 2,
+                false);
+            if (Physics.Raycast(this.transform.position, transform.TransformDirection(Vector3.forward),
+                out var hitResult, 2))
+            {
+                Debug.Log(hitResult.collider.gameObject.name);
+                this.lastScanned = hitResult.transform.gameObject;
+
+                return this.lastScanned.GetComponent<ISpaceObject>().SpaceObjectType.ToString();
+            }
+
+            this.isIdle = true;
+            return "Scanner found no object";
+        }
+
+
+        /// <summary>
+        /// Moves the player forward by given units distance
+        /// </summary>
+        /// <param name="dist">The distance to move, defaults to 1</param>
+        public async UniTask<string> MoveForwardAsync(int dist = 1)
+        {
+            this.isIdle = false;
+            var endPosition = this.transform.position + this.transform.forward * this.gameData.GridSize * dist;
+            endPosition = CheckBoundaries(endPosition);
+
+            while (this.transform.position != endPosition)
+            {
+                this.transform.position =
+                    Vector3.MoveTowards(transform.position, endPosition, this.playerSpeed * Time.deltaTime);
+                await UniTask.WaitForEndOfFrame();
+            }
+
+            isIdle = true;
+            return "finished moving";
+        }
+
+        /// <summary>
+        /// Rotates the player ccw by a given amount of degrees
+        /// </summary>
+        /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
+        public async UniTask<string> RotateLeftAsync(float degrees = 90)
+        {
+            var args = new CommandArgs() {Degrees = -degrees, Speed = this.playerRotationSpeed};
+            return await RotateOverSpeedAsync(args);
+        }
+
+        /// <summary>
+        /// Rotates the player cw by a given amount of degrees
+        /// </summary>
+        /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
+        public async UniTask<string> RotateRightAsync(float degrees = 90)
+        {
+            var args = new CommandArgs {Degrees = degrees, Speed = this.playerRotationSpeed};
+            return await this.RotateOverSpeedAsync(args);
+        }
+
+        #endregion
+
+        private Vector3 CheckBoundaries(Vector3 endPosition)
+        {
+            if (endPosition.x > boundary.xMax) endPosition.x = boundary.xMax;
+            if (endPosition.x < boundary.xMin) endPosition.x = boundary.xMin;
+            if (endPosition.y < boundary.yMin) endPosition.y = boundary.yMin;
+            if (endPosition.y > boundary.yMax) endPosition.y = boundary.yMax;
+            return endPosition;
+        }
+
+        private async UniTask<string> RotateOverSpeedAsync(object args)
+        {
+            var end = Quaternion.Euler(0, ((CommandArgs) args).Degrees, 0);
+            isIdle = false;
+            var endRotation = this.transform.rotation * end;
+            while (this.transform.rotation != endRotation)
+            {
+                this.transform.rotation =
+                    Quaternion.RotateTowards(this.transform.rotation, endRotation,
+                        ((CommandArgs) args).Speed * Time.deltaTime);
+                await UniTask.WaitForEndOfFrame();
+            }
+
+            isIdle = true;
+            return "rotated";
+        }
     }
-    #endregion
-  }
 }
