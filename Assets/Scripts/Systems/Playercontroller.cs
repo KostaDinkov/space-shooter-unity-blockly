@@ -135,7 +135,7 @@ namespace Game.Systems
                 GetComponent<AudioSource>().Play();
             }
 
-            await Task.Delay(1000);
+            
             return "shot fired";
         }
 
@@ -143,10 +143,9 @@ namespace Game.Systems
         {
             this.isIdle = false;
             await Task.Delay(3000);
-            RaycastHit hitResult;
-            this.StartCoroutine(ScanAheadCoroutine(new CommandArgs()));
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 2, Color.yellow, 2, false);
-            if (Physics.Raycast(this.transform.position, transform.TransformDirection(Vector3.forward), out hitResult, 2))
+            //this.StartCoroutine(this.ScanAheadCoroutine(new CommandArgs()));
+            Debug.DrawRay(this.transform.position, transform.TransformDirection(Vector3.forward) * 2, Color.yellow, 2, false);
+            if (Physics.Raycast(this.transform.position, transform.TransformDirection(Vector3.forward), out var hitResult, 2))
             {
 
                 Debug.Log(hitResult.collider.gameObject.name);
