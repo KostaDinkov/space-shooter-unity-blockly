@@ -22,7 +22,7 @@ public class IAsteroid : MonoBehaviour
         }
         rend = asteroid.gameObject.GetComponent<Renderer>();
         name = asteroid.name;
-        Debug.Log($"model name:{name}");
+       
         blackMaterial = Resources.Load<Material>($"LoadableMaterials/{name}_mat_black");
         defaultMaterial = Resources.Load<Material>($"LoadableMaterials/{name}_mat");
 
