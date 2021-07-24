@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Game.GameEvents;
 using Game.Commands;
 using Game.SpaceObject;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 
 namespace Game.Systems
 {
@@ -22,33 +24,34 @@ namespace Game.Systems
     {
         #region [Fields]
 
-        private readonly float playerRotationSpeed = 200;
-        public float playerSpeed = 4;
-        private GameObject lastScanned;
-        public Boundary boundary;
+        [SerializeField] private float playerRotationSpeed = 200;
+        [SerializeField] private float playerSpeed = 4;
+        [SerializeField] private float fireRate = 0.5f;
+        //[SerializeField] private float gameSpeed = 5f;
+        [SerializeField] private float unitSize = 1;
+        [SerializeField] private Boundary boundary;
+        [SerializeField] private GameObject lastScanned;
+        [SerializeField] private List<GameObject> cargoBay;
+        [SerializeField] private int cargoBayCapacity = 5;
+        [SerializeField] private GameObject shot;
 
+        //remove this?
+        //[SerializeField] private Transform shotSpawn;
+        [SerializeField] private bool isDisabled;
+        [SerializeField] private bool isIdle = true;
         private GameEventManager eventManager;
-        public float fireRate = 0.5f;
         private GameData gameData;
-        public List<GameObject> CargoBay;
-
-        //private float gameSpeed = 5f;
-        private bool isDisabled;
-
-        private bool isIdle = true;
         private float nextFire;
-
-        public GameObject shot;
-        public Transform shotSpawn;
-
-        private float unitSize = 1;
-
+        private List<int> freeSlots;
+        
         #endregion
 
         public void Awake()
         {
             this.gameData = GameData.Instance;
             this.isDisabled = false;
+            this.cargoBay = new List<GameObject>(new GameObject[this.cargoBayCapacity]);
+            this.freeSlots = Enumerable.Range(0, this.cargoBayCapacity).ToList();
         }
 
         public void Start()
@@ -116,14 +119,10 @@ namespace Game.Systems
         /// </summary>
         public async UniTask<string> FireWeaponAsync()
         {
-            if (Time.time > this.nextFire)
-            {
-                this.nextFire = Time.time + fireRate;
-                Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-
-                //GetComponent<AudioSource>().Play();
-            }
-
+          
+            await UniTask.Delay((int)(this.fireRate * 1000));
+            this.nextFire = Time.time + fireRate;
+            Instantiate(shot, this.transform.position + new Vector3(0, 1, 0), this.transform.rotation);
             return "shot fired";
         }
 
@@ -134,25 +133,20 @@ namespace Game.Systems
         public async UniTask<string> ScanAheadAsync()
         {
             this.isIdle = false;
-            await Task.Delay(3000);
+            await UniTask.Delay(1000);
 
             //TODO play scan animation
-            Debug.DrawRay(this.transform.position, transform.TransformDirection(Vector3.forward) * 2, Color.yellow, 2,
-                false);
-            if (Physics.Raycast(this.transform.position, transform.TransformDirection(Vector3.forward),
-                out var hitResult, 2))
+            var objectInFront = GetObjectInFront();
+            if (objectInFront != null)
             {
-                Debug.Log(hitResult.collider.gameObject.name);
-                this.lastScanned = hitResult.transform.gameObject;
-
+                this.lastScanned = objectInFront;
+                this.isIdle = true;
                 return this.lastScanned.GetComponent<ISpaceObject>().SpaceObjectType.ToString();
             }
-
             this.isIdle = true;
             return "Scanner found no object";
         }
-
-
+        
         /// <summary>
         /// Moves the player forward by given units distance
         /// </summary>
@@ -194,8 +188,89 @@ namespace Game.Systems
             return await this.RotateOverSpeedAsync(args);
         }
 
+        public async UniTask<string> PickupObject()
+        {
+            var objectAhead = this.GetObjectInFront();
+            var spaceObject = objectAhead.GetComponent<ISpaceObject>();
+            //Play animation
+            await UniTask.Delay(1000);
+            if (objectAhead && spaceObject.IsIdentified && spaceObject.SpaceObjectType != SpaceObjectType.Asteroid)
+            {
+                int slot = GetRandomCargoSlot();
+                if (slot >= 0)
+                {
+                    this.cargoBay[slot] = objectAhead;
+                    objectAhead.SetActive(false);
+                    Debug.Log($"Adding cargo {spaceObject.SpaceObjectType} at slot {slot}");
+                    return spaceObject.SpaceObjectType.ToString();
+                }
+                return "No space left in cargo bay";
+            }
+          
+            return "No collectable object found";
+        }
+
+        public async UniTask<string> UnloadCargoAt(int slotIndex)
+        {
+            //Todo play animation
+            await UniTask.Delay(1000);
+            var unloadPosition = this.transform.position + transform.TransformDirection(Vector3.forward) * 2;
+            if (this.GetObjectInFront() == null && InBounds(unloadPosition))
+            {
+                var cargo = this.cargoBay[slotIndex];
+                this.freeSlots.Add(slotIndex);
+                this.cargoBay[slotIndex] = null;
+                cargo.transform.position = unloadPosition;
+                cargo.SetActive(true);
+                return cargo.GetComponent<ISpaceObject>().SpaceObjectType.ToString();
+            }
+            return "Location occupied";
+        }
+
+        public string[] GetCargo()
+        {
+            var result = new List<string>();
+            foreach (var cargo in this.cargoBay)
+            {
+                if (cargo == null)
+                {
+                    result.Add("null");
+                }
+                else
+                {
+                    result.Add(cargo.GetComponent<ISpaceObject>().SpaceObjectType.ToString());
+                }
+            }
+
+            return result.ToArray();
+        }
+
+        private bool InBounds(Vector3 position)
+        {
+            if (position.x < this.boundary.xMin ||
+                position.x > this.boundary.xMax ||
+                position.y < this.boundary.yMin ||
+                position.y > this.boundary.xMax)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion
 
+        private int GetRandomCargoSlot()
+        {
+            if (this.freeSlots.Count > 0)
+            {
+                var slotIndex = Random.Range(0, this.freeSlots.Count);
+                var slot = this.freeSlots[slotIndex];
+                this.freeSlots.RemoveAt(slotIndex);
+                return slot;
+            }
+            return -1;
+        }
         private Vector3 CheckBoundaries(Vector3 endPosition)
         {
             if (endPosition.x > boundary.xMax) endPosition.x = boundary.xMax;
@@ -220,6 +295,20 @@ namespace Game.Systems
 
             isIdle = true;
             return "rotated";
+        }
+
+        private GameObject GetObjectInFront()
+        {
+            Debug.DrawRay(this.transform.position, transform.TransformDirection(Vector3.forward) * 2, Color.yellow, 1,
+                false);
+            if (Physics.Raycast(this.transform.position, transform.TransformDirection(Vector3.forward),
+                out var hitResult, 2))
+            {
+                Debug.Log($"<color=orange>Object in front:</color> {hitResult.collider.gameObject.name}");
+                this.lastScanned = hitResult.transform.gameObject;
+                return hitResult.transform.gameObject;
+            }
+            return null;
         }
     }
 }
