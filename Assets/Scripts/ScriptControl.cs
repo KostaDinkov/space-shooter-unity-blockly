@@ -27,11 +27,11 @@ public class ScriptControl : MonoBehaviour
         //Debug.Log($"After awaiting result: {result}");
         
 
+        await this.player.MoveForwardAsync();
         result = await this.player.PickupObject();
         Debug.Log($"<color=orange>Pickup:</color> {result}");
 
         await this.player.RotateLeftAsync();
-        await this.player.MoveForwardAsync();
 
         var cargoBay = this.player.GetCargo();
         for (int i = 0; i < cargoBay.Length; i++)
