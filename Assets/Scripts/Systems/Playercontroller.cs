@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.GameEvents;
 using Game.Commands;
@@ -38,6 +39,9 @@ namespace Game.Systems
         //remove this?
         //[SerializeField] private Transform shotSpawn;
         [SerializeField] private bool isDisabled;
+
+        [SerializeField] private bool isAlive;
+
         [SerializeField] private bool isIdle = true;
         private GameEventManager eventManager;
         private GameData gameData;
@@ -50,8 +54,10 @@ namespace Game.Systems
         {
             this.gameData = GameData.Instance;
             this.isDisabled = false;
+            this.isAlive = true;
             this.cargoBay = new List<GameObject>(new GameObject[this.cargoBayCapacity]);
             this.freeSlots = Enumerable.Range(0, this.cargoBayCapacity).ToList();
+            
         }
 
         public void Start()
@@ -59,7 +65,11 @@ namespace Game.Systems
             eventManager = GameEventManager.Instance;
             eventManager.Subscribe(GameEventType.ChallangeCompleted, this.OnChallengeCompleted);
             eventManager.Subscribe(GameEventType.ChallangeStarted, (value) => { isDisabled = false; });
+            
+
         }
+
+        
 
         private void Update()
         {
@@ -108,8 +118,10 @@ namespace Game.Systems
 
         public void Die()
         {
-            isIdle = true;
+            
+            this.isAlive = false;
             gameObject.SetActive(false);
+
         }
 
         #region [API]
@@ -119,7 +131,7 @@ namespace Game.Systems
         /// </summary>
         public async UniTask<string> FireWeaponAsync()
         {
-          
+            if(!this.isAlive) throw new PlayerDiedException();
             await UniTask.Delay((int)(this.fireRate * 1000));
             this.nextFire = Time.time + fireRate;
             Instantiate(shot, this.transform.position + new Vector3(0, 1, 0), this.transform.rotation);
@@ -132,7 +144,7 @@ namespace Game.Systems
         /// <returns>The the space object type</returns>
         public async UniTask<string> ScanAheadAsync()
         {
-            this.isIdle = false;
+            
             await UniTask.Delay(1000);
 
             //TODO play scan animation
@@ -140,10 +152,10 @@ namespace Game.Systems
             if (objectInFront != null)
             {
                 this.lastScanned = objectInFront;
-                this.isIdle = true;
+                
                 return this.lastScanned.GetComponent<ISpaceObject>().SpaceObjectType.ToString();
             }
-            this.isIdle = true;
+            
             return "Scanner found no object";
         }
         
@@ -153,18 +165,20 @@ namespace Game.Systems
         /// <param name="dist">The distance to move, defaults to 1</param>
         public async UniTask<string> MoveForwardAsync(int dist = 1)
         {
-            this.isIdle = false;
+            if (!this.isAlive) throw new PlayerDiedException();
+            
+            
             var endPosition = this.transform.position + this.transform.forward * this.gameData.GridSize * dist;
             endPosition = CheckBoundaries(endPosition);
 
-            while (this.transform.position != endPosition)
+            while (this.transform.position != endPosition && this.isAlive)
             {
                 this.transform.position =
                     Vector3.MoveTowards(transform.position, endPosition, this.playerSpeed * Time.deltaTime);
-                await UniTask.WaitForEndOfFrame();
+                await UniTask.WaitForEndOfFrame(this.GetCancellationTokenOnDestroy());
             }
 
-            isIdle = true;
+            
             return "finished moving";
         }
 
@@ -174,6 +188,7 @@ namespace Game.Systems
         /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
         public async UniTask<string> RotateLeftAsync(float degrees = 90)
         {
+            if(!this.isAlive) throw new PlayerDiedException();
             var args = new CommandArgs() {Degrees = -degrees, Speed = this.playerRotationSpeed};
             return await RotateOverSpeedAsync(args);
         }
@@ -184,12 +199,14 @@ namespace Game.Systems
         /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
         public async UniTask<string> RotateRightAsync(float degrees = 90)
         {
+            if (!this.isAlive) throw new PlayerDiedException();
             var args = new CommandArgs {Degrees = degrees, Speed = this.playerRotationSpeed};
             return await this.RotateOverSpeedAsync(args);
         }
 
         public async UniTask<string> PickupObject()
         {
+            if (!this.isAlive) throw new PlayerDiedException();
             var objectAhead = this.GetObjectInFront();
             var spaceObject = objectAhead.GetComponent<ISpaceObject>();
             //Play animation
@@ -212,6 +229,7 @@ namespace Game.Systems
 
         public async UniTask<string> UnloadCargoAt(int slotIndex)
         {
+            if (!this.isAlive) throw new PlayerDiedException();
             //Todo play animation
             await UniTask.Delay(1000);
             var unloadPosition = this.transform.position + transform.TransformDirection(Vector3.forward) * 2;
@@ -229,6 +247,7 @@ namespace Game.Systems
 
         public string[] GetCargo()
         {
+            if (!this.isAlive) throw new PlayerDiedException();
             var result = new List<string>();
             foreach (var cargo in this.cargoBay)
             {
@@ -244,6 +263,7 @@ namespace Game.Systems
 
             return result.ToArray();
         }
+        #endregion
 
         private bool InBounds(Vector3 position)
         {
@@ -257,8 +277,6 @@ namespace Game.Systems
 
             return true;
         }
-
-        #endregion
 
         private int GetRandomCargoSlot()
         {
@@ -283,7 +301,7 @@ namespace Game.Systems
         private async UniTask<string> RotateOverSpeedAsync(object args)
         {
             var end = Quaternion.Euler(0, ((CommandArgs) args).Degrees, 0);
-            isIdle = false;
+            
             var endRotation = this.transform.rotation * end;
             while (this.transform.rotation != endRotation)
             {
@@ -293,7 +311,7 @@ namespace Game.Systems
                 await UniTask.WaitForEndOfFrame();
             }
 
-            isIdle = true;
+            
             return "rotated";
         }
 
