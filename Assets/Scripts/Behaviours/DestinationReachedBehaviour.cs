@@ -6,10 +6,7 @@ using UnityEngine;
 public class DestinationReachedBehaviour : MonoBehaviour
 {
     private GameEventManager eventManager;
-
-
-    //private MessageHub hub;
-    // Start is called before the first frame update
+    
     private void Start()
     {
         //this.hub = MessageHub.Instance;

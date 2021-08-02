@@ -29,16 +29,9 @@ public class ScriptControl : MonoBehaviour
 
         try
         {
+            
             await this.player.MoveForwardAsync();
             await this.player.MoveForwardAsync();
-            result = await this.player.MoveForwardAsync();
-            Debug.Log($"After awaiting result: {result}");
-
-            result = await this.player.MoveForwardAsync();
-            Debug.Log($"After awaiting result: {result}");
-
-            result = await this.player.RotateLeftAsync();
-            Debug.Log($"After awaiting result: {result}");
         }
         catch (PlayerDiedException ex) 
         {

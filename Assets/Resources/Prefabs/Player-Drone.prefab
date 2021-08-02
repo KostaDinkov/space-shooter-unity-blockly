@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 269272703527914238}
   - component: {fileID: 242926871784658064}
   - component: {fileID: 242926871784658079}
+  - component: {fileID: 1335598708714058}
   m_Layer: 0
   m_Name: Player-Drone
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -113,7 +114,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0308c6e4ba1c0954fbe8c91935343fca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosion: {fileID: 0}
+  explosion: {fileID: 4276089794274580105, guid: a8bc18882fb855341bc22603d7257440,
+    type: 3}
 --- !u!114 &242926871784658079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,15 +128,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7a0803a10862174ba95cba9ba4e8f2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerRotationSpeed: 200
   playerSpeed: 4
+  fireRate: 0.5
+  unitSize: 1
   boundary:
-    xMin: 5
-    xMax: 17
+    xMin: -6
+    xMax: 6
     yMin: 0
     yMax: 16
-  fireRate: 0.5
+  lastScanned: {fileID: 0}
+  cargoBay: []
+  cargoBayCapacity: 5
   shot: {fileID: 1668585415462516, guid: 10f4fe664e6cf324c8312bd697e71834, type: 3}
-  shotSpawn: {fileID: 242926871788757029}
+  isDisabled: 0
+  isAlive: 0
+  isIdle: 1
+--- !u!54 &1335598708714058
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 241982768824686468}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &242926871788757030
 GameObject:
   m_ObjectHideFlags: 0

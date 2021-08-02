@@ -13,10 +13,7 @@ public class DestroyOnCollision : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Boundary"))
-        {
-            return;
-        }
+        
 
         if (!this.GetComponent<ISpaceObject>().IsDestroyable)
         {

@@ -23,7 +23,7 @@ public class PlayerCollisions : MonoBehaviour
         }
         if (explosion != null)
         {
-            Instantiate(explosion, transform.position, transform.rotation);
+            Instantiate(explosion, transform.position, Quaternion.Euler(0,0,0));
         }
 
 

@@ -17,6 +17,8 @@ namespace Game.GameEvents
         EnemyDestroyed,
         TargetPickedUp,
         AchievementEarned,
-        AsteroidDestroyed
-     }
+        AsteroidDestroyed,
+        ContainerDestroyed,
+        MineExploded,
+    }
 }

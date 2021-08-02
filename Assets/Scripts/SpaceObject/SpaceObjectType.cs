@@ -10,6 +10,7 @@ namespace Game.SpaceObject
         Mineral,
         Electronics,
         Treasure,
+        Mine,
 
     }
 }

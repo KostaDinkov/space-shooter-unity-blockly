@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RandomRotator : MonoBehaviour
 {
 
-    public float tumble;
+    [SerializeField]private float tumble = 0.1f;
 	
 	void Start ()
 	{

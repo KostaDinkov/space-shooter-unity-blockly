@@ -72,5 +72,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-#Polygon Sci Fi Pack
+#Resource Packs
 /[Aa]ssets/PolygonSciFiSpace
+/[Aa]ssets/Epic Toon Fx/
+/[Aa]ssets/ShadowGlowOrb/
