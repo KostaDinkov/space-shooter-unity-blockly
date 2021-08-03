@@ -31,7 +31,25 @@ public class ScriptControl : MonoBehaviour
         {
             
             await this.player.MoveForwardAsync();
+            //await this.player.MoveForwardAsync();
+            await this.player.RotateLeftAsync();
             await this.player.MoveForwardAsync();
+            await this.player.RotateRightAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.RotateLeftAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.RotateRightAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.MoveForwardAsync();
+           
+            await this.player.RotateRightAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.MoveForwardAsync();
+
+            
         }
         catch (PlayerDiedException ex) 
         {
