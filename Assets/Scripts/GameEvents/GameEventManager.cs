@@ -9,16 +9,16 @@ namespace Game.GameEvents
     internal class GameEventManager
     {
         private static GameEventManager instance;
-        private readonly Dictionary<GameEventType, Dictionary<int, Action<int>>> events;
+        private readonly Dictionary<GameEventType, Dictionary<string, Action<int>>> events;
 
         private GameEventManager()
         {
             if (instance == null) instance = this;
 
-            this.events = new Dictionary<GameEventType, Dictionary<int, Action<int>>>();
+            this.events = new Dictionary<GameEventType, Dictionary<string, Action<int>>>();
             foreach (var gameEventType in (GameEventType[]) Enum.GetValues(typeof(GameEventType)))
             {
-                this.events.Add(gameEventType, new Dictionary<int, Action<int>>());
+                this.events.Add(gameEventType, new Dictionary<string, Action<int>>());
             }
         }
 
@@ -43,11 +43,12 @@ namespace Game.GameEvents
             
         }
 
-        public int Subscribe(GameEventType gameEventType, Action<int> action)
+        public string Subscribe(GameEventType gameEventType, Action<int> action)
         {
-            var token = action.GetHashCode();
+            var token = action.Method.Name;
             if (events[gameEventType].ContainsKey(token))
             {
+                this.events[gameEventType][token] = action;
                 return token;
             }
 
@@ -56,7 +57,7 @@ namespace Game.GameEvents
             return token;
         }
         
-        public void Unsubscribe(GameEventType gameEventType, int token)
+        public void Unsubscribe(GameEventType gameEventType, string token)
         {
             this.events[gameEventType].Remove(token);
             

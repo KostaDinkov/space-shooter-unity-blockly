@@ -8,7 +8,7 @@ public class ShowTextOnChallengeComplete : MonoBehaviour
     private Text textMesh;
 
 
-    private void Start()
+    private void Awake()
     {
         textMesh = GetComponent<Text>();
         eventManager = GameEventManager.Instance;
@@ -16,6 +16,7 @@ public class ShowTextOnChallengeComplete : MonoBehaviour
         eventManager.Subscribe(GameEventType.ChallangeCompleted, ShowChallangeCompletedText);
         eventManager.Subscribe(GameEventType.PlayerDied, ShowPlayerDiedText);
         eventManager.Subscribe(GameEventType.ChallangeStarted, HideText);
+        
     }
 
     public void ShowChallangeCompletedText(int value)

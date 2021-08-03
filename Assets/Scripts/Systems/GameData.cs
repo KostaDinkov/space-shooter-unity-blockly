@@ -4,22 +4,24 @@ using UnityEngine;
 
 namespace Game.Systems
 {
-    public class GameData
+    public class GameData: MonoBehaviour
     {
-        private static readonly GameData instance = new GameData();
-        
-
-        //Todo Change this to 0 after testing
-        public int CurrentChallengeNumber = 0;
-        public GameObject CurrentChallenge;
-        public int ChallengeCount = 0;
-        public int GridSize = 2;
-
+        private static  GameData instance;
         public static GameData Instance =>instance;
-
-        private GameData() { }
-
-        static GameData() { }
-
+        public Objectives.Objectives Objectives;
+        private void Awake()
+        {
+            if (instance != null && instance != this)
+            {
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                instance = this;
+                DontDestroyOnLoad(this.gameObject);
+            }
+        }
+        public int SceneCount = 0;
+        public int GridSize = 2;
     }
 }

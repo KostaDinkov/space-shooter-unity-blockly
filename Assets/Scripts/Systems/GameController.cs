@@ -17,7 +17,7 @@ namespace Game.Systems
         public static GameController Instance;
 
         private BrowserManager browserManager;
-        public GameObject[] Challenges;
+        //public GameObject[] Challenges;
         public GameData gameData;
         private GameEventManager gameEventManager;
         private bool gameOver = false;
@@ -55,7 +55,7 @@ namespace Game.Systems
 
         private void Start()
         {
-            gameData.ChallengeCount = Challenges.Length;
+            //gameData.ChallengeCount = Challenges.Length;
 
             InitLevel();
             objectivesManager = new ObjectivesManager();
@@ -64,9 +64,8 @@ namespace Game.Systems
 
         private void InitLevel()
         {
-            //Player.transform.position = new Vector3(12, 0, 0);
-            //Player.transform.rotation = Quaternion.Euler(-90,0,0);
-            gameData.CurrentChallenge = Challenges[0];
+
+            gameData.Objectives = this.GetComponent<Objectives.Objectives>();
         }
 
         /// <summary>
@@ -75,11 +74,12 @@ namespace Game.Systems
         public void RestartChallenge()
         {
 #if isDebug
-            Debug.Log("Restart Challange Called");
+            Debug.Log("Restart Challenge Called");
 #endif
-            Destroy(gameData.CurrentChallenge);
+            
             Player.SetActive(true);
             InitLevel();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             this.gameEventManager.Publish(new GameEvent() { EventType = GameEventType.ChallangeStarted });
         }
 
@@ -88,42 +88,15 @@ namespace Game.Systems
         /// </summary>
         public void NextChallenge()
         {
-            if (gameData.CurrentChallengeNumber + 1 >= Challenges.Length)
-            {
-                //TODO publish event
-                //this.gameEventManager.Publish(LevelCompletedEvent);
-                return;
-            }
-            if(!gameData.CurrentChallenge.GetComponent<ChallangeState>().IsComplete)
-            {
-                return;
-            }
-
-            Destroy(gameData.CurrentChallenge);
-            gameData.CurrentChallengeNumber += 1;
-            InitLevel();
             
-            this.gameEventManager.Publish(new GameEvent() { EventType = GameEventType.ChallangeStarted });
-        }
-
-        /// <summary>
-        ///     Destroys the currently active challenge and loads new challenge by provided index
-        /// </summary>
-        /// <param name="challengeNumber">The zero based index of the challenge to be loaded</param>
-        public void StartNthChallenge(int challengeNumber)
-        {
-            if (challengeNumber < 0 || challengeNumber >= Challenges.Length)
+            if (SceneManager.GetActiveScene().buildIndex >= SceneManager.sceneCount - 1)
             {
-                Debug.Log($"Challange number out of range: {challengeNumber}");
-                return;
+                //this is the last scene so there is no more scenes to load
             }
-
-            Destroy(gameData.CurrentChallenge);
-            gameData.CurrentChallengeNumber = challengeNumber;
-            InitLevel();
-            
-            this.gameEventManager.Publish(new GameEvent(){EventType = GameEventType.ChallangeStarted});
             
         }
+
+        
+        
     }
 }

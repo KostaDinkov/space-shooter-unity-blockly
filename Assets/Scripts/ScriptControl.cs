@@ -29,27 +29,25 @@ public class ScriptControl : MonoBehaviour
 
         try
         {
+            await this.player.RotateLeftAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.RotateRightAsync();
+            await this.player.FireWeaponAsync();
+            await this.player.FireWeaponAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.RotateRightAsync();
+            await this.player.MoveForwardAsync();
+            await this.player.MoveForwardAsync();
             
-            await this.player.MoveForwardAsync();
-            //await this.player.MoveForwardAsync();
-            await this.player.RotateLeftAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.RotateRightAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.RotateLeftAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.RotateRightAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.MoveForwardAsync();
-           
-            await this.player.RotateRightAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.MoveForwardAsync();
 
-            
+
         }
         catch (PlayerDiedException ex) 
         {

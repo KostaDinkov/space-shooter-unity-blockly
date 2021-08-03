@@ -38,7 +38,7 @@ namespace Game.Objectives
 
         public void InitUI(int value)
         {
-            objectives = GameData.Instance.CurrentChallenge.GetComponent<Objectives>();
+            objectives = GameData.Instance.Objectives;
             InitChallanges(0);
             //clear children in any
             objectivesTexts.Clear();
