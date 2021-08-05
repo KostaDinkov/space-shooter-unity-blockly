@@ -6,10 +6,10 @@ namespace Game.GameEvents
     public enum GameEventType
     {
         LevelStarted,
-        ChallangeStarted,
+        ProblemStarted,
         ObjectiveCompleted,
         ObjectiveUpdated,
-        ChallangeCompleted,
+        ProblemCompleted,
         LevelCompleted,
         TargetReached,
         PlayerDied,

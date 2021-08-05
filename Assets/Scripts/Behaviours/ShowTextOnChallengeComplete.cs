@@ -13,9 +13,9 @@ public class ShowTextOnChallengeComplete : MonoBehaviour
         textMesh = GetComponent<Text>();
         eventManager = GameEventManager.Instance;
         textMesh.enabled = false;
-        eventManager.Subscribe(GameEventType.ChallangeCompleted, ShowChallangeCompletedText);
+        eventManager.Subscribe(GameEventType.ProblemCompleted, ShowChallangeCompletedText);
         eventManager.Subscribe(GameEventType.PlayerDied, ShowPlayerDiedText);
-        eventManager.Subscribe(GameEventType.ChallangeStarted, HideText);
+        eventManager.Subscribe(GameEventType.ProblemStarted, HideText);
         
     }
 

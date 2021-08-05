@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Game.Objectives
 {
     /// <summary>
-    /// A container class that holds all objectives for a given challange
+    /// A container class that holds all objectives for a given problem
     /// </summary>
     public class Objectives : MonoBehaviour
     {

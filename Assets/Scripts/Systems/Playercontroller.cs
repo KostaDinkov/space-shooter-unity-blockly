@@ -63,8 +63,8 @@ namespace Game.Systems
         public void Start()
         {
             eventManager = GameEventManager.Instance;
-            eventManager.Subscribe(GameEventType.ChallangeCompleted, this.OnChallengeCompleted);
-            eventManager.Subscribe(GameEventType.ChallangeStarted, (value) => { isDisabled = false; });
+            eventManager.Subscribe(GameEventType.ProblemCompleted, this.OnChallengeCompleted);
+            eventManager.Subscribe(GameEventType.ProblemStarted, (value) => { isDisabled = false; });
             
 
         }
@@ -168,7 +168,7 @@ namespace Game.Systems
             if (!this.isAlive) throw new PlayerDiedException();
             
             
-            var endPosition = this.transform.position + this.transform.forward * this.gameData.GridSize * dist;
+            var endPosition = this.transform.position + this.transform.forward * GameData.GridSize * dist;
             endPosition = CheckBoundaries(endPosition);
 
             while (this.transform.position != endPosition && this.isAlive)

@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4f7962400c950748b3efe1cc49d9216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosion: {fileID: 0}
+  explosion: {fileID: 1290715649332758, guid: 587eaecaa621be74486f351c78b4f0a8, type: 3}
   EventType: 14
 --- !u!54 &1630844546
 Rigidbody:
@@ -229,6 +229,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1994862750095001525, guid: 788a33ef19385ca419a30435fd0e1914,
         type: 3}
+      propertyPath: prewarm
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1994862750095001525, guid: 788a33ef19385ca419a30435fd0e1914,
+        type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
       value: 0.2
       objectReference: {fileID: 0}
@@ -236,6 +241,16 @@ PrefabInstance:
         type: 3}
       propertyPath: InitialModule.startLifetime.scalar
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1994862750095001525, guid: 788a33ef19385ca419a30435fd0e1914,
+        type: 3}
+      propertyPath: startDelay.maxCurve.m_Curve.Array.data[0].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1994862750095001525, guid: 788a33ef19385ca419a30435fd0e1914,
+        type: 3}
+      propertyPath: startDelay.maxCurve.m_Curve.Array.data[1].value
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 788a33ef19385ca419a30435fd0e1914, type: 3}

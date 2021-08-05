@@ -1,52 +1,39 @@
 using System;
+using System.Threading.Tasks;
 using Game.Systems;
 using UnityEngine;
+using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
 public class ScriptControl : MonoBehaviour
 {
     // Start is called before the first frame update
     public Playercontroller player;
+    public GameController GameController;
     
     async void Start()
     {
-
-        string result;
-        // Test sequence;
-        //result = await this.player.MoveForwardAsync();
-        //Debug.Log($"After awaiting result: {result}");
+        DontDestroyOnLoad(this.gameObject);
+        this.GameController = GameObject.Find("GameController").GetComponent<GameController>();
+        Assert.raiseExceptions = false;
         
-        //result = await this.player.MoveForwardAsync();
-        //Debug.Log($"After awaiting result: {result}");
-        
-        //result = await this.player.RotateLeftAsync();
-        //Debug.Log($"After awaiting result: {result}");
-        
-        //result = await this.player.MoveForwardAsync();
-        //Debug.Log($"<color=orange>After awaiting result:</color> {result}");
-
-        //result = await this.player.ScanAheadAsync();
-        //Debug.Log($"After awaiting result: {result}");
-
         try
         {
-            await this.player.RotateLeftAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.RotateRightAsync();
-            await this.player.FireWeaponAsync();
-            await this.player.FireWeaponAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.RotateRightAsync();
-            await this.player.MoveForwardAsync();
-            await this.player.MoveForwardAsync();
-            
+            switch (SceneManager.GetActiveScene().buildIndex)
+            {
+                case 0: 
+                    //Test for successful option
+                    await this.P1Solution();
+                    Assert.IsTrue(this.GameController.IsProblemComplete);
+                    this.GameController.RestartChallenge();
 
+                    //Test for player died
+                    await this.P1PlayerDead();
+
+                    break;
+                case 1: this.P2Solution();
+                    break;
+            }
 
         }
         catch (PlayerDiedException ex) 
@@ -71,6 +58,60 @@ public class ScriptControl : MonoBehaviour
         //}
 
 
+    }
+
+    private async Task P1Solution()
+
+    {
+        await this.player.RotateLeftAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.RotateRightAsync();
+
+        await this.player.FireWeaponAsync();
+        await this.player.FireWeaponAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
+
+        await this.player.RotateRightAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
+        
+
+    }
+
+    private async Task P1PlayerDead()
+    {
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
+    }
+
+    private async void P2Solution()
+    {
+        await this.player.RotateLeftAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.RotateRightAsync();
+
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
+
+        await this.player.RotateRightAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.RotateLeftAsync();
+
+
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
+        await this.player.MoveForwardAsync();
     }
 
 

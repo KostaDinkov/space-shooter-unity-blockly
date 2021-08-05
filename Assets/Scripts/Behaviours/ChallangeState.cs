@@ -13,7 +13,7 @@ public class ChallangeState : MonoBehaviour
 
   void Start()
   {
-    this.eventManager.Subscribe(GameEventType.ChallangeCompleted, (x) => IsComplete = true);
+    this.eventManager.Subscribe(GameEventType.ProblemCompleted, (x) => IsComplete = true);
   }
 
 }

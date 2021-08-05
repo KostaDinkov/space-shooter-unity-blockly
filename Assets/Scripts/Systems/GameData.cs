@@ -1,27 +1,50 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Game.GameEvents;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 namespace Game.Systems
 {
-    public class GameData: MonoBehaviour
+    public class GameData : MonoBehaviour
     {
-        private static  GameData instance;
-        public static GameData Instance =>instance;
-        public Objectives.Objectives Objectives;
-        private void Awake()
+        private static GameData instance;
+        private GameEventManager gameEventManager;
+
+        public static GameData Instance
         {
-            if (instance != null && instance != this)
+            get
             {
-                Destroy(this.gameObject);
-            }
-            else
-            {
-                instance = this;
-                DontDestroyOnLoad(this.gameObject);
+                if (instance == null)
+                {
+                    instance = new GameData();
+                }
+
+                return instance;
             }
         }
-        public int SceneCount = 0;
-        public int GridSize = 2;
+
+
+        public const int GridSize = 2;
+
+        public int LastUnlockedProblem { get; set; }
+        public int ProblemsCount { get;  set; }
+        public int CurrentProblem { get; set; }
+
+
+        private GameData()
+        {
+            this.gameEventManager = GameEventManager.Instance;
+            this.ProblemsCount = SceneManager.sceneCountInBuildSettings;
+            this.LastUnlockedProblem = 0;
+            this.CurrentProblem = 0;
+            
+        }
+
+       
+
+        
     }
 }

@@ -2,9 +2,9 @@
 
 using Assets.Scripts.GameEvents;
 using Game.GameEvents;
-using Game.Objectives;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using GameEventType = Game.GameEvents.GameEventType;
 
 namespace Game.Systems
 {
@@ -14,14 +14,15 @@ namespace Game.Systems
     /// </summary>
     public class GameController : MonoBehaviour
     {
-        public static GameController Instance;
-
+        public bool IsProblemComplete { get; set; }
+        public bool IsPlayerDead { get; set; }
         private BrowserManager browserManager;
-        //public GameObject[] Challenges;
-        public GameData gameData;
         private GameEventManager gameEventManager;
-        private bool gameOver = false;
-        private ObjectivesManager objectivesManager;
+        private GameData gameData;
+        
+        
+        public static GameController Instance { get; private set; }
+        public static Objectives.Objectives Objectives;
         public GameObject Player;
 
         private void Awake()
@@ -37,9 +38,14 @@ namespace Game.Systems
                 return;
             }
 
-            gameData = GameData.Instance;
+            this.gameData = GameData.Instance;
             gameEventManager = GameEventManager.Instance;
             browserManager = new BrowserManager();
+            Objectives = this.GetComponent<Objectives.Objectives>();
+            foreach (var objective in Objectives.ObjectiveList)
+            {
+                objective.Init();
+            }
         }
 
         private void OnEnable()
@@ -50,37 +56,28 @@ namespace Game.Systems
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             //TODO: publish event
-            
         }
 
         private void Start()
         {
-            //gameData.ChallengeCount = Challenges.Length;
+            this.gameEventManager.Subscribe(GameEventType.ObjectiveCompleted, this.IsProblemCompleted);
+            this.gameEventManager.Subscribe(GameEventType.ProblemCompleted, this.UnlockNextProblem);
+            this.gameEventManager.Subscribe(GameEventType.PlayerDied, (value) => this.IsPlayerDead = true);
+            this.gameEventManager.Publish(new GameEvent() {EventType = GameEventType.ProblemStarted});
 
-            InitLevel();
-            objectivesManager = new ObjectivesManager();
+
+            this.gameData.CurrentProblem = SceneManager.GetActiveScene().buildIndex;
         }
 
-
-        private void InitLevel()
-        {
-
-            gameData.Objectives = this.GetComponent<Objectives.Objectives>();
-        }
 
         /// <summary>
         ///     Resets / reloads the currently active challenge.
         /// </summary>
         public void RestartChallenge()
         {
-#if isDebug
-            Debug.Log("Restart Challenge Called");
-#endif
-            
             Player.SetActive(true);
-            InitLevel();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            this.gameEventManager.Publish(new GameEvent() { EventType = GameEventType.ChallangeStarted });
+            this.gameEventManager.Publish(new GameEvent() {EventType = GameEventType.ProblemStarted});
         }
 
         /// <summary>
@@ -88,15 +85,55 @@ namespace Game.Systems
         /// </summary>
         public void NextChallenge()
         {
-            
-            if (SceneManager.GetActiveScene().buildIndex >= SceneManager.sceneCount - 1)
+            if (this.gameData.LastUnlockedProblem >= this.gameData.ProblemsCount )
             {
-                //this is the last scene so there is no more scenes to load
+                //TODO no more problems - implement game win condition
+                Debug.Log($"No more problems");
+                return;
             }
+
+            if (this.gameData.CurrentProblem == this.gameData.LastUnlockedProblem)
+            {
+                //TODO next problem is still locked, update UI
+                Debug.Log($"Next level: ({this.gameData.CurrentProblem + 1}) is locked");
+                return;
+            }
+
+            SceneManager.LoadScene(this.gameData.CurrentProblem+1);
+        }
+
+        private void InitObjectives(int value)
+        {
             
         }
 
-        
-        
+        private void IsProblemCompleted(int value)
+        {
+            foreach (var objective in Objectives.ObjectiveList)
+            {
+                if (!objective.IsComplete())
+                {
+                    return;
+                }
+            }
+
+            this.gameEventManager.Publish(new GameEvent {EventType = GameEventType.ProblemCompleted});
+            this.IsProblemComplete = true;
+
+        }
+
+
+        public void UnlockNextProblem(int value)
+        {
+            
+            if (this.gameData.LastUnlockedProblem >= this.gameData.ProblemsCount)
+            {
+                return;
+            }
+            this.gameData.LastUnlockedProblem = this.gameData.CurrentProblem + 1;
+
+        }
+
+
     }
 }
