@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace Scripts.Systems
 {
-    public class GameData : MonoBehaviour
+    public class GameData 
     {
         private static GameData instance;
         private GameEventManager gameEventManager;
