@@ -1,10 +1,7 @@
 ﻿
 using System;
-using Game.GameEvents;
 
-
-
-namespace Assets.Scripts.GameEvents
+namespace Scripts.GameEvents
 {
    [Serializable]
     public class GameEvent

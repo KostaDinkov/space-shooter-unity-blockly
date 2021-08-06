@@ -1,21 +1,24 @@
 ﻿using UnityEngine;
 
-public class DestroyOnCollisionNoEvent : MonoBehaviour
+namespace Scripts.Behaviours
 {
-    public GameObject explosion;
-   
-    private void OnTriggerEnter(Collider other)
+    public class DestroyOnCollisionNoEvent : MonoBehaviour
     {
-        if (other.CompareTag("Boundary"))
+        public GameObject explosion;
+   
+        private void OnTriggerEnter(Collider other)
         {
-            return;
-        }
-        if (explosion != null)
-        {
-            Instantiate(explosion, transform.position, transform.rotation);
-        }
+            if (other.CompareTag("Boundary"))
+            {
+                return;
+            }
+            if (this.explosion != null)
+            {
+                Instantiate(this.explosion, this.transform.position, this.transform.rotation);
+            }
 
-        Destroy(gameObject);
+            Destroy(this.gameObject);
         
+        }
     }
 }

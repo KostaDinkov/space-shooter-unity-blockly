@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Game.SpaceObject
+namespace Scripts.SpaceObject
 {
     public class ISpaceObject : MonoBehaviour
     {

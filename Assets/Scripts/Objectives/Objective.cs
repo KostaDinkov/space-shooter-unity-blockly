@@ -1,9 +1,8 @@
 ﻿using System;
-using Assets.Scripts.GameEvents;
-using Game.GameEvents;
+using Scripts.GameEvents;
 using UnityEngine;
 
-namespace Game.Objectives
+namespace Scripts.Objectives
 {
     /// <summary>
     ///     Base Objective class.
@@ -24,25 +23,25 @@ namespace Game.Objectives
 
         public void Init()
         {
-            CurrentValue = DefaultValue;
-            eventManager = GameEventManager.Instance;
-            eventManager.Subscribe(ListenEvent, ObjectiveUpdated);
+            this.CurrentValue = this.DefaultValue;
+            this.eventManager = GameEventManager.Instance;
+            this.eventManager.Subscribe(this.ListenEvent, this.ObjectiveUpdated);
         }
 
         private void ObjectiveUpdated(int value)
         {
-            CurrentValue += value;
-            if (IsComplete())
+            this.CurrentValue += value;
+            if (this.IsComplete())
             {
-                eventManager.Publish(new GameEvent {EventType = GameEventType.ObjectiveCompleted});
+                this.eventManager.Publish(new GameEvent {EventType = GameEventType.ObjectiveCompleted});
             }
 
-            eventManager.Publish(new GameEvent {EventType = GameEventType.ObjectiveUpdated});
+            this.eventManager.Publish(new GameEvent {EventType = GameEventType.ObjectiveUpdated});
         }
 
         public bool IsComplete()
         {
-            return CurrentValue >= TargetValue;
+            return this.CurrentValue >= this.TargetValue;
         }
     }
 }

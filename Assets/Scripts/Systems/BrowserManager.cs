@@ -1,9 +1,7 @@
 ﻿using System.Runtime.InteropServices;
-using Assets.Scripts.GameEvents;
-using Game.GameEvents;
-using UnityEngine;
+using Scripts.GameEvents;
 
-namespace Game.Systems
+namespace Scripts.Systems
 {
     public class BrowserManager
     {

@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-
 using UnityEngine;
 
-
-namespace Game.Objectives
+namespace Scripts.Objectives
 {
     /// <summary>
     /// A container class that holds all objectives for a given problem

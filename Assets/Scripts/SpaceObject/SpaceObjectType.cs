@@ -1,5 +1,5 @@
 ﻿
-namespace Game.SpaceObject
+namespace Scripts.SpaceObject
 {
     public enum SpaceObjectType
     {

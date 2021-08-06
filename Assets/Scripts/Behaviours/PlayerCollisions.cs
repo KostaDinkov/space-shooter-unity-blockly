@@ -1,33 +1,35 @@
-﻿using Assets.Scripts.GameEvents;
-using Game.GameEvents;
+﻿using Scripts.GameEvents;
+using Scripts.Systems;
 using UnityEngine;
-using Game.Systems;
 
-public class PlayerCollisions : MonoBehaviour
+namespace Scripts.Behaviours
 {
-    public GameObject explosion;
-    private GameEventManager eventManager;
-
-
-    void Start()
+    public class PlayerCollisions : MonoBehaviour
     {
-        this.eventManager = GameEventManager.Instance;
-    }
+        public GameObject explosion;
+        private GameEventManager eventManager;
 
-    void OnTriggerEnter(Collider other)
-    {
-        Debug.Log($"Player colission: {other.name}");
-        if (other.CompareTag("Boundary") || other.CompareTag("Landing"))
+
+        void Start()
         {
-            return;
-        }
-        if (explosion != null)
-        {
-            Instantiate(explosion, transform.position, Quaternion.Euler(0,0,0));
+            this.eventManager = GameEventManager.Instance;
         }
 
+        void OnTriggerEnter(Collider other)
+        {
+            Debug.Log($"Player colission: {other.name}");
+            if (other.CompareTag("Boundary") || other.CompareTag("Landing"))
+            {
+                return;
+            }
+            if (this.explosion != null)
+            {
+                Instantiate(this.explosion, this.transform.position, Quaternion.Euler(0,0,0));
+            }
 
-        this.eventManager.Publish(new GameEvent {EventType = GameEventType.PlayerDied});
-        this.GetComponent<Playercontroller>().Die();
+
+            this.eventManager.Publish(new GameEvent {EventType = GameEventType.PlayerDied});
+            this.GetComponent<Playercontroller>().Die();
+        }
     }
 }

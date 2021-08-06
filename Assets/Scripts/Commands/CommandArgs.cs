@@ -1,4 +1,4 @@
-namespace Game.Commands
+namespace Scripts.Commands
 {
   public class CommandArgs : ICommandArgs
 

@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 
-public class DestroyByBoundary : MonoBehaviour {
+namespace Scripts.Behaviours
+{
+    public class DestroyByBoundary : MonoBehaviour {
 
-    void OnTriggerExit(Collider other)
-    {
-        Destroy(other.gameObject);
+        void OnTriggerExit(Collider other)
+        {
+            Destroy(other.gameObject);
+        }
     }
 }

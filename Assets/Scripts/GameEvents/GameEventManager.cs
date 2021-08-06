@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assets.Scripts.GameEvents;
 using UnityEngine;
 
-
-namespace Game.GameEvents
+namespace Scripts.GameEvents
 {
     internal class GameEventManager
     {
@@ -46,7 +44,7 @@ namespace Game.GameEvents
         public string Subscribe(GameEventType gameEventType, Action<int> action)
         {
             var token = action.Method.Name;
-            if (events[gameEventType].ContainsKey(token))
+            if (this.events[gameEventType].ContainsKey(token))
             {
                 this.events[gameEventType][token] = action;
                 return token;

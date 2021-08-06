@@ -1,39 +1,39 @@
 ﻿using UnityEngine;
-using Game.SpaceObject;
-using UnityEditor;
 
 #if UnityEditor
 [ExecuteInEditMode]
 #endif
-public class IAsteroid : MonoBehaviour
+namespace Scripts.SpaceObject
 {
-    private Transform asteroid;
-    private Renderer rend;
-    private Material blackMaterial;
-    private Material defaultMaterial;
-    private string asteroidName;
-
-    void Awake()
+    public class IAsteroid : MonoBehaviour
     {
-        asteroid = transform.GetChild(0);
-        if (asteroid == null)
+        private Transform asteroid;
+        private Renderer rend;
+        private Material blackMaterial;
+        private Material defaultMaterial;
+        private string asteroidName;
+
+        void Awake()
         {
-            return;
-        }
-        rend = asteroid.gameObject.GetComponent<Renderer>();
-        name = asteroid.name;
+            this.asteroid = this.transform.GetChild(0);
+            if (this.asteroid == null)
+            {
+                return;
+            }
+            this.rend = this.asteroid.gameObject.GetComponent<Renderer>();
+            this.name = this.asteroid.name;
        
-        blackMaterial = Resources.Load<Material>($"LoadableMaterials/{name}_mat_black");
-        defaultMaterial = Resources.Load<Material>($"LoadableMaterials/{name}_mat");
+            this.blackMaterial = Resources.Load<Material>($"LoadableMaterials/{this.name}_mat_black");
+            this.defaultMaterial = Resources.Load<Material>($"LoadableMaterials/{this.name}_mat");
 
-        ApplyMaterial();
+            this.ApplyMaterial();
 
-    }
+        }
     
     
-    // Update is called once per frame
-    void Update()
-    {
+        // Update is called once per frame
+        void Update()
+        {
 #if UnityEditor        
         //Updates material while in edit mode. In play mode we do not need to apply material constantly;
         if (!EditorApplication.isPlaying)
@@ -42,18 +42,19 @@ public class IAsteroid : MonoBehaviour
         }
 #endif
         
-    }
-
-    public void ApplyMaterial()
-    {
-       if (!this.GetComponent<ISpaceObject>().IsDestroyable)
-        {
-            
-            rend.material = blackMaterial;
         }
-        else
+
+        public void ApplyMaterial()
         {
-            rend.material = defaultMaterial;
+            if (!this.GetComponent<ISpaceObject>().IsDestroyable)
+            {
+            
+                this.rend.material = this.blackMaterial;
+            }
+            else
+            {
+                this.rend.material = this.defaultMaterial;
+            }
         }
     }
 }

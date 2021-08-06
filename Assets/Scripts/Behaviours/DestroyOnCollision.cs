@@ -1,30 +1,32 @@
-﻿using Assets.Scripts.GameEvents;
-using Game.GameEvents;
-using Game.SpaceObject;
+﻿using Scripts.GameEvents;
+using Scripts.SpaceObject;
 using UnityEngine;
 
-[RequireComponent(typeof (ISpaceObject))]
-public class DestroyOnCollision : MonoBehaviour
+namespace Scripts.Behaviours
 {
-    public GameObject explosion;
-    [Tooltip("The event type to fire when the object is destroyed.")]
-    public GameEventType EventType;
-    private GameEventManager eventManager = GameEventManager.Instance;
-
-    private void OnTriggerEnter(Collider other)
+    [RequireComponent(typeof (ISpaceObject))]
+    public class DestroyOnCollision : MonoBehaviour
     {
+        public GameObject explosion;
+        [Tooltip("The event type to fire when the object is destroyed.")]
+        public GameEventType EventType;
+        private GameEventManager eventManager = GameEventManager.Instance;
+
+        private void OnTriggerEnter(Collider other)
+        {
         
 
-        if (!this.GetComponent<ISpaceObject>().IsDestroyable)
-        {
-            return;
-        }
-        if (explosion != null)
-        {
-            Instantiate(explosion, transform.position, transform.rotation);
-        }
+            if (!this.GetComponent<ISpaceObject>().IsDestroyable)
+            {
+                return;
+            }
+            if (this.explosion != null)
+            {
+                Instantiate(this.explosion, this.transform.position, this.transform.rotation);
+            }
 
-        gameObject.SetActive(false);
-        eventManager.Publish(new GameEvent(){EventType = EventType, EventValue = 1});
+            this.gameObject.SetActive(false);
+            this.eventManager.Publish(new GameEvent(){EventType = this.EventType, EventValue = 1});
+        }
     }
 }

@@ -1,39 +1,41 @@
-﻿using Assets.Scripts.GameEvents;
-using Game.GameEvents;
+﻿using Scripts.GameEvents;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
-public class DestinationReachedBehaviour : MonoBehaviour
+namespace Scripts.Behaviours
 {
-    private GameEventManager eventManager;
+    [RequireComponent(typeof(Collider))]
+    public class DestinationReachedBehaviour : MonoBehaviour
+    {
+        private GameEventManager eventManager;
     
-    private void Start()
-    {
-        //this.hub = MessageHub.Instance;
-        eventManager = GameEventManager.Instance;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player"))
+        private void Start()
         {
-            eventManager.Publish(new GameEvent
-            {
-                EventType = GameEventType.TargetReached,
-                EventValue = 1
-            });
+            //this.hub = MessageHub.Instance;
+            this.eventManager = GameEventManager.Instance;
         }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player"))
+        private void OnTriggerEnter(Collider other)
         {
-            eventManager.Publish(new GameEvent
+            if (other.gameObject.CompareTag("Player"))
             {
-                EventType = GameEventType.TargetReached,
-                EventValue = -1
-            });
+                this.eventManager.Publish(new GameEvent
+                {
+                    EventType = GameEventType.TargetReached,
+                    EventValue = 1
+                });
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.gameObject.CompareTag("Player"))
+            {
+                this.eventManager.Publish(new GameEvent
+                {
+                    EventType = GameEventType.TargetReached,
+                    EventValue = -1
+                });
+            }
         }
     }
 }

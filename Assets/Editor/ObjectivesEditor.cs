@@ -1,7 +1,7 @@
 ﻿
 #if UNITY_EDITOR
 
-using Game.Objectives;
+using Scripts.Objectives;
 using UnityEditor;
 using UnityEngine;
 

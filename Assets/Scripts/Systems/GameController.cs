@@ -1,12 +1,12 @@
 ﻿#define isDebug
 
-using Assets.Scripts.GameEvents;
-using Game.GameEvents;
+using Scripts.Systems;
+using Scripts.GameEvents;
+using Scripts.Objectives;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using GameEventType = Game.GameEvents.GameEventType;
 
-namespace Game.Systems
+namespace Scripts.Systems
 {
     /// <summary>
     /// API for controlling the game flow and getting information about
@@ -34,13 +34,13 @@ namespace Game.Systems
             }
             else if (Instance != this)
             {
-                Destroy(gameObject);
+                Destroy(this.gameObject);
                 return;
             }
 
             this.gameData = GameData.Instance;
-            gameEventManager = GameEventManager.Instance;
-            browserManager = new BrowserManager();
+            this.gameEventManager = GameEventManager.Instance;
+            this.browserManager = new BrowserManager();
             Objectives = this.GetComponent<Objectives.Objectives>();
             foreach (var objective in Objectives.ObjectiveList)
             {
@@ -50,7 +50,7 @@ namespace Game.Systems
 
         private void OnEnable()
         {
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneLoaded += this.OnSceneLoaded;
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -75,7 +75,7 @@ namespace Game.Systems
         /// </summary>
         public void RestartChallenge()
         {
-            Player.SetActive(true);
+            this.Player.SetActive(true);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             this.gameEventManager.Publish(new GameEvent() {EventType = GameEventType.ProblemStarted});
         }

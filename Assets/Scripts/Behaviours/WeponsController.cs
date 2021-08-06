@@ -1,29 +1,32 @@
 ﻿
 using UnityEngine;
 
-public class WeponsController : MonoBehaviour {
+namespace Scripts.Behaviours
+{
+    public class WeponsController : MonoBehaviour {
 
-	// Use this for initialization
-    private AudioSource audioSource;
-    public GameObject shot;
-    public Transform shotSpawn;
-    public float FireRate;
-    public float shotDelay;
+        // Use this for initialization
+        private AudioSource audioSource;
+        public GameObject shot;
+        public Transform shotSpawn;
+        public float FireRate;
+        public float shotDelay;
 
-	void Start ()
-	{
-	    audioSource = GetComponent<AudioSource>();
-        InvokeRepeating("FireWeapon", shotDelay, FireRate);
-	}
+        void Start ()
+        {
+            this.audioSource = this.GetComponent<AudioSource>();
+            this.InvokeRepeating("FireWeapon", this.shotDelay, this.FireRate);
+        }
 	
-	// Update is called once per frame
-	void Update () {
+        // Update is called once per frame
+        void Update () {
 		
-	}
+        }
 
-    void FireWeapon()
-    {
-        Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-        audioSource.Play();
+        void FireWeapon()
+        {
+            Instantiate(this.shot, this.shotSpawn.position, this.shotSpawn.rotation);
+            this.audioSource.Play();
+        }
     }
 }

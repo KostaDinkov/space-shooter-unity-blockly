@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 
-public class DestroyByTime : MonoBehaviour {
+namespace Scripts.Behaviours
+{
+    public class DestroyByTime : MonoBehaviour {
 
-	// Use this for initialization
-    public float lifetime;
-	void Start ()
-	{
-	    Destroy(gameObject,lifetime);
-	}
+        // Use this for initialization
+        public float lifetime;
+        void Start ()
+        {
+            Destroy(this.gameObject,this.lifetime);
+        }
 	
 	
+    }
 }

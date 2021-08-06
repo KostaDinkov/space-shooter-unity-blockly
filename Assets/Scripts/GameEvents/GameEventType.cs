@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Game.GameEvents
+namespace Scripts.GameEvents
 {
     [Serializable]
     public enum GameEventType

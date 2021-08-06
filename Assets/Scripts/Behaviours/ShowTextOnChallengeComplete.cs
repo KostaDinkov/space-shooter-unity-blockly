@@ -1,39 +1,42 @@
-﻿using Game.GameEvents;
+﻿using Scripts.GameEvents;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShowTextOnChallengeComplete : MonoBehaviour
+namespace Scripts.Behaviours
 {
-    private GameEventManager eventManager;
-    private Text textMesh;
-
-
-    private void Awake()
+    public class ShowTextOnChallengeComplete : MonoBehaviour
     {
-        textMesh = GetComponent<Text>();
-        eventManager = GameEventManager.Instance;
-        textMesh.enabled = false;
-        eventManager.Subscribe(GameEventType.ProblemCompleted, ShowChallangeCompletedText);
-        eventManager.Subscribe(GameEventType.PlayerDied, ShowPlayerDiedText);
-        eventManager.Subscribe(GameEventType.ProblemStarted, HideText);
+        private GameEventManager eventManager;
+        private Text textMesh;
+
+
+        private void Awake()
+        {
+            this.textMesh = this.GetComponent<Text>();
+            this.eventManager = GameEventManager.Instance;
+            this.textMesh.enabled = false;
+            this.eventManager.Subscribe(GameEventType.ProblemCompleted, this.ShowChallangeCompletedText);
+            this.eventManager.Subscribe(GameEventType.PlayerDied, this.ShowPlayerDiedText);
+            this.eventManager.Subscribe(GameEventType.ProblemStarted, this.HideText);
         
-    }
+        }
 
-    public void ShowChallangeCompletedText(int value)
-    {
-        textMesh.text = "ChallangeCompleted";
-        textMesh.enabled = true;
-    }
+        public void ShowChallangeCompletedText(int value)
+        {
+            this.textMesh.text = "ChallangeCompleted";
+            this.textMesh.enabled = true;
+        }
 
-    public void ShowPlayerDiedText(int value)
-    {
-        textMesh.text = "Player Died.\nRestart Challange.";
-        textMesh.enabled = true;
-    }
+        public void ShowPlayerDiedText(int value)
+        {
+            this.textMesh.text = "Player Died.\nRestart Challange.";
+            this.textMesh.enabled = true;
+        }
 
-    public void HideText(int value)
-    {
-        textMesh.text = "";
-        textMesh.enabled = false;
+        public void HideText(int value)
+        {
+            this.textMesh.text = "";
+            this.textMesh.enabled = false;
+        }
     }
 }

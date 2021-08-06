@@ -1,19 +1,19 @@
-﻿using System;
+﻿using Scripts.GameEvents;
 using UnityEngine;
-using System.Collections;
-using Game.GameEvents;
 
-
-public class ChallangeState : MonoBehaviour
+namespace Scripts.Behaviours
 {
-  private GameEventManager eventManager = GameEventManager.Instance;
+    public class ChallangeState : MonoBehaviour
+    {
+        private GameEventManager eventManager = GameEventManager.Instance;
 
-  [Tooltip("If the challange is complete")]
-  public bool IsComplete;
+        [Tooltip("If the challange is complete")]
+        public bool IsComplete;
 
-  void Start()
-  {
-    this.eventManager.Subscribe(GameEventType.ProblemCompleted, (x) => IsComplete = true);
-  }
+        void Start()
+        {
+            this.eventManager.Subscribe(GameEventType.ProblemCompleted, (x) => this.IsComplete = true);
+        }
 
+    }
 }

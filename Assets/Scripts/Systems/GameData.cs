@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Game.GameEvents;
+﻿using Scripts.GameEvents;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
-namespace Game.Systems
+namespace Scripts.Systems
 {
     public class GameData : MonoBehaviour
     {

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+using Scripts.Commands;
+using Scripts.Exceptions;
+using Scripts.GameEvents;
+using Scripts.SpaceObject;
 using Cysharp.Threading.Tasks;
-using Game.GameEvents;
-using Game.Commands;
-using Game.SpaceObject;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 
-namespace Game.Systems
+namespace Scripts.Systems
 {
     [Serializable]
     public class Boundary
@@ -62,9 +62,9 @@ namespace Game.Systems
 
         public void Start()
         {
-            eventManager = GameEventManager.Instance;
-            eventManager.Subscribe(GameEventType.ProblemCompleted, this.OnChallengeCompleted);
-            eventManager.Subscribe(GameEventType.ProblemStarted, (value) => { isDisabled = false; });
+            this.eventManager = GameEventManager.Instance;
+            this.eventManager.Subscribe(GameEventType.ProblemCompleted, this.OnChallengeCompleted);
+            this.eventManager.Subscribe(GameEventType.ProblemStarted, (value) => { this.isDisabled = false; });
             
 
         }
@@ -73,17 +73,17 @@ namespace Game.Systems
 
         private void Update()
         {
-            ReadInput();
+            this.ReadInput();
         }
 
         private void OnChallengeCompleted(int value)
         {
-            isDisabled = true;
+            this.isDisabled = true;
         }
 
         private void ReadInput()
         {
-            if (isDisabled)
+            if (this.isDisabled)
             {
                 return;
             }
@@ -120,7 +120,7 @@ namespace Game.Systems
         {
             
             this.isAlive = false;
-            gameObject.SetActive(false);
+            this.gameObject.SetActive(false);
 
         }
 
@@ -133,8 +133,8 @@ namespace Game.Systems
         {
             if(!this.isAlive) throw new PlayerDiedException();
             await UniTask.Delay((int)(this.fireRate * 1000));
-            this.nextFire = Time.time + fireRate;
-            Instantiate(shot, this.transform.position + new Vector3(0, 1, 0), this.transform.rotation);
+            this.nextFire = Time.time + this.fireRate;
+            Instantiate(this.shot, this.transform.position + new Vector3(0, 1, 0), this.transform.rotation);
             return "shot fired";
         }
 
@@ -148,7 +148,7 @@ namespace Game.Systems
             await UniTask.Delay(1000);
 
             //TODO play scan animation
-            var objectInFront = GetObjectInFront();
+            var objectInFront = this.GetObjectInFront();
             if (objectInFront != null)
             {
                 this.lastScanned = objectInFront;
@@ -169,12 +169,12 @@ namespace Game.Systems
             
             
             var endPosition = this.transform.position + this.transform.forward * GameData.GridSize * dist;
-            endPosition = CheckBoundaries(endPosition);
+            endPosition = this.CheckBoundaries(endPosition);
 
             while (this.transform.position != endPosition && this.isAlive)
             {
                 this.transform.position =
-                    Vector3.MoveTowards(transform.position, endPosition, this.playerSpeed * Time.deltaTime);
+                    Vector3.MoveTowards(this.transform.position, endPosition, this.playerSpeed * Time.deltaTime);
                 await UniTask.WaitForEndOfFrame(this.GetCancellationTokenOnDestroy());
             }
 
@@ -190,7 +190,7 @@ namespace Game.Systems
         {
             if(!this.isAlive) throw new PlayerDiedException();
             var args = new CommandArgs() {Degrees = -degrees, Speed = this.playerRotationSpeed};
-            return await RotateOverSpeedAsync(args);
+            return await this.RotateOverSpeedAsync(args);
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace Game.Systems
             await UniTask.Delay(1000);
             if (objectAhead && spaceObject.IsIdentified && spaceObject.SpaceObjectType != SpaceObjectType.Asteroid)
             {
-                int slot = GetRandomCargoSlot();
+                int slot = this.GetRandomCargoSlot();
                 if (slot >= 0)
                 {
                     this.cargoBay[slot] = objectAhead;
@@ -232,8 +232,8 @@ namespace Game.Systems
             if (!this.isAlive) throw new PlayerDiedException();
             //Todo play animation
             await UniTask.Delay(1000);
-            var unloadPosition = this.transform.position + transform.TransformDirection(Vector3.forward) * 2;
-            if (this.GetObjectInFront() == null && InBounds(unloadPosition))
+            var unloadPosition = this.transform.position + this.transform.TransformDirection(Vector3.forward) * 2;
+            if (this.GetObjectInFront() == null && this.InBounds(unloadPosition))
             {
                 var cargo = this.cargoBay[slotIndex];
                 this.freeSlots.Add(slotIndex);
@@ -291,10 +291,10 @@ namespace Game.Systems
         }
         private Vector3 CheckBoundaries(Vector3 endPosition)
         {
-            if (endPosition.x > boundary.xMax) endPosition.x = boundary.xMax;
-            if (endPosition.x < boundary.xMin) endPosition.x = boundary.xMin;
-            if (endPosition.y < boundary.yMin) endPosition.y = boundary.yMin;
-            if (endPosition.y > boundary.yMax) endPosition.y = boundary.yMax;
+            if (endPosition.x > this.boundary.xMax) endPosition.x = this.boundary.xMax;
+            if (endPosition.x < this.boundary.xMin) endPosition.x = this.boundary.xMin;
+            if (endPosition.y < this.boundary.yMin) endPosition.y = this.boundary.yMin;
+            if (endPosition.y > this.boundary.yMax) endPosition.y = this.boundary.yMax;
             return endPosition;
         }
 
@@ -317,9 +317,9 @@ namespace Game.Systems
 
         private GameObject GetObjectInFront()
         {
-            Debug.DrawRay(this.transform.position, transform.TransformDirection(Vector3.forward) * 2, Color.yellow, 1,
+            Debug.DrawRay(this.transform.position, this.transform.TransformDirection(Vector3.forward) * 2, Color.yellow, 1,
                 false);
-            if (Physics.Raycast(this.transform.position, transform.TransformDirection(Vector3.forward),
+            if (Physics.Raycast(this.transform.position, this.transform.TransformDirection(Vector3.forward),
                 out var hitResult, 2))
             {
                 Debug.Log($"<color=orange>Object in front:</color> {hitResult.collider.gameObject.name}");
