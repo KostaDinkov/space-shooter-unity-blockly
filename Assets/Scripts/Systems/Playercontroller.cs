@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Scripts.Commands;
 using Scripts.Exceptions;
@@ -7,6 +8,7 @@ using Scripts.GameEvents;
 using Scripts.SpaceObject;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
 
@@ -27,13 +29,16 @@ namespace Scripts.Systems
 
         [SerializeField] private float playerRotationSpeed = 200;
         [SerializeField] private float playerSpeed = 4;
+
         [SerializeField] private float fireRate = 0.5f;
+
         //[SerializeField] private float gameSpeed = 5f;
         [SerializeField] private float unitSize = 1;
         [SerializeField] private Boundary boundary;
         [SerializeField] private GameObject lastScanned;
         [SerializeField] private List<GameObject> cargoBay;
         [SerializeField] private int cargoBayCapacity = 5;
+        [SerializeField] private GameObject lastPickedUp;
         [SerializeField] private GameObject shot;
 
         //remove this?
@@ -47,7 +52,8 @@ namespace Scripts.Systems
         private GameData gameData;
         private float nextFire;
         private List<int> freeSlots;
-        
+        private UniTask<string> currentTask;
+
         #endregion
 
         public void Awake()
@@ -57,7 +63,6 @@ namespace Scripts.Systems
             this.isAlive = true;
             this.cargoBay = new List<GameObject>(new GameObject[this.cargoBayCapacity]);
             this.freeSlots = Enumerable.Range(0, this.cargoBayCapacity).ToList();
-            
         }
 
         public void Start()
@@ -65,11 +70,8 @@ namespace Scripts.Systems
             this.eventManager = GameEventManager.Instance;
             this.eventManager.Subscribe(GameEventType.ProblemCompleted, this.OnChallengeCompleted);
             this.eventManager.Subscribe(GameEventType.ProblemStarted, (value) => { this.isDisabled = false; });
-            
-
         }
 
-        
 
         private void Update()
         {
@@ -88,53 +90,62 @@ namespace Scripts.Systems
                 return;
             }
 
-            if (Input.GetButton("Fire1"))
+            if (Input.GetKeyDown(KeyCode.Space) && this.currentTask.Status == UniTaskStatus.Succeeded)
             {
-                //FireWeapon();
+                this.currentTask = this.FireWeaponAsync();
             }
 
-            if (Input.GetKeyDown(KeyCode.I))
+            if (Input.GetKeyDown(KeyCode.I) && this.currentTask.Status == UniTaskStatus.Succeeded)
             {
-                //test sequence
-                //MoveForward();
+                this.currentTask = this.MoveForwardAsync();
             }
 
-            if (Input.GetKeyDown(KeyCode.J))
+            if (Input.GetKeyDown(KeyCode.J) && this.currentTask.Status == UniTaskStatus.Succeeded)
             {
-                //RotateLeftAsync();
+                this.currentTask = this.RotateLeftAsync();
             }
 
-            if (Input.GetKeyDown(KeyCode.L))
+            if (Input.GetKeyDown(KeyCode.L) && this.currentTask.Status == UniTaskStatus.Succeeded)
             {
-                //RotateRightAsync();
+                this.currentTask = this.RotateRightAsync();
             }
 
-            if (Input.GetKeyDown(KeyCode.U))
+            if (Input.GetKeyDown(KeyCode.U) && this.currentTask.Status == UniTaskStatus.Succeeded)
             {
-                //var result = await this.ScanAhead();
-                //Debug.Log(result);
+                this.currentTask = this.ScanAheadAsync();
+            }
+
+            if (Input.GetKeyDown(KeyCode.O) && this.currentTask.Status == UniTaskStatus.Succeeded)
+            {
+                this.currentTask = this.PickupObjectAsync();
+            }
+
+            if (Input.GetKeyDown(KeyCode.P) && this.currentTask.Status == UniTaskStatus.Succeeded)
+            {
+                this.currentTask = this.UnloadCargoAt(this.cargoBay.IndexOf(this.lastPickedUp));
             }
         }
+
 
         public void Die()
         {
-            
             this.isAlive = false;
             this.gameObject.SetActive(false);
-
         }
 
         #region [API]
+
         //TODO - IMPORTANT - implement cancellation for the async tasks
         /// <summary>
         /// Fires the player weapon once
         /// </summary>
         public async UniTask<string> FireWeaponAsync()
         {
-            if(!this.isAlive) throw new PlayerDiedException();
-            await UniTask.Delay((int)(this.fireRate * 1000));
+            if (!this.isAlive) throw new PlayerDiedException();
+
             this.nextFire = Time.time + this.fireRate;
-            Instantiate(this.shot, this.transform.position + new Vector3(0, 1, 0), this.transform.rotation);
+            Instantiate(this.shot, this.transform.position + this.transform.forward, this.transform.rotation);
+            await UniTask.Delay((int) (this.fireRate * 1000));
             return "shot fired";
         }
 
@@ -144,7 +155,6 @@ namespace Scripts.Systems
         /// <returns>The the space object type</returns>
         public async UniTask<string> ScanAheadAsync()
         {
-            
             await UniTask.Delay(1000);
 
             //TODO play scan animation
@@ -152,13 +162,13 @@ namespace Scripts.Systems
             if (objectInFront != null)
             {
                 this.lastScanned = objectInFront;
-                
+
                 return this.lastScanned.GetComponent<ISpaceObject>().SpaceObjectType.ToString();
             }
-            
+
             return "Scanner found no object";
         }
-        
+
         /// <summary>
         /// Moves the player forward by given units distance
         /// </summary>
@@ -166,11 +176,11 @@ namespace Scripts.Systems
         public async UniTask<string> MoveForwardAsync(int dist = 1)
         {
             if (!this.isAlive) throw new PlayerDiedException();
-            
-            
+
             var endPosition = this.transform.position + this.transform.forward * GameData.GridSize * dist;
             endPosition = this.CheckBoundaries(endPosition);
-
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             while (this.transform.position != endPosition && this.isAlive)
             {
                 this.transform.position =
@@ -178,7 +188,9 @@ namespace Scripts.Systems
                 await UniTask.WaitForEndOfFrame(this.GetCancellationTokenOnDestroy());
             }
 
-            
+            sw.Stop();
+            Debug.Log($"Moving forward takes: {sw.ElapsedMilliseconds} ms");
+
             return "finished moving";
         }
 
@@ -188,7 +200,7 @@ namespace Scripts.Systems
         /// <param name="degrees">The amount of the rotation in degrees, defaults to 90</param>
         public async UniTask<string> RotateLeftAsync(float degrees = 90)
         {
-            if(!this.isAlive) throw new PlayerDiedException();
+            if (!this.isAlive) throw new PlayerDiedException();
             var args = new CommandArgs() {Degrees = -degrees, Speed = this.playerRotationSpeed};
             return await this.RotateOverSpeedAsync(args);
         }
@@ -204,11 +216,12 @@ namespace Scripts.Systems
             return await this.RotateOverSpeedAsync(args);
         }
 
-        public async UniTask<string> PickupObject()
+        public async UniTask<string> PickupObjectAsync()
         {
             if (!this.isAlive) throw new PlayerDiedException();
             var objectAhead = this.GetObjectInFront();
             var spaceObject = objectAhead.GetComponent<ISpaceObject>();
+
             //Play animation
             await UniTask.Delay(1000);
             if (objectAhead && spaceObject.IsIdentified && spaceObject.SpaceObjectType != SpaceObjectType.Asteroid)
@@ -218,18 +231,21 @@ namespace Scripts.Systems
                 {
                     this.cargoBay[slot] = objectAhead;
                     objectAhead.SetActive(false);
+                    this.lastPickedUp = objectAhead;
                     Debug.Log($"Adding cargo {spaceObject.SpaceObjectType} at slot {slot}");
                     return spaceObject.SpaceObjectType.ToString();
                 }
+
                 return "No space left in cargo bay";
             }
-          
+
             return "No collectable object found";
         }
 
         public async UniTask<string> UnloadCargoAt(int slotIndex)
         {
             if (!this.isAlive) throw new PlayerDiedException();
+
             //Todo play animation
             await UniTask.Delay(1000);
             var unloadPosition = this.transform.position + this.transform.TransformDirection(Vector3.forward) * 2;
@@ -242,6 +258,7 @@ namespace Scripts.Systems
                 cargo.SetActive(true);
                 return cargo.GetComponent<ISpaceObject>().SpaceObjectType.ToString();
             }
+
             return "Location occupied";
         }
 
@@ -263,6 +280,7 @@ namespace Scripts.Systems
 
             return result.ToArray();
         }
+
         #endregion
 
         private bool InBounds(Vector3 position)
@@ -287,8 +305,10 @@ namespace Scripts.Systems
                 this.freeSlots.RemoveAt(slotIndex);
                 return slot;
             }
+
             return -1;
         }
+
         private Vector3 CheckBoundaries(Vector3 endPosition)
         {
             if (endPosition.x > this.boundary.xMax) endPosition.x = this.boundary.xMax;
@@ -301,7 +321,7 @@ namespace Scripts.Systems
         private async UniTask<string> RotateOverSpeedAsync(object args)
         {
             var end = Quaternion.Euler(0, ((CommandArgs) args).Degrees, 0);
-            
+
             var endRotation = this.transform.rotation * end;
             while (this.transform.rotation != endRotation)
             {
@@ -311,13 +331,13 @@ namespace Scripts.Systems
                 await UniTask.WaitForEndOfFrame();
             }
 
-            
             return "rotated";
         }
 
         private GameObject GetObjectInFront()
         {
-            Debug.DrawRay(this.transform.position, this.transform.TransformDirection(Vector3.forward) * 2, Color.yellow, 1,
+            Debug.DrawRay(this.transform.position, this.transform.TransformDirection(Vector3.forward) * 2, Color.yellow,
+                1,
                 false);
             if (Physics.Raycast(this.transform.position, this.transform.TransformDirection(Vector3.forward),
                 out var hitResult, 2))
@@ -326,6 +346,7 @@ namespace Scripts.Systems
                 this.lastScanned = hitResult.transform.gameObject;
                 return hitResult.transform.gameObject;
             }
+
             return null;
         }
     }
