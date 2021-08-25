@@ -16,7 +16,7 @@ namespace Scripts.Systems
         private static extern void PlayerDied();
 #else
         private void ProblemCompleted(int value){
-            Debug.Log("Event Sent To Browser :Challange Completed");    
+            //Debug.Log("Event Sent To Browser :Challange Completed");    
         }
 #endif
 
