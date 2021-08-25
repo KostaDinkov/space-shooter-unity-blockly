@@ -83,3 +83,11 @@ The following packages were updated:
   com.unity.xr.legacyinputhelpers from version 2.0.2 to 2.1.7
 The following packages were removed:
   com.unity.package-manager-ui@2.1.2
+
+=== Tue Aug 24 18:01:13 2021
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.shadergraph from version 10.5.0 to 10.5.1
