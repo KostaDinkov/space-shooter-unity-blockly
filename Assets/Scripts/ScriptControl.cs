@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
 using Scripts.Systems;
-using Scripts.Exceptions;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.SceneManagement;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 
 namespace Scripts
 {
@@ -12,10 +11,22 @@ namespace Scripts
         // Start is called before the first frame update
         public Playercontroller player;
         public GameController GameController;
-    
+
+        public class Globals
+        {
+            public Playercontroller Player;
+        }
+
         async void Start()
         {
-  
+            var globals = new Globals() {Player = this.player};
+            await CSharpScript.EvaluateAsync(
+                "await Player.MoveForwardAsync(); await Player.RotateLeftAsync();await Player.MoveForwardAsync();",
+                ScriptOptions.Default
+                    .WithImports("UnityEngine")
+                    .WithReferences(typeof(UnityEngine.MonoBehaviour).Assembly),
+                globals: globals);
+            
         }
 
         private async Task P1Solution()
@@ -39,8 +50,6 @@ namespace Scripts
             await this.player.RotateRightAsync();
             await this.player.MoveForwardAsync();
             await this.player.MoveForwardAsync();
-        
-
         }
 
         private async Task P1PlayerDead()
@@ -66,12 +75,9 @@ namespace Scripts
             await this.player.MoveForwardAsync();
             await this.player.RotateLeftAsync();
 
-
             await this.player.MoveForwardAsync();
             await this.player.MoveForwardAsync();
             await this.player.MoveForwardAsync();
         }
-
-
     }
 }
