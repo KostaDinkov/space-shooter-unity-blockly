@@ -1,8 +1,10 @@
+using System;
 using System.Threading.Tasks;
 using Scripts.Systems;
 using UnityEngine;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
+using ZenFulcrum.EmbeddedBrowser;
 
 namespace Scripts
 {
@@ -10,24 +12,35 @@ namespace Scripts
     {
         // Start is called before the first frame update
         public Playercontroller player;
+        public BrowserController BrowserController;
         public GameController GameController;
-
+        private Browser browser;
         public class Globals
         {
             public Playercontroller Player;
         }
 
-        async void Start()
+        void Start()
         {
-            var globals = new Globals() {Player = this.player};
-            await CSharpScript.EvaluateAsync(
-                "await Player.MoveForwardAsync(); await Player.RotateLeftAsync();await Player.MoveForwardAsync();",
-                ScriptOptions.Default
-                    .WithImports("UnityEngine")
-                    .WithReferences(typeof(UnityEngine.MonoBehaviour).Assembly),
-                globals: globals);
+            this.browser = this.BrowserController.GetComponent<Browser>();
             
         }
+
+        public void RunCode()
+        {
+             this.browser.CallFunction("getCode").Then(async res =>
+             {
+                 string code = (string)res.Value;
+                 var globals = new Globals() { Player = this.player };
+                 await CSharpScript.EvaluateAsync(
+                     code,
+                     ScriptOptions.Default
+                         .WithImports("UnityEngine")
+                         .WithReferences(typeof(UnityEngine.MonoBehaviour).Assembly),
+                     globals: globals);
+             }).Done();
+        }
+
 
         private async Task P1Solution()
 
