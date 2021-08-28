@@ -1,0 +1,9 @@
+
+/* Blockly styles overrides */
+.blocklyMainBackground{
+  stroke:none;
+}
+
+.blocklySvg{
+  background-color: rgba(0, 0, 0, 0.5);
+}

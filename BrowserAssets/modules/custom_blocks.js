@@ -5,7 +5,7 @@ export default function InitCustomBlocks(){
     "message0": "Премести Напред",
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "style": "drone_blocks",
     "tooltip": "Премества дрона 1 поле напред",
     "helpUrl": ""
   },
