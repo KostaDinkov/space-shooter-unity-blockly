@@ -512,18 +512,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5264a281fd479842b752e15012ba976, type: 3}
---- !u!114 &1428665841 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8377873650194306477, guid: 386844d22c1dfdb4baea57a96fbad4db,
-    type: 3}
-  m_PrefabInstance: {fileID: 1865594842}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15bd2bc9aebadb44793b7fd681d33d70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1493911115
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -590,6 +578,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Main Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 1926112389881089761, guid: 455e4f88a83dd8e4e81d8df9ceff8b2e,
+        type: 3}
+      propertyPath: m_TagString
+      value: MainCamera
       objectReference: {fileID: 0}
     - target: {fileID: 1945184902940095657, guid: 455e4f88a83dd8e4e81d8df9ceff8b2e,
         type: 3}
@@ -956,7 +949,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Player
       value: 
-      objectReference: {fileID: 1335598708714051}
+      objectReference: {fileID: 1335598708714052}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae7d20936d6c9b742bc4e835021da3ba, type: 3}
 --- !u!1 &1703912689
@@ -988,9 +981,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99a81a28554083e4e91f3b1bf51c1b9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1335598708714052}
-  BrowserController: {fileID: 1428665841}
-  GameController: {fileID: 0}
 --- !u!4 &1703912691
 Transform:
   m_ObjectHideFlags: 0
@@ -1216,19 +1206,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1119c243e900a140a3827cf239a64c8, type: 3}
---- !u!1 &1335598708714051 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 241982768824686468, guid: aac1924ca5e9cfb4a9cb2aae39793fa7,
-    type: 3}
-  m_PrefabInstance: {fileID: 242926870509125063}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1335598708714052 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 242926871784658079, guid: aac1924ca5e9cfb4a9cb2aae39793fa7,
     type: 3}
   m_PrefabInstance: {fileID: 242926870509125063}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1335598708714051}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7a0803a10862174ba95cba9ba4e8f2a, type: 3}
@@ -1334,7 +1318,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1703912690}
+      objectReference: {fileID: 62392294}
     - target: {fileID: 134329848919446641, guid: bc32863a041f0164e9d3ad6d2a59d44c,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -1348,7 +1332,7 @@ PrefabInstance:
     - target: {fileID: 134329848919446641, guid: bc32863a041f0164e9d3ad6d2a59d44c,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Scripts.ScriptControl, Scripts
+      value: Scripts.Systems.GameController, Scripts
       objectReference: {fileID: 0}
     - target: {fileID: 134329848919446641, guid: bc32863a041f0164e9d3ad6d2a59d44c,
         type: 3}

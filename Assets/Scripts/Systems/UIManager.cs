@@ -24,22 +24,29 @@ namespace Scripts.Systems
             this.objectivesListView = GameObject.Find("ObjectivesListView");
 
             this.eventManager = GameEventManager.Instance;
-            this.eventManager.Subscribe(GameEventType.ProblemCompleted, this.ShowChallangeCompletedText);
+            this.eventManager.Subscribe(GameEventType.ProblemCompleted, this.ShowProblemCompletedText);
             this.eventManager.Subscribe(GameEventType.PlayerDied, this.ShowPlayerDiedText);
             this.eventManager.Subscribe(GameEventType.ProblemStarted, this.HideText);
             this.eventManager.Subscribe(GameEventType.ProblemStarted, this.InitUI);
             this.eventManager.Subscribe(GameEventType.ObjectiveUpdated, this.UpdateUI);
+            this.eventManager.Subscribe(GameEventType.SolutionFailed, this.ShowSolutionFailedText);
         }
 
-        public void ShowChallangeCompletedText(int value)
+        public void ShowProblemCompletedText(int value)
         {
-            this.textMesh.text = "ProblemCompleted";
+            this.textMesh.text = "Проблемът е решен!";
             this.textMesh.enabled = true;
         }
 
         public void ShowPlayerDiedText(int value)
         {
-            this.textMesh.text = "Player Died.\nRestart Challange.";
+            this.textMesh.text = "Дронът е унищожен.\nРестартирайте проблема.";
+            this.textMesh.enabled = true;
+        }
+
+        public void ShowSolutionFailedText(int value)
+        {
+            this.textMesh.text = "Непълно решение.Опитай пак.\nРестартирайте проблема.";
             this.textMesh.enabled = true;
         }
 

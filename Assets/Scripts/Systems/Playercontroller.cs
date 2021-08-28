@@ -68,7 +68,7 @@ namespace Scripts.Systems
         public void Start()
         {
             this.eventManager = GameEventManager.Instance;
-            this.eventManager.Subscribe(GameEventType.ProblemCompleted, this.OnChallengeCompleted);
+            this.eventManager.Subscribe(GameEventType.ProblemCompleted, this.OnProblemCompleted);
             this.eventManager.Subscribe(GameEventType.ProblemStarted, (value) => { this.isDisabled = false; });
         }
 
@@ -78,7 +78,7 @@ namespace Scripts.Systems
             this.ReadInput();
         }
 
-        private void OnChallengeCompleted(int value)
+        private void OnProblemCompleted(int value)
         {
             this.isDisabled = true;
         }

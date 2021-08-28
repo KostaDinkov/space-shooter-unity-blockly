@@ -1,10 +1,14 @@
 ﻿#define isDebug
 
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 using Scripts.Systems;
 using Scripts.GameEvents;
 using Scripts.Objectives;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using ZenFulcrum.EmbeddedBrowser;
 
 namespace Scripts.Systems
 {
@@ -16,6 +20,7 @@ namespace Scripts.Systems
     {
         public bool IsProblemComplete { get; set; }
         public bool IsPlayerDead { get; set; }
+
         private BrowserManager browserManager;
         private GameEventManager gameEventManager;
         private GameData gameData;
@@ -23,7 +28,7 @@ namespace Scripts.Systems
         
         public static GameController Instance { get; private set; }
         public static Objectives.Objectives Objectives;
-        public GameObject Player;
+        public Playercontroller Player;
 
         private void Awake()
         {
@@ -68,6 +73,40 @@ namespace Scripts.Systems
 
             this.gameData.CurrentProblem = SceneManager.GetActiveScene().buildIndex;
         }
+        public class Globals
+        {
+            public Playercontroller Player;
+        }
+
+        public void RunCode()
+        {
+
+            var browser = GameObject.Find("Browser (Mouse)").GetComponent<Browser>();
+
+            browser.CallFunction("getCode").Then(async res =>
+            {
+                var runButton = GameObject.Find("Run").GetComponent<Button>();
+                runButton.interactable = false;
+                string code = (string)res.Value;
+                Debug.Log(code);
+                var globals = new Globals { Player = this.Player };
+                await CSharpScript.EvaluateAsync(
+                    code,
+                    ScriptOptions.Default
+                        .WithImports("UnityEngine")
+                        .WithReferences(typeof(MonoBehaviour).Assembly),
+                    globals: globals);
+                if (!this.IsProblemComplete)
+                {
+                    this.gameEventManager.Publish(new GameEvent() { EventType = GameEventType.SolutionFailed });
+                    
+
+                }
+            }).Done();
+
+            
+
+        }
 
 
         /// <summary>
@@ -75,7 +114,7 @@ namespace Scripts.Systems
         /// </summary>
         public void RestartChallenge()
         {
-            this.Player.SetActive(true);
+            this.Player.gameObject.SetActive(true);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             this.gameEventManager.Publish(new GameEvent() {EventType = GameEventType.ProblemStarted});
         }
