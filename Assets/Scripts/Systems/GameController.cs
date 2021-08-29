@@ -80,15 +80,11 @@ namespace Scripts.Systems
 
         public void RunCode()
         {
-
             var browser = GameObject.Find("Browser (Mouse)").GetComponent<Browser>();
-
+            this.gameEventManager.Publish(new GameEvent() { EventType = GameEventType.ScriptStarted });
             browser.CallFunction("getCode").Then(async res =>
             {
-                var runButton = GameObject.Find("Run").GetComponent<Button>();
-                runButton.interactable = false;
                 string code = (string)res.Value;
-                Debug.Log(code);
                 var globals = new Globals { Player = this.Player };
                 await CSharpScript.EvaluateAsync(
                     code,
@@ -99,13 +95,8 @@ namespace Scripts.Systems
                 if (!this.IsProblemComplete)
                 {
                     this.gameEventManager.Publish(new GameEvent() { EventType = GameEventType.SolutionFailed });
-                    
-
                 }
             }).Done();
-
-            
-
         }
 
 

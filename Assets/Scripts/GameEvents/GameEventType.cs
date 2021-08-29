@@ -11,6 +11,7 @@ namespace Scripts.GameEvents
         ObjectiveUpdated,
         ProblemCompleted,
         SolutionFailed,
+        ScriptStarted,
         LevelCompleted,
         TargetReached,
         PlayerDied,

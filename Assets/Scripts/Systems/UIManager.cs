@@ -12,6 +12,7 @@ namespace Scripts.Systems
         private Text textMesh;
         private GameObject objectivesListView;
         private Dictionary<Objective, UnityEngine.UI.Text> objectivesTexts;
+        private Button runButton;
 
 
 
@@ -30,6 +31,18 @@ namespace Scripts.Systems
             this.eventManager.Subscribe(GameEventType.ProblemStarted, this.InitUI);
             this.eventManager.Subscribe(GameEventType.ObjectiveUpdated, this.UpdateUI);
             this.eventManager.Subscribe(GameEventType.SolutionFailed, this.ShowSolutionFailedText);
+            this.eventManager.Subscribe(GameEventType.ScriptStarted, this.OnScriptStarted);
+        }
+
+        private void Start()
+        {
+            runButton = GameObject.Find("RunBtn").GetComponent<Button>();
+            
+        }
+
+        public void OnScriptStarted(int value)
+        {
+            runButton.interactable = false;
         }
 
         public void ShowProblemCompletedText(int value)
