@@ -21,7 +21,7 @@ namespace Scripts.Systems
         public bool IsProblemComplete { get; set; }
         public bool IsPlayerDead { get; set; }
 
-        private BrowserManager browserManager;
+        
         private GameEventManager gameEventManager;
         private GameData gameData;
         
@@ -45,7 +45,6 @@ namespace Scripts.Systems
 
             this.gameData = GameData.Instance;
             this.gameEventManager = GameEventManager.Instance;
-            this.browserManager = new BrowserManager();
             Objectives = this.GetComponent<Objectives.Objectives>();
             foreach (var objective in Objectives.ObjectiveList)
             {
@@ -85,6 +84,7 @@ namespace Scripts.Systems
             browser.CallFunction("getCode").Then(async res =>
             {
                 string code = (string)res.Value;
+                Debug.Log(code);
                 var globals = new Globals { Player = this.Player };
                 await CSharpScript.EvaluateAsync(
                     code,
@@ -130,6 +130,7 @@ namespace Scripts.Systems
             }
 
             SceneManager.LoadScene(this.gameData.CurrentProblem+1);
+           
         }
 
         private void InitObjectives(int value)

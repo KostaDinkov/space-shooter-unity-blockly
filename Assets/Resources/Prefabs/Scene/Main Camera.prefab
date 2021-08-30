@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1989330145715259397}
   m_Layer: 8
   m_Name: Main Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -48,7 +48,7 @@ Camera:
   m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
+  m_FocalLength: 13.1
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -56,8 +56,8 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 200
-  field of view: 60
+  far clip plane: 78.7
+  field of view: 20.099665
   orthographic: 0
   orthographic size: 11
   m_Depth: -1

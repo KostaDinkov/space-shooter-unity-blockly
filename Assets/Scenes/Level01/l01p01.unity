@@ -579,36 +579,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Camera
       objectReference: {fileID: 0}
-    - target: {fileID: 1926112389881089761, guid: 455e4f88a83dd8e4e81d8df9ceff8b2e,
-        type: 3}
-      propertyPath: m_TagString
-      value: MainCamera
-      objectReference: {fileID: 0}
-    - target: {fileID: 1945184902940095657, guid: 455e4f88a83dd8e4e81d8df9ceff8b2e,
-        type: 3}
-      propertyPath: orthographic
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1945184902940095657, guid: 455e4f88a83dd8e4e81d8df9ceff8b2e,
-        type: 3}
-      propertyPath: field of view
-      value: 20.099665
-      objectReference: {fileID: 0}
-    - target: {fileID: 1945184902940095657, guid: 455e4f88a83dd8e4e81d8df9ceff8b2e,
-        type: 3}
-      propertyPath: m_FocalLength
-      value: 13.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1945184902940095657, guid: 455e4f88a83dd8e4e81d8df9ceff8b2e,
-        type: 3}
-      propertyPath: far clip plane
-      value: 78.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1945184902940095657, guid: 455e4f88a83dd8e4e81d8df9ceff8b2e,
-        type: 3}
-      propertyPath: m_projectionMatrixMode
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 455e4f88a83dd8e4e81d8df9ceff8b2e, type: 3}
 --- !u!20 &1493911116 stripped
@@ -897,6 +867,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2043638646, guid: ae7d20936d6c9b742bc4e835021da3ba, type: 3}
+      propertyPath: ObjectiveList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2043638646, guid: ae7d20936d6c9b742bc4e835021da3ba, type: 3}
+      propertyPath: ObjectiveList.Array.data[0].ListenEvent
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2043638646, guid: ae7d20936d6c9b742bc4e835021da3ba, type: 3}
+      propertyPath: ObjectiveList.Array.data[1].ListenEvent
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 1825088303611506, guid: ae7d20936d6c9b742bc4e835021da3ba, type: 3}
       propertyPath: m_Name
       value: GameController
@@ -1207,7 +1189,7 @@ PrefabInstance:
     - target: {fileID: 238199138568988170, guid: aac1924ca5e9cfb4a9cb2aae39793fa7,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 238199138568988170, guid: aac1924ca5e9cfb4a9cb2aae39793fa7,
         type: 3}
@@ -1391,7 +1373,7 @@ PrefabInstance:
     - target: {fileID: 3070724993760360381, guid: bc32863a041f0164e9d3ad6d2a59d44c,
         type: 3}
       propertyPath: m_PlaneDistance
-      value: 55
+      value: 54
       objectReference: {fileID: 0}
     - target: {fileID: 3070724993760360382, guid: bc32863a041f0164e9d3ad6d2a59d44c,
         type: 3}

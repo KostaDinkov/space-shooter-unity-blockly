@@ -11,6 +11,8 @@ let workspace;
 
 function SetWorkSpace(toolbox) {
 
+  let blocklyDiv = document.getElementById("blocklyDiv");
+  blocklyDiv.innerHTML = "";
   let toolboxJson = JSON.parse(toolbox);
   console.log(toolboxJson);
   workspace = Blockly.inject('blocklyDiv', {

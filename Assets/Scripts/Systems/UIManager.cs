@@ -13,6 +13,7 @@ namespace Scripts.Systems
         private GameObject objectivesListView;
         private Dictionary<Objective, UnityEngine.UI.Text> objectivesTexts;
         private Button runButton;
+        private Button nextButton;
 
 
 
@@ -20,7 +21,10 @@ namespace Scripts.Systems
         {
             this.textMesh = GameObject.Find("StatusText").GetComponent<Text>();
             this.textMesh.enabled = false;
-
+            
+            this.runButton = GameObject.Find("RunBtn").GetComponent<Button>();
+            this.nextButton = GameObject.Find("NextBtn").GetComponent<Button>();
+            this.nextButton.interactable = false;
             this.objectivesTexts = new Dictionary<Objective, UnityEngine.UI.Text>();
             this.objectivesListView = GameObject.Find("ObjectivesListView");
 
@@ -34,11 +38,7 @@ namespace Scripts.Systems
             this.eventManager.Subscribe(GameEventType.ScriptStarted, this.OnScriptStarted);
         }
 
-        private void Start()
-        {
-            runButton = GameObject.Find("RunBtn").GetComponent<Button>();
-            
-        }
+      
 
         public void OnScriptStarted(int value)
         {
@@ -49,6 +49,7 @@ namespace Scripts.Systems
         {
             this.textMesh.text = "Проблемът е решен!";
             this.textMesh.enabled = true;
+            this.nextButton.interactable = true;
         }
 
         public void ShowPlayerDiedText(int value)

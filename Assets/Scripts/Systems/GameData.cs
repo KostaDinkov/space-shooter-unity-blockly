@@ -34,6 +34,7 @@ namespace Scripts.Systems
         {
             this.gameEventManager = GameEventManager.Instance;
             this.ProblemsCount = SceneManager.sceneCountInBuildSettings;
+            //TODO the game will probably start with a different scene, so the first problem will be with a different index
             this.LastUnlockedProblem = 0;
             this.CurrentProblem = 0;
             
