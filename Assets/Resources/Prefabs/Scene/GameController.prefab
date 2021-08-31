@@ -58,13 +58,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectiveList:
-  - Description: Reach the platform
+  - Description: "\u0414\u043E\u0441\u0442\u0438\u0433\u043D\u0435\u0442\u0435 \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u0430\u0442\u0430"
     DefaultValue: 0
     TargetValue: 1
-    ListenEvent: 6
-    CurrentValue: 0
-  - Description: Destroy 2 asteroids
-    DefaultValue: 0
-    TargetValue: 2
-    ListenEvent: 12
+    ListenEvent: 8
     CurrentValue: 0

@@ -3,6 +3,7 @@ using Scripts.GameEvents;
 using Scripts.Objectives;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Scripts.Systems
 {
@@ -11,7 +12,7 @@ namespace Scripts.Systems
         private GameEventManager eventManager;
         private Text textMesh;
         private GameObject objectivesListView;
-        private Dictionary<Objective, UnityEngine.UI.Text> objectivesTexts;
+        private Dictionary<Objective, TMPro.TextMeshProUGUI> objectivesTexts;
         private Button runButton;
         private Button nextButton;
 
@@ -25,7 +26,7 @@ namespace Scripts.Systems
             this.runButton = GameObject.Find("RunBtn").GetComponent<Button>();
             this.nextButton = GameObject.Find("NextBtn").GetComponent<Button>();
             this.nextButton.interactable = false;
-            this.objectivesTexts = new Dictionary<Objective, UnityEngine.UI.Text>();
+            this.objectivesTexts = new Dictionary<Objective, TextMeshProUGUI>();
             this.objectivesListView = GameObject.Find("ObjectivesListView");
 
             this.eventManager = GameEventManager.Instance;
@@ -83,17 +84,22 @@ namespace Scripts.Systems
             foreach (var objective in objectives.ObjectiveList)
             {
 
-                GameObject textContainer = new GameObject(objective.Description);
+                GameObject textContainer = new GameObject(objectives.ObjectiveList.IndexOf(objective).ToString());
                 var rectTransform = textContainer.AddComponent<RectTransform>();
+                
                 rectTransform.SetParent(this.objectivesListView.GetComponent<RectTransform>());
                 rectTransform.localPosition = Vector3.zero;
                 rectTransform.localRotation = Quaternion.Euler(0, 0, 0);
                 rectTransform.localScale = new Vector3(1, 1, 1);
-                Text textComponent = textContainer.AddComponent<Text>();
-                textComponent.font = Font.CreateDynamicFontFromOSFont("Arial", 14);
-                textComponent.color = new Color32(35, 190, 255, 255);
-                textComponent.text = $"{objective.Description} : {objective.CurrentValue} of {objective.TargetValue}";
-                this.objectivesTexts.Add(objective, textComponent);
+                
+                var tmpro = textContainer.AddComponent<TextMeshProUGUI>();
+                tmpro.SetText($"{objective.Description} : {objective.CurrentValue} от {objective.TargetValue}");
+                tmpro.fontSize = 20;
+                tmpro.color = new Color32(35, 190, 255, 255);
+                tmpro.font = Resources.Load<TMP_FontAsset>("Fonts/AnkaCoderItalicSDF");
+                tmpro.alignment = TextAlignmentOptions.BaselineRight;
+
+                this.objectivesTexts.Add(objective, tmpro);
             }
         }
         private void UpdateUI(int value)
