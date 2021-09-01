@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json;
 using Scripts.Systems;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using ZenFulcrum.EmbeddedBrowser;
@@ -13,6 +15,7 @@ public class BrowserController : MonoBehaviour
     private static BrowserController instance;
     private string lastStartdedLevel;
     public static BrowserController Instance => instance;
+    public ToolBox ToolBox;
 
     private Dictionary<string, string> levelToolboxes;
 
@@ -24,6 +27,7 @@ public class BrowserController : MonoBehaviour
             return;
         }
 
+        
         SceneManager.sceneLoaded += this.OnSceneLoaded;
         this.lastStartdedLevel = SceneManager.GetActiveScene().name;
         instance = this;
@@ -132,10 +136,11 @@ public class BrowserController : MonoBehaviour
     public void SetBlocklyWorkspace(string levelName)
     {
         var browser = this.gameObject.GetComponent<Browser>();
-        
-        
+
+        var toolbox = JsonConvert.SerializeObject(this.ToolBox.ToolBoxType);
+        Debug.Log(toolbox);
         //TODO check if the scene is a level and it is in the dictionary
-        browser.CallFunction("setWorkSpace", this.levelToolboxes[levelName]).Done();
+        browser.CallFunction("setWorkSpace", toolbox/*this.levelToolboxes[levelName]*/).Done();
     }
 
     // Update is called once per frame

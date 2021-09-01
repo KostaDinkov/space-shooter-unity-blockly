@@ -21,7 +21,8 @@
         "System.Reflection.Metadata.dll",
         "System.Runtime.CompilerServices.Unsafe.dll",
         "System.Runtime.Loader.dll",
-        "System.Threading.Tasks.Extensions.dll"
+        "System.Threading.Tasks.Extensions.dll",
+        "Newtonsoft.Json.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

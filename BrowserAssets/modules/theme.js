@@ -43,10 +43,15 @@ function SetTheme() {
         'colourTertiary': "#8c5d0e"
       },
     },
+    'categoryStyles':{
+      "drone_blocks":{
+        "colour":"#FE9B13"
+      }
+    },
     'componentStyles': {
       'workspaceBackgroundColour': 'none',
       'toolboxBackgroundColour': 'none',
-      'toolboxForegroundColour': 'none',
+      'toolboxForegroundColour': '#fff',
       'flyoutBackgroundColour': 'none',
       'flyoutForegroundColour': 'none',
       'flyoutOpacity': 1,

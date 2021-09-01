@@ -20,8 +20,6 @@ public class ObjectivesEditor : Editor
         }
         serializedObject.ApplyModifiedProperties();
     }
-        
-    
 }
 
 public static class EditorList
