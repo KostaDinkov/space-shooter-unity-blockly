@@ -36,7 +36,27 @@ public class BrowserController : MonoBehaviour
                     {
                         ""kind"": ""block"",
                         ""type"": ""move_forward""
-                    }                                     
+                    },
+                    {
+                        ""kind"": ""block"",
+                        ""type"": ""rotate_left""
+                    },
+                    {
+                        ""kind"": ""block"",
+                        ""type"": ""rotate_right""
+                    },
+                    {
+                        ""kind"": ""block"",
+                        ""type"": ""scan_ahead""
+                    },
+                    {
+                        ""kind"": ""block"",
+                        ""type"": ""fire_weapon""
+                    },
+                    {
+                        ""kind"": ""block"",
+                        ""type"": ""pickup_object""
+                    }
                 ]
                 }"
             },
@@ -63,6 +83,26 @@ public class BrowserController : MonoBehaviour
                     {
                         ""kind"": ""block"",
                         ""type"": ""move_forward""
+                    },
+                    {
+                        ""kind"": ""block"",
+                        ""type"": ""rotate_left""
+                    },
+                    {
+                        ""kind"": ""block"",
+                        ""type"": ""rotate_right""
+                    },
+                    {
+                        ""kind"": ""block"",
+                        ""type"": ""scan_ahead""
+                    },
+                    {
+                        ""kind"": ""block"",
+                        ""type"": ""fire_weapon""
+                    },
+                    {
+                        ""kind"": ""block"",
+                        ""type"": ""pickup_object""
                     }
                 ]
                 }"
