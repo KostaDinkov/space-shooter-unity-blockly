@@ -137,7 +137,9 @@ public class BrowserController : MonoBehaviour
     {
         var browser = this.gameObject.GetComponent<Browser>();
 
-        var toolbox = JsonConvert.SerializeObject(this.ToolBox.ToolBoxType);
+        //var toolbox = JsonConvert.SerializeObject(this.ToolBox.CategoryToolbox);
+        Debug.Log($"block kind: {this.ToolBox.contents[0].kind}");
+        var toolbox = JsonUtility.ToJson(this.ToolBox);
         Debug.Log(toolbox);
         //TODO check if the scene is a level and it is in the dictionary
         browser.CallFunction("setWorkSpace", toolbox/*this.levelToolboxes[levelName]*/).Done();

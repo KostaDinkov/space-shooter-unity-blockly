@@ -1,39 +1,55 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scripts.Systems
 {
     [CreateAssetMenu]
-    public class ToolBox:ScriptableObject
+    public class ToolBox : ScriptableObject
     {
+        public string kind = "categoryToolbox";
+        public List<CategoryNode> contents = new List<CategoryNode>();
+
         
-        public ToolBoxType ToolBoxType = new ToolBoxType(){contents = new List<CategoryNode>(), kind = "categoryToolbox" };
 
-        
+        [Serializable]
+        public class BlockNode:ISerializationCallbackReceiver
+        {
+            [HideInInspector] public string kind;
+            public string type;
+            public void OnBeforeSerialize()
+            {
+                
+            }
+
+            public void OnAfterDeserialize()
+            {
+                this.kind = "block";
+            }
+        }
+
+        [Serializable]
+        public class CategoryNode:ISerializationCallbackReceiver
+        {
+            [HideInInspector] public string kind;
+            public string name;
+            public string categoryStyle;
+            public List<BlockNode> contents;
+
+
+            public void OnBeforeSerialize()
+            {
+                this.kind = "category";
+            }
+
+            public void OnAfterDeserialize()
+            {
+                this.kind = "category";
+            }
+        }
     }
 
-    [System.Serializable]
-    public class BlockNode
-    {
-        public string kind = "block";
-        public string type;
+   
 
-    }
-
-    [System.Serializable]
-    public class CategoryNode
-    {
-        public string kind = "category";
-        public string name;
-        public string categoryStyle;
-        public List<BlockNode> contents;
-    }
-
-    [System.Serializable]
-    public class ToolBoxType
-    {
-        public string kind;
-        public List<CategoryNode> contents;
-    }
+    
 }

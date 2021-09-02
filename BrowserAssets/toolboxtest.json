@@ -1,18 +1,22 @@
 {
-  "Name": "",
-  "Kind": "categoryToolbox",
-  "Type": "",
-  "Contents": [
+  "kind": "categoryToolbox",
+  "contents": [
     {
-      "Name": "Drone Controls",
-      "Kind": "category",
-      "Type": "",
-      "Contents": [
+      "kind": "",
+      "name": "Drone",
+      "categoryStyle": "drone_blocks",
+      "contents": [
         {
-          "Name": "",
-          "Kind": "block",
-          "Type": "move_forward",
-          "Contents": []
+          "kind": "",
+          "type": "move_forward"
+        },
+        {
+          "kind": "",
+          "type": "rotate_left"
+        },
+        {
+          "kind": "",
+          "type": "rotate_right"
         }
       ]
     }
