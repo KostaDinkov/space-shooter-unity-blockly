@@ -12,20 +12,36 @@ using UnityEngine.UIElements;
 
 namespace Assets.Editor
 {
-    //[CustomPropertyDrawer(typeof(CategoryNode))]
+    //[CustomPropertyDrawer(typeof(ToolBox.CategoryNode))]
     public class ToolBoxInspectors:PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            
+
+            
             EditorGUI.BeginProperty(position, label, property);
-
-            position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-
-            Rect nameRect = new Rect(position.x, position.y, position.width, position.height);
-
-            EditorGUI.PropertyField(nameRect, property.FindPropertyRelative("name"), GUIContent.none);
-
+            EditorGUI.LabelField(position,label);
             EditorGUI.EndProperty();
+            EditorGUI.BeginProperty(position, label, property);
+            EditorGUI.PropertyField(position, property.FindPropertyRelative("name")); 
+            EditorGUI.EndProperty();
+
+            
+            
+
+
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            int totalLine = 3;
+
+            SerializedProperty nameProperty = property.FindPropertyRelative("name");
+            if (nameProperty.isExpanded)
+                totalLine++;
+
+            return EditorGUIUtility.singleLineHeight * totalLine + EditorGUIUtility.standardVerticalSpacing * (totalLine - 1);
         }
     }
 }
