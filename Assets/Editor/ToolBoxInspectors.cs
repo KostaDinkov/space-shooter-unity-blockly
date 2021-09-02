@@ -15,22 +15,17 @@ namespace Assets.Editor
     //[CustomPropertyDrawer(typeof(ToolBox.CategoryNode))]
     public class ToolBoxInspectors:PropertyDrawer
     {
+        
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            
-
             
             EditorGUI.BeginProperty(position, label, property);
             EditorGUI.LabelField(position,label);
             EditorGUI.EndProperty();
             EditorGUI.BeginProperty(position, label, property);
+            Rect nameRect = new Rect(position.x,position.y + 30,position.width, position.height);
             EditorGUI.PropertyField(position, property.FindPropertyRelative("name")); 
             EditorGUI.EndProperty();
-
-            
-            
-
-
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
