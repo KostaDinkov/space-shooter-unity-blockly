@@ -163,7 +163,7 @@ namespace Scripts.Systems
             {
                 this.lastScanned = objectInFront;
 
-                return this.lastScanned.GetComponent<ISpaceObject>().SpaceObjectType.ToString();
+                return this.lastScanned.GetComponent<SpaceObject.SpaceObject>().SpaceObjectType.ToString();
             }
 
             return "Scanner found no object";
@@ -220,11 +220,15 @@ namespace Scripts.Systems
         {
             if (!this.isAlive) throw new PlayerDiedException();
             var objectAhead = this.GetObjectInFront();
-            var spaceObject = objectAhead.GetComponent<ISpaceObject>();
+            if (!objectAhead)
+            {
+                throw new NoObjectAheadException();
+            }
+            var spaceObject = objectAhead.GetComponent<SpaceObject.SpaceObject>();
 
-            //Play animation
+            //TODO Play animation
             await UniTask.Delay(1000);
-            if (objectAhead && spaceObject.IsIdentified && spaceObject.SpaceObjectType != SpaceObjectType.Asteroid)
+            if (spaceObject.IsCollectable)
             {
                 int slot = this.GetRandomCargoSlot();
                 if (slot >= 0)
@@ -256,7 +260,7 @@ namespace Scripts.Systems
                 this.cargoBay[slotIndex] = null;
                 cargo.transform.position = unloadPosition;
                 cargo.SetActive(true);
-                return cargo.GetComponent<ISpaceObject>().SpaceObjectType.ToString();
+                return cargo.GetComponent<SpaceObject.SpaceObject>().SpaceObjectType.ToString();
             }
 
             return "Location occupied";
@@ -274,7 +278,7 @@ namespace Scripts.Systems
                 }
                 else
                 {
-                    result.Add(cargo.GetComponent<ISpaceObject>().SpaceObjectType.ToString());
+                    result.Add(cargo.GetComponent<SpaceObject.SpaceObject>().SpaceObjectType.ToString());
                 }
             }
 

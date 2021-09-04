@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Diagnostics.Eventing.Reader;
+using UnityEngine;
 
 namespace Scripts.SpaceObject
 {
-    public class ISpaceObject : MonoBehaviour
+    public class SpaceObject : MonoBehaviour
     {
         //if the object can be destroyed by collisions or lasers
         public bool IsDestroyable;
@@ -12,7 +13,8 @@ namespace Scripts.SpaceObject
 
         public SpaceObjectType SpaceObjectType;
 
+        public bool IsCollectable;
 
-       
+
     }
 }

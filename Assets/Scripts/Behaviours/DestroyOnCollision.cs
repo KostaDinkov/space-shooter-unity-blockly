@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Scripts.Behaviours
 {
-    [RequireComponent(typeof (ISpaceObject))]
+    [RequireComponent(typeof (SpaceObject.SpaceObject))]
     public class DestroyOnCollision : MonoBehaviour
     {
         public GameObject explosion;
@@ -16,7 +16,7 @@ namespace Scripts.Behaviours
         {
         
 
-            if (!this.GetComponent<ISpaceObject>().IsDestroyable)
+            if (!this.GetComponent<SpaceObject.SpaceObject>().IsDestroyable)
             {
                 return;
             }

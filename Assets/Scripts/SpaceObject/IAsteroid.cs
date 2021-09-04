@@ -46,7 +46,7 @@ namespace Scripts.SpaceObject
 
         public void ApplyMaterial()
         {
-            if (!this.GetComponent<ISpaceObject>().IsDestroyable)
+            if (!this.GetComponent<SpaceObject>().IsDestroyable)
             {
             
                 this.rend.material = this.blackMaterial;
