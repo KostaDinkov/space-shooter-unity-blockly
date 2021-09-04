@@ -1,13 +1,12 @@
 ﻿#define isDebug
 
+using System;
+
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
-using Scripts.Systems;
 using Scripts.GameEvents;
-using Scripts.Objectives;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using ZenFulcrum.EmbeddedBrowser;
 
 namespace Scripts.Systems
@@ -83,15 +82,23 @@ namespace Scripts.Systems
             this.gameEventManager.Publish(new GameEvent() { EventType = GameEventType.ScriptStarted });
             browser.CallFunction("getCode").Then(async res =>
             {
+                
                 string code = (string)res.Value;
+                //code = $"try {{{code}}} catch (Exception e){{Debug.LogException(e);}}";
                 Debug.Log(code);
                 var globals = new Globals { Player = this.Player };
-                await CSharpScript.EvaluateAsync(
-                    code,
-                    ScriptOptions.Default
-                        .WithImports("UnityEngine")
-                        .WithReferences(typeof(MonoBehaviour).Assembly),
-                    globals: globals);
+                try
+                {
+                    await CSharpScript.EvaluateAsync(
+                        code, ScriptOptions.Default
+                            .WithImports("UnityEngine")
+                            .WithReferences(typeof(MonoBehaviour).Assembly), globals: globals);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException( e);
+                }
+                
                 if (!this.IsProblemComplete)
                 {
                     this.gameEventManager.Publish(new GameEvent() { EventType = GameEventType.SolutionFailed });
@@ -162,6 +169,7 @@ namespace Scripts.Systems
                 return;
             }
             this.gameData.LastUnlockedProblem = this.gameData.CurrentProblem + 1;
+            
 
         }
 

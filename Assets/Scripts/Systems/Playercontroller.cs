@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Assets.Scripts.Exceptions;
 using Scripts.Commands;
 using Scripts.Exceptions;
 using Scripts.GameEvents;
@@ -76,6 +77,10 @@ namespace Scripts.Systems
         private void Update()
         {
             this.ReadInput();
+            if (this.currentTask.Status == UniTaskStatus.Faulted)
+            {
+                this.currentTask = new UniTask<string>();
+            }
         }
 
         private void OnProblemCompleted(int value)
@@ -117,7 +122,14 @@ namespace Scripts.Systems
 
             if (Input.GetKeyDown(KeyCode.O) && this.currentTask.Status == UniTaskStatus.Succeeded)
             {
-                this.currentTask = this.PickupObjectAsync();
+                try
+                {
+                    this.currentTask = this.PickupObjectAsync();
+                }
+                catch (Exception e) when (!(e is OperationCanceledException))
+                {
+                    Debug.LogException(e);
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.P) && this.currentTask.Status == UniTaskStatus.Succeeded)
@@ -222,8 +234,9 @@ namespace Scripts.Systems
             var objectAhead = this.GetObjectInFront();
             if (!objectAhead)
             {
-                throw new NoObjectAheadException();
+                throw new NoObjectAheadException("Няма намерен обект за товарене.");
             }
+
             var spaceObject = objectAhead.GetComponent<SpaceObject.SpaceObject>();
 
             //TODO Play animation
@@ -240,10 +253,10 @@ namespace Scripts.Systems
                     return spaceObject.SpaceObjectType.ToString();
                 }
 
-                return "No space left in cargo bay";
+                throw new CargoBayFullException();
             }
 
-            return "No collectable object found";
+            throw new ObjectNotCollectableException();
         }
 
         public async UniTask<string> UnloadCargoAt(int slotIndex)

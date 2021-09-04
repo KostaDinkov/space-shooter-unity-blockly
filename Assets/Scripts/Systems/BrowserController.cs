@@ -31,86 +31,7 @@ public class BrowserController : MonoBehaviour
         this.lastStartdedLevel = SceneManager.GetActiveScene().name;
         instance = this;
         DontDestroyOnLoad(this.gameObject);
-        this.levelToolboxes = new Dictionary<string, string>()
-        {{
-                "l01p01", @"{
-                ""kind"": ""flyoutToolbox"",
-                ""contents"": [
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""move_forward""
-                    },
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""rotate_left""
-                    },
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""rotate_right""
-                    },
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""scan_ahead""
-                    },
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""fire_weapon""
-                    },
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""pickup_object""
-                    }
-                ]
-                }"
-            },
-            {
-                "l01p02", @"{
-                ""kind"": ""flyoutToolbox"",
-                ""contents"": [
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""controls_repeat""
-                    },
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""controls_whileUntil""
-                    },
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""math_number""
-                    },
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""math_single""
-                    },
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""move_forward""
-                    },
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""rotate_left""
-                    },
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""rotate_right""
-                    },
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""scan_ahead""
-                    },
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""fire_weapon""
-                    },
-                    {
-                        ""kind"": ""block"",
-                        ""type"": ""pickup_object""
-                    }
-                ]
-                }"
-            }
-        };
+        
     }
 
     // Start is called before the first frame update
@@ -136,7 +57,7 @@ public class BrowserController : MonoBehaviour
     {
         var browser = this.gameObject.GetComponent<Browser>();
 
-        //var toolbox = JsonConvert.SerializeObject(this.ToolBox.CategoryToolbox);
+        
         Debug.Log($"block kind: {this.ToolBox.contents[0].kind}");
         var toolbox = JsonUtility.ToJson(this.ToolBox);
         Debug.Log(toolbox);
