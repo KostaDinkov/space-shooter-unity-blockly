@@ -30,3 +30,5 @@ MonoBehaviour:
       type: scan_ahead
     - kind: block
       type: pickup_object
+    - kind: 
+      type: print

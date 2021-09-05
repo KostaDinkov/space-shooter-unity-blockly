@@ -54,6 +54,26 @@ export default function InitCustomBlocks(){
     "tooltip": "Товари обекта директно пред дрона(ако обекта може да бъде товарен)",
     "helpUrl": ""
   },
+
+  {
+    "type": "print",
+    "message0": "Отпечатай %1 %2",
+    "args0": [
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "input_value",
+        "name": "str",
+        "check": "String"
+      }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "style": "drone_blocks",
+    "tooltip": "Отпечатай даден низ на конзолата.",
+    "helpUrl": ""
+  }
   
 
 ])
@@ -76,7 +96,7 @@ export default function InitCustomBlocks(){
   };
 
   Blockly.CSharp['scan_ahead'] = function(block) {
-    var code = 'await Player.ScanAheadAsync();';
+    var code = 'await Player.ScanAheadAsync()';
     return [code, Blockly.CSharp.ORDER_NONE];
   };
 
@@ -87,6 +107,12 @@ export default function InitCustomBlocks(){
   
   Blockly.CSharp['pickup_object'] = function(block) {
     var code = 'await Player.PickupObjectAsync();';
+    return code;
+  };
+  Blockly.CSharp['print'] = function(block) {
+    var value_str = Blockly.CSharp.valueToCode(block, 'str', Blockly.CSharp.ORDER_ATOMIC);
+
+    var code = `Player.Print(${value_str});\n`;
     return code;
   };
 }

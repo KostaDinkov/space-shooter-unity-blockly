@@ -191,18 +191,13 @@ namespace Scripts.Systems
 
             var endPosition = this.transform.position + this.transform.forward * GameData.GridSize * dist;
             endPosition = this.CheckBoundaries(endPosition);
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+           
             while (this.transform.position != endPosition && this.isAlive)
             {
                 this.transform.position =
                     Vector3.MoveTowards(this.transform.position, endPosition, this.playerSpeed * Time.deltaTime);
                 await UniTask.WaitForEndOfFrame(this.GetCancellationTokenOnDestroy());
             }
-
-            sw.Stop();
-            Debug.Log($"Moving forward takes: {sw.ElapsedMilliseconds} ms");
-
             return "finished moving";
         }
 
@@ -298,6 +293,12 @@ namespace Scripts.Systems
             return result.ToArray();
         }
 
+
+        public void Print(string msg)
+        {
+            Debug.Log($"[INFO]<color=#00b2ff>Drone Print</color>: {msg}");
+        }
+
         #endregion
 
         private bool InBounds(Vector3 position)
@@ -359,7 +360,7 @@ namespace Scripts.Systems
             if (Physics.Raycast(this.transform.position, this.transform.TransformDirection(Vector3.forward),
                 out var hitResult, 2))
             {
-                Debug.Log($"<color=orange>Object in front:</color> {hitResult.collider.gameObject.name}");
+                //Debug.Log($"<color=orange>Object in front:</color> {hitResult.collider.gameObject.name}");
                 this.lastScanned = hitResult.transform.gameObject;
                 return hitResult.transform.gameObject;
             }
