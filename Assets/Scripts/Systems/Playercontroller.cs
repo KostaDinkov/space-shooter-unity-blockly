@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Assets.Scripts.Exceptions;
+using Assets.Scripts.Systems;
 using Scripts.Commands;
 using Scripts.Exceptions;
 using Scripts.GameEvents;
@@ -54,6 +55,7 @@ namespace Scripts.Systems
         private float nextFire;
         private List<int> freeSlots;
         private UniTask<string> currentTask;
+        private InGameLogger logger;
 
         #endregion
 
@@ -64,6 +66,7 @@ namespace Scripts.Systems
             this.isAlive = true;
             this.cargoBay = new List<GameObject>(new GameObject[this.cargoBayCapacity]);
             this.freeSlots = Enumerable.Range(0, this.cargoBayCapacity).ToList();
+            this.logger = new InGameLogger();
         }
 
         public void Start()
@@ -296,7 +299,7 @@ namespace Scripts.Systems
 
         public void Print(string msg)
         {
-            Debug.Log($"[INFO]<color=#00b2ff>Drone Print</color>: {msg}");
+           this.logger.Log(msg);
         }
 
         #endregion

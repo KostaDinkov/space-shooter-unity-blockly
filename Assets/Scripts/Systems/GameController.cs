@@ -19,16 +19,11 @@ namespace Scripts.Systems
     {
         public bool IsProblemComplete { get; set; }
         public bool IsPlayerDead { get; set; }
-
-        
         private GameEventManager gameEventManager;
         private GameData gameData;
-        
-        
         public static GameController Instance { get; private set; }
         public static Objectives.Objectives Objectives;
         public Playercontroller Player;
-
         private void Awake()
         {
             //Make sure there is only one instance of the GameController class (Singleton)
@@ -78,7 +73,7 @@ namespace Scripts.Systems
 
         public void RunCode()
         {
-            var browser = GameObject.Find("Browser (Mouse)").GetComponent<Browser>();
+            var browser = GameObject.Find("Browser (GUI)").GetComponent<Browser>();
             this.gameEventManager.Publish(new GameEvent() { EventType = GameEventType.ScriptStarted });
             browser.CallFunction("getCode").Then(async res =>
             {
