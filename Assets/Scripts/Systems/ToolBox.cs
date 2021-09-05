@@ -38,7 +38,8 @@ namespace Scripts.Systems
                 "fire_weapon",
                 "scan_ahead",
                 "pickup_object",
-                "print"
+                "print",
+                "on_start"
             };
         }
 

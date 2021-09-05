@@ -26,11 +26,10 @@ public class BrowserController : MonoBehaviour
             return;
         }
 
-        
         SceneManager.sceneLoaded += this.OnSceneLoaded;
         this.lastStartdedLevel = SceneManager.GetActiveScene().name;
         instance = this;
-        DontDestroyOnLoad(this.gameObject);
+       
         
     }
 

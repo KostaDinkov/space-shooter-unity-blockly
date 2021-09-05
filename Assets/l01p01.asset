@@ -15,8 +15,8 @@ MonoBehaviour:
   kind: categoryToolbox
   contents:
   - kind: category
-    name: Drone
-    categoryStyle: drone_blocks
+    name: "\u0414\u0440\u043E\u043D"
+    categoryStyle: drone_category
     contents:
     - kind: block
       type: move_forward
@@ -30,5 +30,11 @@ MonoBehaviour:
       type: scan_ahead
     - kind: block
       type: pickup_object
-    - kind: 
+    - kind: block
       type: print
+  - kind: category
+    name: "\u0421\u044A\u0431\u0438\u0442\u0438\u044F"
+    categoryStyle: event_category
+    contents:
+    - kind: block
+      type: on_start

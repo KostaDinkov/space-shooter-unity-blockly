@@ -73,8 +73,16 @@ export default function InitCustomBlocks(){
     "style": "drone_blocks",
     "tooltip": "Отпечатай даден низ на конзолата.",
     "helpUrl": ""
+  },
+  {
+    "type": "on_start",
+    "message0": "При \"Старт\"",
+    "nextStatement": null,
+    "style": "event_blocks",
+    "tooltip": "Когато е натиснат бутона \"Старт\"",
+    "helpUrl": ""
   }
-  
+
 
 ])
 
@@ -113,6 +121,11 @@ export default function InitCustomBlocks(){
     var value_str = Blockly.CSharp.valueToCode(block, 'str', Blockly.CSharp.ORDER_ATOMIC);
 
     var code = `Player.Print(${value_str});\n`;
+    return code;
+  };
+  Blockly.CSharp['on_start'] = function(block) {
+    
+    var code = '//on_start;\n';
     return code;
   };
 }

@@ -11,6 +11,7 @@ let workspace;
 
 function SetWorkSpace(toolbox) {
 
+  
   let blocklyDiv = document.getElementById("blocklyDiv");
   blocklyDiv.innerHTML = "";
   let toolboxJson = JSON.parse(toolbox);
@@ -41,7 +42,8 @@ function SetWorkSpace(toolbox) {
     },
   });
   workspace.toolbox_.flyout_.autoClose = false;
-
+  workspace.addChangeListener(Blockly.Events.disableOrphans);
+  
 
 
 

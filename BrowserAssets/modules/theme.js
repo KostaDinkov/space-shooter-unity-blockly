@@ -2,6 +2,7 @@ function SetTheme() {
 
   Blockly.Themes.Kiberlab = Blockly.Theme.defineTheme('kiberlab', {
     'base': Blockly.Themes.Classic,
+    'startHats':"true",
     'categoryStyles': {
       'list_category': {
         'colour': "#4a148c"
@@ -15,6 +16,8 @@ function SetTheme() {
       'text_category': {
         'colour': "#FE9B13",
       },
+      "event_category":{"colour":"#0085bf"},
+      "drone_category":{"colour":"#FE9B13"}
     },
     'blockStyles': {
       'list_blocks': {
@@ -42,12 +45,13 @@ function SetTheme() {
         'colourSecondary': "#ff0000",
         'colourTertiary': "#8c5d0e"
       },
-    },
-    'categoryStyles':{
-      "drone_blocks":{
-        "colour":"#FE9B13"
+      'event_blocks':{
+        'colourPrimary': "#0085bf",
+        'colourSecondary': "#ff0000",
+        'colourTertiary': "#003c56"
       }
     },
+    
     'componentStyles': {
       'workspaceBackgroundColour': 'none',
       'toolboxBackgroundColour': 'none',
