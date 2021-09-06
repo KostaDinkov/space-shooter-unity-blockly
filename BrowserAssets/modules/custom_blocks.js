@@ -65,7 +65,7 @@ export default function InitCustomBlocks(){
       {
         "type": "input_value",
         "name": "str",
-        "check": "String"
+        //"check": "String"
       }
     ],
     "previousStatement": null,
@@ -81,6 +81,42 @@ export default function InitCustomBlocks(){
     "style": "event_blocks",
     "tooltip": "Когато е натиснат бутона \"Старт\"",
     "helpUrl": ""
+  },
+  {
+    "type": "variables_get_string",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "field_variable",
+        "name": "VAR",
+        "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
+        "variableTypes": ["string"],    // Specifies what types to put in the dropdown
+        "defaultType": "string"
+      }
+    ],
+    "output": "Panda",    // Returns a value of "Panda"
+    
+  },
+  {
+    "type": "variables_set_string",
+    "message0": "%{BKY_VARIABLES_SET}",
+    "args0": [
+      {
+        "type": "field_variable",
+        "name": "VAR",
+        "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
+        "variableTypes": ["string"],
+        "defaultType": "string"
+      },
+      {
+        "type": "input_value",
+        "name": "VALUE",
+        "check": "string"    // Checks that the input value is of type "Panda"
+      }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    
   }
 
 

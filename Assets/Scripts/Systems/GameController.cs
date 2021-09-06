@@ -8,6 +8,8 @@ using Scripts.GameEvents;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using ZenFulcrum.EmbeddedBrowser;
+using Microsoft.CSharp;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace Scripts.Systems
 {
@@ -29,6 +31,7 @@ namespace Scripts.Systems
             //Make sure there is only one instance of the GameController class (Singleton)
             if (Instance == null)
             {
+                
                 Instance = this;
             }
             else if (Instance != this)
@@ -86,8 +89,8 @@ namespace Scripts.Systems
                 {
                     await CSharpScript.EvaluateAsync(
                         code, ScriptOptions.Default
-                            .WithImports("UnityEngine")
-                            .WithReferences(typeof(MonoBehaviour).Assembly), globals: globals);
+                            .WithImports("UnityEngine","System")
+                            .WithReferences(typeof(MonoBehaviour).Assembly, typeof(CSharpArgumentInfo).Assembly), globals: globals);
                 }
                 catch (Exception e)
                 {

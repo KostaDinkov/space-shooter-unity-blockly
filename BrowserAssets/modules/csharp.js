@@ -43,6 +43,7 @@ Blockly.CSharp.ORDER_NONE = 99;          // (...)
 Blockly.CSharp.INFINITE_LOOP_TRAP = null;
 
 Blockly.CSharp.init = function(workspace) {
+  
   Blockly.CSharp.definitions_ = {};
 
   if (Blockly.Variables) {
@@ -52,11 +53,11 @@ Blockly.CSharp.init = function(workspace) {
     } else {
       Blockly.CSharp.variableDB_.reset();
     }
-
+    Blockly.CSharp.variableDB_.setVariableMap(workspace.getVariableMap());
     var defvars = [];
     defvars = defvars.concat(Blockly.CSharp.getDefinitions(workspace));
-    defvars = defvars.concat(Blockly.CSharp.getDefinitions(workspace, 'inferbool'));
-    defvars = defvars.concat(Blockly.CSharp.getDefinitions(workspace, 'inferdouble'));
+    //defvars = defvars.concat(Blockly.CSharp.getDefinitions(workspace, 'inferbool'));
+    //defvars = defvars.concat(Blockly.CSharp.getDefinitions(workspace, 'inferdouble'));
     Blockly.CSharp.definitions_['variables'] = defvars.join('\n');
   }
 }
@@ -64,8 +65,9 @@ Blockly.CSharp.init = function(workspace) {
 Blockly.CSharp.getDefinitions = function(workspace, type) {
   var defvars = [];
   var variables = workspace.getAllVariables();
+  
   for (var x = 0; x < variables.length; x++) {
-    var name = Blockly.CSharp.variableDB_.getName(variables[x],
+    var name = Blockly.CSharp.variableDB_.getName(variables[x].name,
       Blockly.Variables.NAME_TYPE);
     var prefix = 'dynamic ';
     if(type && type.startsWith('infer')) {
@@ -86,6 +88,7 @@ Blockly.CSharp.build_definitions = function() {
 };
 
 Blockly.CSharp.finish = function(code) {
+  code = Blockly.CSharp.build_definitions() + code;
   return code;
 };
 

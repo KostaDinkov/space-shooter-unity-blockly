@@ -297,9 +297,9 @@ namespace Scripts.Systems
         }
 
 
-        public void Print(string msg)
+        public void Print(object msg)
         {
-           this.logger.Log(msg);
+           this.logger.Log(msg.ToString());
         }
 
         #endregion

@@ -15,7 +15,7 @@ function SetWorkSpace(toolbox) {
   let blocklyDiv = document.getElementById("blocklyDiv");
   blocklyDiv.innerHTML = "";
   let toolboxJson = JSON.parse(toolbox);
-  console.log(toolboxJson);
+  
   workspace = Blockly.inject('blocklyDiv', {
     toolbox: toolboxJson,
     scrollbars: true,
@@ -43,10 +43,6 @@ function SetWorkSpace(toolbox) {
   });
   workspace.toolbox_.flyout_.autoClose = false;
   workspace.addChangeListener(Blockly.Events.disableOrphans);
-  
-
-
-
 }
 function getCode() {
   return Blockly.CSharp.workspaceToCode(workspace);
