@@ -48,5 +48,22 @@ function getCode() {
   return Blockly.CSharp.workspaceToCode(workspace);
 }
 
+function saveWorkspace(){
+  let workspaceXML = Blockly.Xml.workspaceToDom(workspace)
+  
+  let workspaceString = Blockly.Xml.domToText(workspaceXML);
+  console.log(workspaceString)
+  return workspaceString;
+}
+
+function loadLastWorkspace(workspaceString){
+  
+  const doc = Blockly.Xml.textToDom(workspaceString)
+  console.log(doc)
+  Blockly.Xml.domToWorkspace(workspace, doc);
+}
+
 window.getCode = getCode;
 window.setWorkSpace = SetWorkSpace;
+window.saveWorkspace = saveWorkspace;
+window.loadLastWorkspace = loadLastWorkspace;

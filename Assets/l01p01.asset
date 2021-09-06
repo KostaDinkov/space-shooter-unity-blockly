@@ -98,31 +98,69 @@ MonoBehaviour:
     name: "\u041F\u0440\u043E\u043C\u0435\u043D\u043B\u0438\u0432\u0438"
     categoryStyle: 
     contents:
-    - kind: 
+    - kind: block
       type: variables_set
-    - kind: 
+    - kind: block
       type: variables_get
   - kind: category
     name: "\u0422\u0435\u043A\u0441\u0442"
     categoryStyle: 
     contents:
-    - kind: 
+    - kind: block
       type: text
-    - kind: 
+    - kind: block
       type: text_join
-    - kind: 
+    - kind: block
       type: text_trim
-    - kind: 
+    - kind: block
       type: text_append
-    - kind: 
+    - kind: block
       type: text_length
-    - kind: 
+    - kind: block
       type: text_charAt
-    - kind: 
+    - kind: block
       type: text_isEmpty
-    - kind: 
+    - kind: block
       type: text_indexOf
-    - kind: 
+    - kind: block
       type: text_changeCase
-    - kind: 
+    - kind: block
       type: text_getSubstring
+  - kind: category
+    name: "\u041C\u0430\u0442\u0435\u043C\u0430\u0442\u0438\u043A\u0430"
+    categoryStyle: 
+    contents:
+    - kind: block
+      type: math_number
+    - kind: block
+      type: math_single
+    - kind: block
+      type: math_change
+    - kind: block
+      type: math_modulo
+    - kind: block
+      type: math_on_list
+    - kind: block
+      type: math_constant
+    - kind: block
+      type: math_constrain
+    - kind: block
+      type: math_arithmetic
+    - kind: block
+      type: math_random_int
+    - kind: block
+      type: math_random_float
+    - kind: block
+      type: math_number_property
+  - kind: category
+    name: "\u0424\u0443\u043D\u043A\u0446\u0438\u0438"
+    categoryStyle: 
+    contents:
+    - kind: block
+      type: procedures_defreturn
+    - kind: block
+      type: procedures_callreturn
+    - kind: block
+      type: procedures_ifreturn
+    - kind: block
+      type: procedures_callnoreturn

@@ -26,6 +26,7 @@ namespace Scripts.Systems
         public static GameController Instance { get; private set; }
         public static Objectives.Objectives Objectives;
         public Playercontroller Player;
+        private Browser browser;
         private void Awake()
         {
             //Make sure there is only one instance of the GameController class (Singleton)
@@ -68,6 +69,13 @@ namespace Scripts.Systems
 
 
             this.gameData.CurrentProblem = SceneManager.GetActiveScene().buildIndex;
+            browser = GameObject.Find("Browser (GUI)").GetComponent<Browser>();
+            this.browser.onLoad += (JSONNode node) =>
+            {
+                Debug.Log("browser onload...");
+                string lastWorkspace = PlayerPrefs.GetString("lastWorkspace", "");
+                this.browser.CallFunction("loadLastWorkspace",new JSONNode(lastWorkspace));
+            };
         }
         public class Globals
         {
@@ -76,8 +84,16 @@ namespace Scripts.Systems
 
         public void RunCode()
         {
-            var browser = GameObject.Find("Browser (GUI)").GetComponent<Browser>();
+            
             this.gameEventManager.Publish(new GameEvent() { EventType = GameEventType.ScriptStarted });
+
+            browser.CallFunction("saveWorkspace").Then(res =>
+            {
+                Debug.Log(res.Value);
+                string workspace = (string)res.Value;
+                Debug.Log(workspace);
+                PlayerPrefs.SetString("lastWorkspace",workspace);
+            }).Done();
             browser.CallFunction("getCode").Then(async res =>
             {
                 
@@ -89,7 +105,7 @@ namespace Scripts.Systems
                 {
                     await CSharpScript.EvaluateAsync(
                         code, ScriptOptions.Default
-                            .WithImports("UnityEngine","System")
+                            .WithImports("UnityEngine","System","System.Collections.Generic")
                             .WithReferences(typeof(MonoBehaviour).Assembly, typeof(CSharpArgumentInfo).Assembly), globals: globals);
                 }
                 catch (Exception e)
