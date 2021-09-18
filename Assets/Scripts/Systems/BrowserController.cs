@@ -29,6 +29,8 @@ public class BrowserController : MonoBehaviour
         SceneManager.sceneLoaded += this.OnSceneLoaded;
         this.lastStartdedLevel = SceneManager.GetActiveScene().name;
         instance = this;
+
+
        
         
     }

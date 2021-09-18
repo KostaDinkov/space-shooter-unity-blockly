@@ -22,7 +22,10 @@
         "System.Runtime.CompilerServices.Unsafe.dll",
         "System.Runtime.Loader.dll",
         "System.Threading.Tasks.Extensions.dll",
-        "Sirenix.OdinInspector.Attributes.dll"
+        "Sirenix.OdinInspector.Attributes.dll",
+        "AzureSqlDbConnect.dll",
+        "EntityFramework.dll",
+        "EntityFramework.SqlServer.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
