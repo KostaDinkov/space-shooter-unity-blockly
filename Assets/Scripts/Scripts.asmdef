@@ -25,7 +25,9 @@
         "Sirenix.OdinInspector.Attributes.dll",
         "AzureSqlDbConnect.dll",
         "EntityFramework.dll",
-        "EntityFramework.SqlServer.dll"
+        "EntityFramework.SqlServer.dll",
+        "Authentication.dll",
+        "Microsoft.Identity.Client.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
