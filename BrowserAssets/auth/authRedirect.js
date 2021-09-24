@@ -31,7 +31,7 @@ function selectAccount () {
         console.warn("Multiple accounts detected.");
     } else if (currentAccounts.length === 1) {
         username = currentAccounts[0].username;
-        showWelcomeMessage(username);
+        //showWelcomeMessage(username);
     }
 }
 
@@ -39,7 +39,8 @@ function handleResponse(response) {
     if (response !== null) {
         username = response.account.username;
         console.log(response.account);
-        showWelcomeMessage(username);
+        window.saveUsername(username);
+        //showWelcomeMessage(username);
     } else {
         selectAccount();
     }
@@ -90,19 +91,9 @@ function getTokenRedirect(request) {
 }
 
 function seeProfile() {
-    getTokenRedirect(loginRequest)
-        .then(response => {
-            callMSGraph(graphConfig.graphMeEndpoint, response.accessToken, updateUI);
-        }).catch(error => {
-            console.error(error);
-        });
+    
 }
 
 function readMail() {
-    getTokenRedirect(tokenRequest)
-        .then(response => {
-            callMSGraph(graphConfig.graphMailEndpoint, response.accessToken, updateUI);
-        }).catch(error => {
-            console.error(error);
-        });
+    
 }

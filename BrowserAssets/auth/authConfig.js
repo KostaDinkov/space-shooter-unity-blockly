@@ -5,8 +5,8 @@
  */
 const msalConfig = {
     auth: {
-        clientId: "7d74f671-c740-4bc6-bbe5-d935a0273401",
-        authority: "https://login.microsoftonline.com/25da1cb8-a81d-435b-b0cb-0c3d266ea76f",
+        clientId: "c3846bc1-feeb-467b-b587-58c5cae3875c",
+        authority: "https://login.microsoftonline.com/fc624d84-98e3-4c36-b996-38ec2ea9683a",
         redirectUri: "https://game.local/auth/index.html",
     },
     cache: {

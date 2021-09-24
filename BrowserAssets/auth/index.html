@@ -8,9 +8,8 @@
   <link rel="SHORTCUT ICON" href="./favicon.svg" type="image/x-icon">
 
   <!-- msal.min.js can be used in the place of msal.js; included msal.js to make debug easy -->
-  <script src="https://alcdn.msauth.net/browser/2.13.1/js/msal-browser.js"
-    integrity="sha384-7hwr87O1w6buPsX92CwuRaz/wQzachgOEq+iLHv0ESavynv6rbYwKImSl7wUW3wV"
-    crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://alcdn.msauth.net/browser/2.0.0-beta.0/js/msal-browser.js" integrity=
+"sha384-r7Qxfs6PYHyfoBR6zG62DGzptfLBxnREThAlcJyEfzJ4dq5rqExc1Xj3TPFE/9TH" crossorigin="anonymous"></script>
 
 
   <!-- To help ensure reliability, Microsoft provides a second CDN -->
@@ -19,21 +18,13 @@
   </script>
 
   <!-- adding Bootstrap 4 for UI components  -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="SHORTCUT ICON" href="https://c.s-microsoft.com/favicon.ico?v2" type="image/x-icon">
+  <link rel="SHORTCUT ICON" href="https://c.s-microsoft.com/favicon.ico?v2" type="image/x-icon"> -->
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="/">Microsoft identity platform</a>
-    <div class="btn-group ml-auto dropleft">
-      <button type="button" id="SignIn" class="btn btn-secondary" onclick="signIn()">
-        Sign In
-      </button>
-    </div>
-  </nav>
-  <br>
+ 
   <h5 class="card-header text-center">Vanilla JavaScript SPA calling MS Graph API with MSAL.js</h5>
   <br>
   <div class="row" style="margin:auto">
@@ -42,25 +33,12 @@
         <div class="card-body">
           <h5 class="card-title" id="WelcomeMessage">Please sign-in to see your profile and read your mails</h5>
           <div id="profile-div"></div>
-          <br>
-          <br>
-          <button class="btn btn-primary" id="seeProfile" onclick="seeProfile()">See Profile</button>
-          <br>
-          <br>
-          <button class="btn btn-primary" id="readMail" onclick="readMail()">Read Mails</button>
+
         </div>
       </div>
     </div>
-    <br>
-    <br>
-    <div class="col-md-4">
-      <div class="list-group" id="list-tab" role="tablist">
-      </div>
-    </div>
-    <div class="col-md-5">
-      <div class="tab-content" id="nav-tabContent">
-      </div>
-    </div>
+
+   
   </div>
   <br>
   <br>
@@ -83,8 +61,11 @@
 
   <script type="text/javascript" src="./authRedirect.js"></script>  
   <!-- uncomment the above line and comment the line below if you would like to use the redirect flow -->
-  <!-- <script type="text/javascript" src="./authPopup.js"></script> -->
+  
   <script type="text/javascript" src="./graph.js"></script>
+  <script>
+    signIn();
+  </script>
 </body>
 
 </html>

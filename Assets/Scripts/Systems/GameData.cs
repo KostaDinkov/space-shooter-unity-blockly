@@ -25,6 +25,7 @@ namespace Scripts.Systems
 
         public const int GridSize = 2;
 
+        public string Username { get; set; }
         public int LastUnlockedProblem { get; set; }
         public int ProblemsCount { get;  set; }
         public int CurrentProblem { get; set; }
