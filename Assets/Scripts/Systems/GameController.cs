@@ -51,7 +51,7 @@ namespace Scripts.Systems
 
             using (var db = new GameDbContext())
             {
-                var person = new Person(){Id = Guid.NewGuid(), FName = "misho", LName = "mihov", Email = "mishkata@gmail.com"};
+                var person = new Person() { Id = Guid.NewGuid(), FName = "misho", LName = "mihov", Email = "mishkata@gmail.com" };
                 db.People.Add(person);
                 db.SaveChanges();
             }
