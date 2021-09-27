@@ -10,14 +10,11 @@ using ZenFulcrum.EmbeddedBrowser;
 
 public class BrowserController : MonoBehaviour
 {
-    public Playercontroller player;
-    private static BrowserController instance;
-    private string lastStartdedLevel;
-    public static BrowserController Instance => instance;
     public ToolBox ToolBox;
-
-    private Dictionary<string, string> levelToolboxes;
-
+    public static BrowserController Instance => instance;
+    
+    private static BrowserController instance;
+    private Browser browser;
     void Awake()
     {
         if (instance != null && instance != this)
@@ -25,46 +22,26 @@ public class BrowserController : MonoBehaviour
             Destroy(this.gameObject);
             return;
         }
-
-        SceneManager.sceneLoaded += this.OnSceneLoaded;
-        this.lastStartdedLevel = SceneManager.GetActiveScene().name;
+        this.browser = this.gameObject.GetComponent<Browser>();
         instance = this;
-
-
-       
-        
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        this.SetBlocklyWorkspace(this.lastStartdedLevel);
-
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
-    {
-        var currentLevel = SceneManager.GetActiveScene().name;
-        if (currentLevel == this.lastStartdedLevel)
+        this.browser.onLoad += node =>
         {
-            return;
-        }
-
-        this.lastStartdedLevel = currentLevel;
-        this.SetBlocklyWorkspace(currentLevel);
+            Debug.Log("browser onload...");
+            this.SetBlocklyWorkspace();
+            var lastWorkspace = PlayerPrefs.GetString("lastWorkspace", "");
+            this.browser.CallFunction("loadLastWorkspace", new JSONNode(lastWorkspace));
+        };
     }
 
-    public void SetBlocklyWorkspace(string levelName)
+    public void SetBlocklyWorkspace()
     {
-        var browser = this.gameObject.GetComponent<Browser>();
-
-        
         Debug.Log($"block kind: {this.ToolBox.contents[0].kind}");
         var toolbox = JsonUtility.ToJson(this.ToolBox);
         Debug.Log(toolbox);
-        //TODO check if the scene is a level and it is in the dictionary
-        browser.CallFunction("setWorkSpace", toolbox/*this.levelToolboxes[levelName]*/).Done();
+        browser.CallFunction("setWorkSpace", toolbox).Done();
     }
-
-    // Update is called once per frame
 }

@@ -4,35 +4,37 @@ using System;
 using AzureSqlDbConnect;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.CSharp.RuntimeBinder;
 using Scripts.GameEvents;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using ZenFulcrum.EmbeddedBrowser;
-using Microsoft.CSharp;
-using Microsoft.CSharp.RuntimeBinder;
 
 namespace Scripts.Systems
 {
     /// <summary>
-    /// API for controlling the game flow and getting information about
-    /// the current state.
+    ///     API for controlling the game flow and getting information about
+    ///     the current state.
     /// </summary>
     public class GameController : MonoBehaviour
     {
+        public static Objectives.Objectives Objectives;
+
+        private static bool isOverlayMenuOpen;
+        private Browser browser;
+        private GameData gameData;
+        private GameEventManager gameEventManager;
+        public Playercontroller Player;
+        public GameObject OverlayMenu;
         public bool IsProblemComplete { get; set; }
         public bool IsPlayerDead { get; set; }
-        private GameEventManager gameEventManager;
-        private GameData gameData;
         public static GameController Instance { get; private set; }
-        public static Objectives.Objectives Objectives;
-        public Playercontroller Player;
-        private Browser browser;
+
         private void Awake()
         {
             //Make sure there is only one instance of the GameController class (Singleton)
             if (Instance == null)
             {
-                
                 Instance = this;
             }
             else if (Instance != this)
@@ -51,7 +53,8 @@ namespace Scripts.Systems
 
             using (var db = new GameDbContext())
             {
-                var person = new Person() { Id = Guid.NewGuid(), FName = "misho", LName = "mihov", Email = "mishkata@gmail.com" };
+                var person = new Person
+                    {Id = Guid.NewGuid(), FName = "misho", LName = "mihov", Email = "mishkata@gmail.com"};
                 db.People.Add(person);
                 db.SaveChanges();
             }
@@ -71,58 +74,48 @@ namespace Scripts.Systems
         {
             this.gameEventManager.Subscribe(GameEventType.ObjectiveCompleted, this.IsProblemCompleted);
             this.gameEventManager.Subscribe(GameEventType.ProblemCompleted, this.UnlockNextProblem);
-            this.gameEventManager.Subscribe(GameEventType.PlayerDied, (value) => this.IsPlayerDead = true);
-            this.gameEventManager.Publish(new GameEvent() {EventType = GameEventType.ProblemStarted});
-
+            this.gameEventManager.Subscribe(GameEventType.PlayerDied, value => this.IsPlayerDead = true);
+            this.gameEventManager.Publish(new GameEvent {EventType = GameEventType.ProblemStarted});
 
             this.gameData.CurrentProblem = SceneManager.GetActiveScene().buildIndex;
-            browser = GameObject.Find("Browser (GUI)").GetComponent<Browser>();
-            this.browser.onLoad += (JSONNode node) =>
-            {
-                Debug.Log("browser onload...");
-                string lastWorkspace = PlayerPrefs.GetString("lastWorkspace", "");
-                this.browser.CallFunction("loadLastWorkspace",new JSONNode(lastWorkspace));
-            };
-        }
-        public class Globals
-        {
-            public Playercontroller Player;
+            this.browser = GameObject.Find("Browser (GUI)").GetComponent<Browser>();
+            
         }
 
         public void RunCode()
         {
-            
-            this.gameEventManager.Publish(new GameEvent() { EventType = GameEventType.ScriptStarted });
+            this.gameEventManager.Publish(new GameEvent {EventType = GameEventType.ScriptStarted});
 
-            browser.CallFunction("saveWorkspace").Then(res =>
+            this.browser.CallFunction("saveWorkspace").Then(res =>
             {
                 Debug.Log(res.Value);
-                string workspace = (string)res.Value;
+                var workspace = (string) res.Value;
                 Debug.Log(workspace);
-                PlayerPrefs.SetString("lastWorkspace",workspace);
+                PlayerPrefs.SetString("lastWorkspace", workspace);
             }).Done();
-            browser.CallFunction("getCode").Then(async res =>
+            this.browser.CallFunction("getCode").Then(async res =>
             {
-                
-                string code = (string)res.Value;
+                var code = (string) res.Value;
+
                 //code = $"try {{{code}}} catch (Exception e){{Debug.LogException(e);}}";
                 Debug.Log(code);
-                var globals = new Globals { Player = this.Player };
+                var globals = new Globals {Player = this.Player};
                 try
                 {
                     await CSharpScript.EvaluateAsync(
                         code, ScriptOptions.Default
-                            .WithImports("UnityEngine","System","System.Collections.Generic")
-                            .WithReferences(typeof(MonoBehaviour).Assembly, typeof(CSharpArgumentInfo).Assembly), globals: globals);
+                            .WithImports("UnityEngine", "System", "System.Collections.Generic")
+                            .WithReferences(typeof(MonoBehaviour).Assembly, typeof(CSharpArgumentInfo).Assembly),
+                        globals);
                 }
                 catch (Exception e)
                 {
-                    Debug.LogException( e);
+                    Debug.LogException(e);
                 }
-                
+
                 if (!this.IsProblemComplete)
                 {
-                    this.gameEventManager.Publish(new GameEvent() { EventType = GameEventType.SolutionFailed });
+                    this.gameEventManager.Publish(new GameEvent {EventType = GameEventType.SolutionFailed});
                 }
             }).Done();
         }
@@ -135,7 +128,7 @@ namespace Scripts.Systems
         {
             this.Player.gameObject.SetActive(true);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            this.gameEventManager.Publish(new GameEvent() {EventType = GameEventType.ProblemStarted});
+            this.gameEventManager.Publish(new GameEvent {EventType = GameEventType.ProblemStarted});
         }
 
         /// <summary>
@@ -143,10 +136,10 @@ namespace Scripts.Systems
         /// </summary>
         public void NextChallenge()
         {
-            if (this.gameData.LastUnlockedProblem >= this.gameData.ProblemsCount )
+            if (this.gameData.LastUnlockedProblem >= this.gameData.ProblemsCount)
             {
                 //TODO no more problems - implement game win condition
-                Debug.Log($"No more problems");
+                Debug.Log("No more problems");
                 return;
             }
 
@@ -157,13 +150,11 @@ namespace Scripts.Systems
                 return;
             }
 
-            SceneManager.LoadScene(this.gameData.CurrentProblem+1);
-           
+            SceneManager.LoadScene(this.gameData.CurrentProblem + 1);
         }
 
         private void InitObjectives(int value)
         {
-            
         }
 
         private void IsProblemCompleted(int value)
@@ -178,22 +169,49 @@ namespace Scripts.Systems
 
             this.gameEventManager.Publish(new GameEvent {EventType = GameEventType.ProblemCompleted});
             this.IsProblemComplete = true;
-
         }
 
 
         public void UnlockNextProblem(int value)
         {
-            
             if (this.gameData.LastUnlockedProblem >= this.gameData.ProblemsCount)
             {
                 return;
             }
-            this.gameData.LastUnlockedProblem = this.gameData.CurrentProblem + 1;
-            
 
+            this.gameData.LastUnlockedProblem = this.gameData.CurrentProblem + 1;
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (isOverlayMenuOpen)
+                {
+                    this.ResumeGame();
+                }
+                else
+                {
+                    this.OpenMenu();
+                }
+            }
+        }
 
+        private void ResumeGame()
+        {
+            isOverlayMenuOpen = false;
+            this.OverlayMenu.SetActive(false);
+        }
+
+        private void OpenMenu()
+        {
+            isOverlayMenuOpen = true;
+            this.OverlayMenu.SetActive(true);
+        }
+
+        public class Globals
+        {
+            public Playercontroller Player;
+        }
     }
 }
