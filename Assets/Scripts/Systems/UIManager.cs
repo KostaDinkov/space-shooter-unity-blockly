@@ -10,21 +10,21 @@ namespace Scripts.Systems
     public class UIManager : MonoBehaviour
     {
         private GameEventManager eventManager;
-        private Text textMesh;
+        private Text statusText;
         private GameObject objectivesListView;
         private Dictionary<Objective, TMPro.TextMeshProUGUI> objectivesTexts;
         private Button runButton;
         private Button nextButton;
-
-
+        [SerializeField]private GameObject infoPanel;
 
         private void Awake()
         {
-            this.textMesh = GameObject.Find("StatusText").GetComponent<Text>();
-            this.textMesh.enabled = false;
+            this.statusText = GameObject.Find("StatusText").GetComponent<Text>();
+            this.statusText.enabled = false;
             
             this.runButton = GameObject.Find("RunBtn").GetComponent<Button>();
             this.nextButton = GameObject.Find("NextBtn").GetComponent<Button>();
+            
             this.nextButton.interactable = false;
             this.objectivesTexts = new Dictionary<Objective, TextMeshProUGUI>();
             this.objectivesListView = GameObject.Find("ObjectivesListView");
@@ -48,27 +48,27 @@ namespace Scripts.Systems
 
         public void ShowProblemCompletedText(int value)
         {
-            this.textMesh.text = "Проблемът е решен!";
-            this.textMesh.enabled = true;
+            this.statusText.text = "Проблемът е решен!";
+            this.statusText.enabled = true;
             this.nextButton.interactable = true;
         }
 
         public void ShowPlayerDiedText(int value)
         {
-            this.textMesh.text = "Дронът е унищожен.\nРестартирайте проблема.";
-            this.textMesh.enabled = true;
+            this.statusText.text = "Дронът е унищожен.\nРестартирайте проблема.";
+            this.statusText.enabled = true;
         }
 
         public void ShowSolutionFailedText(int value)
         {
-            this.textMesh.text = "Непълно решение.Опитай пак.\nРестартирайте проблема.";
-            this.textMesh.enabled = true;
+            this.statusText.text = "Непълно решение.Опитай пак.\nРестартирайте проблема.";
+            this.statusText.enabled = true;
         }
 
         public void HideText(int value)
         {
-            this.textMesh.text = "";
-            this.textMesh.enabled = false;
+            this.statusText.text = "";
+            this.statusText.enabled = false;
         }
 
         public void InitUI(int value)
@@ -97,7 +97,7 @@ namespace Scripts.Systems
                 tmpro.fontSize = 20;
                 tmpro.color = new Color32(35, 190, 255, 255);
                 tmpro.font = Resources.Load<TMP_FontAsset>("Fonts/AnkaCoderItalicSDF");
-                tmpro.alignment = TextAlignmentOptions.BaselineRight;
+                tmpro.alignment = TextAlignmentOptions.BaselineLeft;
 
                 this.objectivesTexts.Add(objective, tmpro);
             }
@@ -117,6 +117,16 @@ namespace Scripts.Systems
                 this.objectivesTexts[objective].text = $"{objective.Description} : {objective.CurrentValue} of {objective.TargetValue}";
 
             }
+        }
+
+        public void OpenInfoPanel()
+        {
+            this.infoPanel.SetActive(true);
+        }
+
+        public void CloseInfoPanel()
+        {
+            this.infoPanel.SetActive(false);
         }
     }
 }
