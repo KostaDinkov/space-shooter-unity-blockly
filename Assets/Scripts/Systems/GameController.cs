@@ -153,9 +153,7 @@ namespace Scripts.Systems
             SceneManager.LoadScene(this.gameData.CurrentProblem + 1);
         }
 
-        private void InitObjectives(int value)
-        {
-        }
+        
 
         private void IsProblemCompleted(int value)
         {

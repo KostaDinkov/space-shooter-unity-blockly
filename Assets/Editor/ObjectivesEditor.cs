@@ -5,13 +5,14 @@ using Scripts.Objectives;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Objectives))]
+//[CustomEditor(typeof(Objectives))]
 public class ObjectivesEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
 
+       
         EditorList.Show(serializedObject.FindProperty("ObjectiveList"));
         
         if (GUILayout.Button("Add New Objective"))

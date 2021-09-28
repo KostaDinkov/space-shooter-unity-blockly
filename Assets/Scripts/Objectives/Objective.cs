@@ -35,7 +35,6 @@ namespace Scripts.Objectives
             {
                 this.eventManager.Publish(new GameEvent {EventType = GameEventType.ObjectiveCompleted});
             }
-
             this.eventManager.Publish(new GameEvent {EventType = GameEventType.ObjectiveUpdated});
         }
 

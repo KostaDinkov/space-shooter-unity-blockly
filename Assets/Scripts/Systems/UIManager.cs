@@ -1,9 +1,13 @@
+using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Scripts.GameEvents;
 using Scripts.Objectives;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace Scripts.Systems
 {
@@ -15,13 +19,20 @@ namespace Scripts.Systems
         private Dictionary<Objective, TMPro.TextMeshProUGUI> objectivesTexts;
         private Button runButton;
         private Button nextButton;
+        private TMPro.TextMeshProUGUI infoTitle;
+        private TMPro.TextMeshProUGUI problemTitle;
+        private TMPro.TextMeshProUGUI infoText;
         [SerializeField]private GameObject infoPanel;
 
         private void Awake()
         {
             this.statusText = GameObject.Find("StatusText").GetComponent<Text>();
             this.statusText.enabled = false;
-            
+
+            this.infoTitle=GameObject.Find("InfoTitle").GetComponent<TMPro.TextMeshProUGUI>();
+            this.infoText = GameObject.Find("InfoText").GetComponent<TMPro.TextMeshProUGUI>();
+            this.problemTitle = GameObject.Find("ProblemTitle").GetComponent<TMPro.TextMeshProUGUI>();
+
             this.runButton = GameObject.Find("RunBtn").GetComponent<Button>();
             this.nextButton = GameObject.Find("NextBtn").GetComponent<Button>();
             
@@ -73,8 +84,16 @@ namespace Scripts.Systems
 
         public void InitUI(int value)
         {
+
+            this.InitObjectives();
+            this.InitInfoPanel();
+   
+        }
+
+        private void InitObjectives()
+        {
             var objectives = GameController.Objectives;
-        
+
             //clear children in any
             this.objectivesTexts.Clear();
             foreach (Transform transform in this.objectivesListView.transform)
@@ -86,12 +105,12 @@ namespace Scripts.Systems
 
                 GameObject textContainer = new GameObject(objectives.ObjectiveList.IndexOf(objective).ToString());
                 var rectTransform = textContainer.AddComponent<RectTransform>();
-                
+
                 rectTransform.SetParent(this.objectivesListView.GetComponent<RectTransform>());
                 rectTransform.localPosition = Vector3.zero;
                 rectTransform.localRotation = Quaternion.Euler(0, 0, 0);
                 rectTransform.localScale = new Vector3(1, 1, 1);
-                
+
                 var tmpro = textContainer.AddComponent<TextMeshProUGUI>();
                 tmpro.SetText($"{objective.Description} : {objective.CurrentValue} от {objective.TargetValue}");
                 tmpro.fontSize = 20;
@@ -101,6 +120,22 @@ namespace Scripts.Systems
 
                 this.objectivesTexts.Add(objective, tmpro);
             }
+        }
+
+        private void InitInfoPanel()
+        {
+            var sceneName = SceneManager.GetActiveScene().name;
+            var levelParams = Regex.Matches(sceneName, @"[0-9]{2}");
+            if (levelParams.Count != 2)
+            {
+                throw new ArgumentException($"Scene name not following convention -l[number]p[number], but instead was {sceneName}");
+            }
+            var infoTitleText = $"Ниво {int.Parse(levelParams[0].Value)} | Задача {int.Parse(levelParams[1].Value)}";
+            
+            this.infoTitle.SetText(infoTitleText);
+            this.problemTitle.SetText(infoTitleText);
+            this.infoText.SetText(GameController.Objectives.ProblemDescription);
+
         }
         private void UpdateUI(int value)
         {
