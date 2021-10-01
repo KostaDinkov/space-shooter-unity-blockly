@@ -51,13 +51,7 @@ namespace Scripts.Systems
                 objective.Init();
             }
 
-            using (var db = new GameDbContext())
-            {
-                var person = new Person
-                    {Id = Guid.NewGuid(), FName = "misho", LName = "mihov", Email = "mishkata@gmail.com"};
-                db.People.Add(person);
-                db.SaveChanges();
-            }
+            
         }
 
         private void OnEnable()

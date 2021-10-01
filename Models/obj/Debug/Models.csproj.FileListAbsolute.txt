@@ -1,0 +1,6 @@
+C:\Projects\Unity3D\Space-Shooter-KiberLab\Models\bin\Debug\Models.dll
+C:\Projects\Unity3D\Space-Shooter-KiberLab\Models\bin\Debug\Models.pdb
+C:\Projects\Unity3D\Space-Shooter-KiberLab\Models\obj\Debug\Models.csproj.AssemblyReference.cache
+C:\Projects\Unity3D\Space-Shooter-KiberLab\Models\obj\Debug\Models.csproj.CoreCompileInputs.cache
+C:\Projects\Unity3D\Space-Shooter-KiberLab\Models\obj\Debug\Models.dll
+C:\Projects\Unity3D\Space-Shooter-KiberLab\Models\obj\Debug\Models.pdb
