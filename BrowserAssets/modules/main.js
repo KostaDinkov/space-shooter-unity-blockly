@@ -63,7 +63,12 @@ function loadLastWorkspace(workspaceString){
   Blockly.Xml.domToWorkspace(workspace, doc);
 }
 
+function getBlocksCount(){
+  return workspace.getAllBlocks().length;
+}
+
 window.getCode = getCode;
 window.setWorkSpace = SetWorkSpace;
 window.saveWorkspace = saveWorkspace;
 window.loadLastWorkspace = loadLastWorkspace;
+window.getBlocksCount = getBlocksCount;

@@ -1,27 +1,26 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Linq;
 using Scripts.Systems;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using ZenFulcrum.EmbeddedBrowser;
 
 public class BrowserController : MonoBehaviour
 {
     public ToolBox ToolBox;
     public static BrowserController Instance => instance;
-    
+
     private static BrowserController instance;
     private Browser browser;
+    private GameData gameData;
+
     void Awake()
     {
+        this.gameData = GameData.Instance;
         if (instance != null && instance != this)
         {
             Destroy(this.gameObject);
             return;
         }
+
         this.browser = this.gameObject.GetComponent<Browser>();
         instance = this;
     }
@@ -32,8 +31,16 @@ public class BrowserController : MonoBehaviour
         {
             Debug.Log("browser onload...");
             this.SetBlocklyWorkspace();
-            var lastWorkspace = PlayerPrefs.GetString("lastWorkspace", "");
-            this.browser.CallFunction("loadLastWorkspace", new JSONNode(lastWorkspace));
+
+            //var lastWorkspace = PlayerPrefs.GetString("lastWorkspace", "");
+            var currentProblemData = this.gameData.UserProblemStates[this.gameData.CurrentLevelName]
+                .FirstOrDefault(p =>
+                    p.ProblemName == this.gameData.CurrentProblemName
+                );
+            if (currentProblemData != null)
+            {
+                this.browser.CallFunction("loadLastWorkspace", new JSONNode(currentProblemData.ProblemBlocksXml));
+            }
         };
     }
 

@@ -14,5 +14,7 @@ namespace Models
         public int ProblemScore { get; set; }
         public bool ProblemLocked { get; set; }
 
+        public bool ProblemCompleted { get; set; }
+
     }
 }

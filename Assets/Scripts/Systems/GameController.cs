@@ -45,23 +45,17 @@ namespace Scripts.Systems
 
             this.gameData = GameData.Instance;
             this.gameEventManager = GameEventManager.Instance;
+
             Objectives = this.GetComponent<Objectives.Objectives>();
             foreach (var objective in Objectives.ObjectiveList)
             {
                 objective.Init();
             }
 
-            
-        }
-
-        private void OnEnable()
-        {
-            SceneManager.sceneLoaded += this.OnSceneLoaded;
-        }
-
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            //TODO: publish event
+            // get level and problem names
+            var sceneName = SceneManager.GetActiveScene().name;
+            this.gameData.CurrentLevelName = sceneName.Substring(0, 3);
+            this.gameData.CurrentProblemName = sceneName.Substring(3, 3);
         }
 
         private void Start()
@@ -73,20 +67,15 @@ namespace Scripts.Systems
 
             this.gameData.CurrentProblem = SceneManager.GetActiveScene().buildIndex;
             this.browser = GameObject.Find("Browser (GUI)").GetComponent<Browser>();
-            
         }
 
         public void RunCode()
         {
             this.gameEventManager.Publish(new GameEvent {EventType = GameEventType.ScriptStarted});
 
-            this.browser.CallFunction("saveWorkspace").Then(res =>
-            {
-                Debug.Log(res.Value);
-                var workspace = (string) res.Value;
-                Debug.Log(workspace);
-                PlayerPrefs.SetString("lastWorkspace", workspace);
-            }).Done();
+            //save workspace blocks
+            this.SaveBlocksXml();
+
             this.browser.CallFunction("getCode").Then(async res =>
             {
                 var code = (string) res.Value;
@@ -147,7 +136,6 @@ namespace Scripts.Systems
             SceneManager.LoadScene(this.gameData.CurrentProblem + 1);
         }
 
-        
 
         private void IsProblemCompleted(int value)
         {
@@ -166,6 +154,19 @@ namespace Scripts.Systems
 
         public void UnlockNextProblem(int value)
         {
+
+            //Set current problem as completed
+            this.SaveBlocksXml();
+            this.browser.CallFunction("getBlocksCount").Then(res =>
+            {
+                this.gameData.dbApi.SetProblemScore(
+                    this.gameData.Username,
+                    this.gameData.CurrentLevelName,
+                    this.gameData.CurrentProblemName,
+                    int.Parse(res.Value.ToString()));
+            }).Done();
+            
+            //Unlock next problem
             if (this.gameData.LastUnlockedProblem >= this.gameData.ProblemsCount)
             {
                 return;
@@ -204,6 +205,28 @@ namespace Scripts.Systems
         public class Globals
         {
             public Playercontroller Player;
+        }
+
+        private void SaveBlocksXml()
+        {
+            this.browser.CallFunction("saveWorkspace").Then(res =>
+            {
+                //save to local gameData
+                var blocksXml = (string) res.Value;
+                Debug.Log(blocksXml);
+                var problemState = this.gameData.UserProblemStates[this.gameData.CurrentLevelName].Find(p =>
+                    p.ProblemName == this.gameData.CurrentProblemName);
+                problemState.ProblemBlocksXml = blocksXml;
+
+                //persist to DB
+                //Todo fix score
+                this.gameData.dbApi.SaveProblemState(
+                    this.gameData.Username,
+                    this.gameData.CurrentLevelName,
+                    this.gameData.CurrentProblemName,
+                    blocksXml,
+                    0);
+            }).Done();
         }
     }
 }

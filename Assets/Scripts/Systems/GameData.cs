@@ -34,8 +34,9 @@ namespace Scripts.Systems
         public int LastUnlockedProblem { get; set; }
         public int ProblemsCount { get;  set; }
         public int CurrentProblem { get; set; }
-
-        public List<ProblemState> UserProblemStates { get; set; }
+        public string CurrentProblemName { get; set; }
+        public string CurrentLevelName { get; set; }
+        public SortedDictionary<string,List<ProblemState>> UserProblemStates { get; set; }
 
 
         private GameData()
@@ -45,7 +46,7 @@ namespace Scripts.Systems
             //TODO the game will probably start with a different scene, so the first problem will be with a different index
             this.LastUnlockedProblem = 2;
             this.CurrentProblem = 0;
-            this.Username = "kosta@kiberlab.net";
+            this.Username = "kosta@kiberlab.net"; 
 
             this.LevelNames = new Dictionary<string, string>()
             {

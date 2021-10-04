@@ -50,7 +50,7 @@ namespace AzureSqlDbConnect
                         ProblemName = problem,
                         ProblemScore = 0,
                         ProblemBlocksXml = "",
-                        ProblemLocked = true
+                        ProblemLocked = false
                     };
                     problemStates.Add(problemState);
                 }
@@ -100,9 +100,19 @@ namespace AzureSqlDbConnect
             return problemState;
         }
 
-        public List<ProblemState> GetAllProblemStates(string username)
+        public void SetProblemScore(string username, string levelName, string problemName, int score)
         {
-            return this.db.ProblemStates.Where(p => p.Person.Username == username).ToList();
+            var problemState = this.GetProblemState(username, levelName, problemName);
+            problemState.ProblemScore = score;
+            problemState.ProblemCompleted = true;
+            this.db.SaveChangesAsync();
+        }
+
+        public SortedDictionary<string, List<ProblemState>> GetAllProblemStates(string username)
+        {
+            var dict=  this.db.ProblemStates.Where(p => p.Person.Username == username).GroupBy(group=>group.LevelName)
+                .ToDictionary(group=>group.Key, group=>group.ToList().OrderBy(p=>p.ProblemName).ToList());
+            return new SortedDictionary<string, List<ProblemState>>(dict);
         }
     }
 }

@@ -1,8 +1,11 @@
 
 using System.Linq;
+using Scripts.Behaviours;
 using Scripts.Systems;
 using TMPro;
+using UnityEditor.Events;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenuUiManager : MonoBehaviour
@@ -10,6 +13,7 @@ public class MainMenuUiManager : MonoBehaviour
     // Start is called before the first frame update
     private GameData gameData;
     private GameObject levelsGroup;
+    private string selectedScene;
 
     void Awake()
     {
@@ -26,8 +30,7 @@ public class MainMenuUiManager : MonoBehaviour
 
     private void UpdateLevels()
     {
-        var sortedProblemStates = this.gameData.UserProblemStates.GroupBy(p => p.LevelName).OrderBy(p => p.Key).ToList();
-        foreach (var problemStates in sortedProblemStates)
+        foreach (var problemStates in this.gameData.UserProblemStates)
         {
 
             var levelTitle = new GameObject(problemStates.Key);
@@ -47,20 +50,27 @@ public class MainMenuUiManager : MonoBehaviour
             horLayoutGroup.childControlHeight = false;
             horLayoutGroup.childControlWidth = false;
 
-            levelTitle.transform.parent = this.levelsGroup.transform;
-
-            foreach (var state in problemStates)
+            levelTitle.transform.SetParent(this.levelsGroup.transform);
+            
+            foreach (var state in problemStates.Value)
             {
                 var button = Resources.Load<GameObject>("Prefabs/MainMenu/problemBtn");
                 button.name = state.ProblemName;
+                //button.GetComponent<MainMenuProblemBtn>().SceneName = state.LevelName+state.ProblemName;
+                
+
                 var rectTransform = button.GetComponent<RectTransform>();
                 rectTransform.sizeDelta = new Vector2(25,25);
                 Button btn = button.GetComponent<Button>();
+                
                 btn.enabled = true;
                 var colorBlock = new ColorBlock()
                 {
                     normalColor = new Color(1, 1, 1),
                     disabledColor = new Color(0.9f, 0.9f, 0.9f, 0.5f),
+                    highlightedColor = new Color(1f,1f,1f),
+                    pressedColor = new Color(0.7113208f, 0.9531364f,1,1),
+                    selectedColor = new Color(1,0.7653183f,1),
                     colorMultiplier = 1,
                     fadeDuration = 0.1f
                 };
@@ -77,8 +87,22 @@ public class MainMenuUiManager : MonoBehaviour
                     btn.colors = colorBlock;
                 }
                 
-                Instantiate(button, Vector3.zero, Quaternion.identity, levelTitle.transform);
+                var btnInstance = Instantiate(button, Vector3.zero, Quaternion.identity, levelTitle.transform);
+                
+               btnInstance.GetComponent<Button>().onClick.AddListener(() => this.ProblemBtnClick(state.LevelName+state.ProblemName));
+
             }
         }
+    }
+
+    public void ProblemBtnClick(string sceneName)
+    {
+        this.selectedScene = sceneName;
+        Debug.Log(sceneName);
+    }
+
+    public void LoadSelectedScene()
+    {
+        SceneManager.LoadScene(this.selectedScene);
     }
 }

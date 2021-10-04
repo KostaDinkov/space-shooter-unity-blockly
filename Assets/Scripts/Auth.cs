@@ -10,7 +10,7 @@ using ZenFulcrum.EmbeddedBrowser;
 public class Auth: MonoBehaviour
 {
     // Start is called before the first frame update
-    private Authientication auth;
+    
     private GameData gameData;
     private Browser browser;
 
@@ -42,6 +42,5 @@ public class Auth: MonoBehaviour
         //TODO fix scene number
         SceneManager.LoadScene(1);
 
-        
     }
 }
