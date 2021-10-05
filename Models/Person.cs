@@ -18,6 +18,8 @@ namespace Models
 
         public string Email { get; set; }
 
+        public GameState GameState { get; set; }
+
         public ICollection<ProblemState> ProblemStates { get; set; }
     }
 }

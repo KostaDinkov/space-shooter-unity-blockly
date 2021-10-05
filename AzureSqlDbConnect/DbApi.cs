@@ -35,7 +35,7 @@ namespace AzureSqlDbConnect
 
         public void NewUserProblemStateInit(string username, Dictionary<string, List<string>> levels)
         {
-            //TODO initialize levels for new user.
+            var user = this.db.People.FirstOrDefault(p => p.Username == username);
 
             var problemStates = new List<ProblemState>();
             foreach (var level in levels)
@@ -45,12 +45,12 @@ namespace AzureSqlDbConnect
                     var problemState = new ProblemState()
                     {
                         Id = Guid.NewGuid(),
-                        Person = this.db.People.FirstOrDefault(p => p.Username == username),
+                        Person = user,
                         LevelName = level.Key,
                         ProblemName = problem,
                         ProblemScore = 0,
                         ProblemBlocksXml = "",
-                        ProblemLocked = false
+                        ProblemLocked = true
                     };
                     problemStates.Add(problemState);
                 }
@@ -58,6 +58,22 @@ namespace AzureSqlDbConnect
 
             this.db.ProblemStates.AddRange(problemStates);
             this.db.SaveChanges();
+            
+            // init new GameState
+            var firstProblemState =
+                this.db.ProblemStates.FirstOrDefault(p => p.LevelName == "l01" && p.ProblemName == "p01");
+            var newGameState = new GameState()
+            {
+                Person = user,
+                GameCompleted = false,
+                GameStateId = Guid.NewGuid(),
+                LastUnlockedProblem = firstProblemState
+            };
+
+            firstProblemState.ProblemLocked = false;
+            user.GameState = newGameState;
+            this.db.SaveChanges();
+
         }
 
         public ProblemState SaveProblemState(string username, string levelName, string problemName,
@@ -113,6 +129,25 @@ namespace AzureSqlDbConnect
             var dict=  this.db.ProblemStates.Where(p => p.Person.Username == username).GroupBy(group=>group.LevelName)
                 .ToDictionary(group=>group.Key, group=>group.ToList().OrderBy(p=>p.ProblemName).ToList());
             return new SortedDictionary<string, List<ProblemState>>(dict);
+        }
+
+        public ProblemState GetLastUnlockedProblem(string username)
+        {
+            var user = this.db.People.FirstOrDefault(p => p.Username == username);
+            if (user == null)
+            {
+                throw new ObjectNotFoundException();
+            }
+
+            var result = this.db.GameStates.FirstOrDefault(gs => gs.GameStateId == user.Id).LastUnlockedProblem;
+            return result;
+        }
+
+        public void SetLastUnlockedProblem(string username, Guid problemStateId)
+        {
+            this.db.GameStates.SingleOrDefault(gs => gs.Person.Username == username)
+                .LastUnlockedProblem = this.db.ProblemStates.SingleOrDefault(ps => ps.Id == problemStateId);
+            this.db.SaveChanges();
         }
     }
 }

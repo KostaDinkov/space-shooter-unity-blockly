@@ -26,6 +26,7 @@ namespace Scripts.Systems
         private GameEventManager gameEventManager;
         public Playercontroller Player;
         public GameObject OverlayMenu;
+        private const string DebugTag = "GameController";
         public bool IsProblemComplete { get; set; }
         public bool IsPlayerDead { get; set; }
         public static GameController Instance { get; private set; }
@@ -80,7 +81,6 @@ namespace Scripts.Systems
             {
                 var code = (string) res.Value;
 
-                //code = $"try {{{code}}} catch (Exception e){{Debug.LogException(e);}}";
                 Debug.Log(code);
                 var globals = new Globals {Player = this.Player};
                 try
@@ -115,25 +115,26 @@ namespace Scripts.Systems
         }
 
         /// <summary>
-        ///     Destroys the currently active challenge and instantiates the next one.
+        ///     Load the next problem
         /// </summary>
         public void NextChallenge()
         {
-            if (this.gameData.LastUnlockedProblem >= this.gameData.ProblemsCount)
+            if (this.gameData.GameComplete)
             {
-                //TODO no more problems - implement game win condition
-                Debug.Log("No more problems");
+                Debug.LogWarning($"{DebugTag}: No more problems");
                 return;
             }
 
-            if (this.gameData.CurrentProblem == this.gameData.LastUnlockedProblem)
+            var nextProblemSceneName = this.gameData.GetNextProblemSceneName();
+            var nextProblemState = this.gameData.FindProblemState(nextProblemSceneName);
+
+            if (nextProblemState.ProblemLocked)
             {
-                //TODO next problem is still locked, update UI
-                Debug.Log($"Next level: ({this.gameData.CurrentProblem + 1}) is locked");
+                Debug.LogWarning($"{DebugTag}: Problem '{nextProblemSceneName}' is locked");
                 return;
             }
 
-            SceneManager.LoadScene(this.gameData.CurrentProblem + 1);
+            SceneManager.LoadScene(nextProblemSceneName);
         }
 
 
@@ -154,7 +155,6 @@ namespace Scripts.Systems
 
         public void UnlockNextProblem(int value)
         {
-
             //Set current problem as completed
             this.SaveBlocksXml();
             this.browser.CallFunction("getBlocksCount").Then(res =>
@@ -165,14 +165,31 @@ namespace Scripts.Systems
                     this.gameData.CurrentProblemName,
                     int.Parse(res.Value.ToString()));
             }).Done();
-            
+
             //Unlock next problem
-            if (this.gameData.LastUnlockedProblem >= this.gameData.ProblemsCount)
+            var nextProblemSceneName = this.gameData.GetNextProblemSceneName();
+            if (nextProblemSceneName == null)
             {
+                Debug.LogWarning($"{DebugTag}: Couldn't find next problem");
+                this.gameData.GameComplete = true;
                 return;
             }
 
-            this.gameData.LastUnlockedProblem = this.gameData.CurrentProblem + 1;
+            var nextProblemState = this.gameData.FindProblemState(nextProblemSceneName);
+
+            if (!nextProblemState.ProblemLocked)
+            {
+                Debug.Log($"{DebugTag}: Problem '{nextProblemSceneName}' already unlocked");
+                return;
+            }
+
+            nextProblemState.ProblemLocked = false;
+            this.gameData.dbApi.SetProblemLocked(
+                this.gameData.Username,
+                nextProblemState.LevelName,
+                nextProblemState.ProblemName, false);
+            //NOTE this could be done on database level with a trigger
+            this.gameData.dbApi.SetLastUnlockedProblem(this.gameData.Username, nextProblemState.Id);
         }
 
         private void Update()

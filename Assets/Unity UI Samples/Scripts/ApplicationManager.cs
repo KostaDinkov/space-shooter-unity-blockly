@@ -21,7 +21,9 @@ public class ApplicationManager : MonoBehaviour
             dbApi.CreateUser(this.gameData.Username);
             dbApi.NewUserProblemStateInit(this.gameData.Username, allProblems);
         }
-
+        var lastUnlockedProblemState = this.gameData.dbApi.GetLastUnlockedProblem(this.gameData.Username);
+        
+        this.gameData.LastUnlockedProblem = lastUnlockedProblemState.LevelName + lastUnlockedProblemState.ProblemName;
         this.gameData.UserProblemStates = dbApi.GetAllProblemStates(this.gameData.Username);
     }
 
