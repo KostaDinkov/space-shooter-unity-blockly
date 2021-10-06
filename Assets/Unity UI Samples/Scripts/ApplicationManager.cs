@@ -9,7 +9,6 @@ using UnityEngine.SceneManagement;
 public class ApplicationManager : MonoBehaviour
 {
     private GameData gameData;
-
     private void Awake()
     {
         this.gameData = GameData.Instance;
@@ -21,12 +20,12 @@ public class ApplicationManager : MonoBehaviour
             dbApi.CreateUser(this.gameData.Username);
             dbApi.NewUserProblemStateInit(this.gameData.Username, allProblems);
         }
-        var lastUnlockedProblemState = this.gameData.dbApi.GetLastUnlockedProblem(this.gameData.Username);
-        
+        var lastUnlockedProblemState = dbApi.GetLastUnlockedProblem(this.gameData.Username);
         this.gameData.LastUnlockedProblem = lastUnlockedProblemState.LevelName + lastUnlockedProblemState.ProblemName;
-        this.gameData.UserProblemStates = dbApi.GetAllProblemStates(this.gameData.Username);
+        this.gameData.UserProblemStates = this.gameData.dbApi.GetAllProblemStates(this.gameData.Username);
     }
 
+  
     private Dictionary<string, List<string>> GetAllProblems()
     {
         var problems = new Dictionary<string, List<string>>();

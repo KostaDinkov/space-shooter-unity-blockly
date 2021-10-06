@@ -66,7 +66,7 @@ namespace AzureSqlDbConnect
             {
                 Person = user,
                 GameCompleted = false,
-                GameStateId = Guid.NewGuid(),
+                
                 LastUnlockedProblem = firstProblemState
             };
 
@@ -139,7 +139,14 @@ namespace AzureSqlDbConnect
                 throw new ObjectNotFoundException();
             }
 
-            var result = this.db.GameStates.FirstOrDefault(gs => gs.GameStateId == user.Id).LastUnlockedProblem;
+            var gState = this.db.GameStates.Include(gs=>gs.LastUnlockedProblem).FirstOrDefault(gs => gs.GameStateId == user.Id);
+            if (gState == null)
+            {
+                throw new ObjectNotFoundException($"No GameState for {user.Username}");
+            }
+            Console.WriteLine(gState.LastUnlockedProblemId);
+            var result = this.db.ProblemStates.Find(gState.LastUnlockedProblemId);
+            //TODO fix this null return
             return result;
         }
 

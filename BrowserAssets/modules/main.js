@@ -9,7 +9,7 @@ SetTheme();
 
 let workspace;
 
-function SetWorkSpace(toolbox) {
+function SetToolbox(toolbox) {
 
   
   let blocklyDiv = document.getElementById("blocklyDiv");
@@ -58,9 +58,13 @@ function saveWorkspace(){
 
 function loadLastWorkspace(workspaceString){
   
+  if(workspaceString ===""){
+    workspaceString = '<xml xmlns="https://developers.google.com/blockly/xml"></xml>'
+  }
   const doc = Blockly.Xml.textToDom(workspaceString)
+
   console.log(doc)
-  Blockly.Xml.domToWorkspace(workspace, doc);
+  Blockly.Xml.clearWorkspaceAndLoadFromXml(doc, workspace);
 }
 
 function getBlocksCount(){
@@ -68,7 +72,7 @@ function getBlocksCount(){
 }
 
 window.getCode = getCode;
-window.setWorkSpace = SetWorkSpace;
+window.setToolbox = SetToolbox;
 window.saveWorkspace = saveWorkspace;
 window.loadLastWorkspace = loadLastWorkspace;
 window.getBlocksCount = getBlocksCount;
