@@ -82,7 +82,7 @@ namespace Scripts.Systems
             //check if there is a next level and take it's first problem
 
             var nextLevelNumber = int.Parse(this.CurrentLevelName.Substring(1, 2)) + 1;
-            var nextLevelName = "l" + nextLevelNumber;
+            var nextLevelName = "l" + nextLevelNumber.ToString("D2");
             if (this.UserProblemStates.ContainsKey(nextLevelName))
             {
                 return nextLevelName + "p01";

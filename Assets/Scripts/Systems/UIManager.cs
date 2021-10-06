@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Scripts.GameEvents;
 using Scripts.Objectives;
@@ -48,6 +49,15 @@ namespace Scripts.Systems
             this.eventManager.Subscribe(GameEventType.ObjectiveUpdated, this.UpdateUI);
             this.eventManager.Subscribe(GameEventType.SolutionFailed, this.ShowSolutionFailedText);
             this.eventManager.Subscribe(GameEventType.ScriptStarted, this.OnScriptStarted);
+
+            //Set next button active if next problem is unlocked
+            var nextScene = GameData.Instance.GetNextProblemSceneName();
+            var nextProblemState = GameData.Instance.UserProblemStates[nextScene.Substring(0, 3)]
+                .FirstOrDefault(p => p.ProblemName == nextScene.Substring(3, 3));
+            if (!nextProblemState.ProblemLocked)
+            {
+                this.nextButton.interactable = true;
+            }
         }
 
       
