@@ -1,14 +1,13 @@
 ﻿#define isDebug
 
 using System;
-using AzureSqlDbConnect;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.CSharp.RuntimeBinder;
 using Scripts.GameEvents;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using ZenFulcrum.EmbeddedBrowser;
+
 
 namespace Scripts.Systems
 {
@@ -21,7 +20,8 @@ namespace Scripts.Systems
         public static Objectives.Objectives Objectives;
 
         private static bool isOverlayMenuOpen;
-        private Browser browser;
+
+        private BlocklyManager blocklyManager;
         private GameData gameData;
         private GameEventManager gameEventManager;
         public Playercontroller Player;
@@ -65,42 +65,38 @@ namespace Scripts.Systems
             this.gameEventManager.Subscribe(GameEventType.ProblemCompleted, this.UnlockNextProblem);
             this.gameEventManager.Subscribe(GameEventType.PlayerDied, value => this.IsPlayerDead = true);
             this.gameEventManager.Publish(new GameEvent {EventType = GameEventType.ProblemStarted});
-
             this.gameData.CurrentProblem = SceneManager.GetActiveScene().buildIndex;
-            this.browser = GameObject.Find("Browser (GUI)").GetComponent<Browser>();
+            this.blocklyManager = GameObject.Find("Browser (GUI)").GetComponent<BlocklyManager>();
         }
 
-        public void RunCode()
+        public async void RunCode()
         {
             this.gameEventManager.Publish(new GameEvent {EventType = GameEventType.ScriptStarted});
 
             //save workspace blocks
-            this.SaveBlocksXml();
+            this.blocklyManager.SaveBlocksXml();
 
-            this.browser.CallFunction("getCode").Then(async res =>
+            var code = await this.blocklyManager.GetCode();
+
+            Debug.Log(code);
+            var globals = new Globals {Player = this.Player};
+            try
             {
-                var code = (string) res.Value;
+                await CSharpScript.EvaluateAsync(
+                    code, ScriptOptions.Default
+                        .WithImports("UnityEngine", "System", "System.Collections.Generic")
+                        .WithReferences(typeof(MonoBehaviour).Assembly, typeof(CSharpArgumentInfo).Assembly),
+                    globals);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
 
-                Debug.Log(code);
-                var globals = new Globals {Player = this.Player};
-                try
-                {
-                    await CSharpScript.EvaluateAsync(
-                        code, ScriptOptions.Default
-                            .WithImports("UnityEngine", "System", "System.Collections.Generic")
-                            .WithReferences(typeof(MonoBehaviour).Assembly, typeof(CSharpArgumentInfo).Assembly),
-                        globals);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogException(e);
-                }
-
-                if (!this.IsProblemComplete)
-                {
-                    this.gameEventManager.Publish(new GameEvent {EventType = GameEventType.SolutionFailed});
-                }
-            }).Done();
+            if (!this.IsProblemComplete)
+            {
+                this.gameEventManager.Publish(new GameEvent {EventType = GameEventType.SolutionFailed});
+            }
         }
 
 
@@ -138,7 +134,7 @@ namespace Scripts.Systems
         }
 
 
-        private void IsProblemCompleted(int value)
+        private void IsProblemCompleted(object args)
         {
             foreach (var objective in Objectives.ObjectiveList)
             {
@@ -153,18 +149,18 @@ namespace Scripts.Systems
         }
 
 
-        public void UnlockNextProblem(int value)
+        public async void UnlockNextProblem(object args)
         {
-            //Set current problem as completed
-            this.SaveBlocksXml();
-            this.browser.CallFunction("getBlocksCount").Then(res =>
-            {
-                this.gameData.dbApi.SetProblemScore(
-                    this.gameData.Username,
-                    this.gameData.CurrentLevelName,
-                    this.gameData.CurrentProblemName,
-                    int.Parse(res.Value.ToString()));
-            }).Done();
+            //Save blocks
+            this.blocklyManager.SaveBlocksXml();
+            
+            //Set the score and problem completed
+            int blockCount = await this.blocklyManager.GetBlocksCount();
+            this.gameData.dbApi.SetProblemScore(
+                this.gameData.Username,
+                this.gameData.CurrentLevelName,
+                this.gameData.CurrentProblemName,
+                blockCount);
 
             //Unlock next problem
             var nextProblemSceneName = this.gameData.GetNextProblemSceneName();
@@ -188,6 +184,7 @@ namespace Scripts.Systems
                 this.gameData.Username,
                 nextProblemState.LevelName,
                 nextProblemState.ProblemName, false);
+
             //NOTE this could be done on database level with a trigger
             this.gameData.dbApi.SetLastUnlockedProblem(this.gameData.Username, nextProblemState.Id);
         }
@@ -222,28 +219,6 @@ namespace Scripts.Systems
         public class Globals
         {
             public Playercontroller Player;
-        }
-
-        private void SaveBlocksXml()
-        {
-            this.browser.CallFunction("saveWorkspace").Then(res =>
-            {
-                //save to local gameData
-                var blocksXml = (string) res.Value;
-                Debug.Log(blocksXml);
-                var problemState = this.gameData.UserProblemStates[this.gameData.CurrentLevelName].Find(p =>
-                    p.ProblemName == this.gameData.CurrentProblemName);
-                problemState.ProblemBlocksXml = blocksXml;
-
-                //persist to DB
-                //Todo fix score
-                this.gameData.dbApi.SaveProblemState(
-                    this.gameData.Username,
-                    this.gameData.CurrentLevelName,
-                    this.gameData.CurrentProblemName,
-                    blocksXml,
-                    0);
-            }).Done();
         }
     }
 }

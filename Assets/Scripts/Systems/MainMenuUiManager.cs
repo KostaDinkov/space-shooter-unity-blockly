@@ -14,21 +14,23 @@ public class MainMenuUiManager : MonoBehaviour
     private GameData gameData;
     private GameObject levelsGroup;
     private string selectedScene;
+    private Button loadSelectedBtn;
 
     void Awake()
     {
         this.gameData = GameData.Instance;
+
         
     }
     void Start()
     {
+        this.loadSelectedBtn = GameObject.Find("LoadSelected").GetComponent<Button>(); 
+        this.loadSelectedBtn.interactable = false;
         this.levelsGroup = GameObject.Find("levels");
         this.UpdateLevels();
     }
 
-    
-
-    private void UpdateLevels()
+   private void UpdateLevels()
     {
         foreach (var problemStates in this.gameData.UserProblemStates)
         {
@@ -98,6 +100,7 @@ public class MainMenuUiManager : MonoBehaviour
     public void ProblemBtnClick(string sceneName)
     {
         this.selectedScene = sceneName;
+        this.loadSelectedBtn.interactable = true;
         Debug.Log(sceneName);
     }
 

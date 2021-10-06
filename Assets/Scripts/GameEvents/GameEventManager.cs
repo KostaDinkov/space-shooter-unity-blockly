@@ -7,16 +7,16 @@ namespace Scripts.GameEvents
     internal class GameEventManager
     {
         private static GameEventManager instance;
-        private readonly Dictionary<GameEventType, Dictionary<string, Action<int>>> events;
+        private readonly Dictionary<GameEventType, Dictionary<string, Action<object>>> events;
 
         private GameEventManager()
         {
             if (instance == null) instance = this;
 
-            this.events = new Dictionary<GameEventType, Dictionary<string, Action<int>>>();
+            this.events = new Dictionary<GameEventType, Dictionary<string, Action<object>>>();
             foreach (var gameEventType in (GameEventType[]) Enum.GetValues(typeof(GameEventType)))
             {
-                this.events.Add(gameEventType, new Dictionary<string, Action<int>>());
+                this.events.Add(gameEventType, new Dictionary<string, Action<object>>());
             }
         }
 
@@ -35,13 +35,13 @@ namespace Scripts.GameEvents
             Debug.Log($"Event fired {gameEvent.EventType.ToString()}");
             foreach (var action in this.events[gameEvent.EventType].Values)
             {
-                action.Invoke(gameEvent.EventValue);
+                action.Invoke(gameEvent.EventArgs);
             }
 
             
         }
 
-        public string Subscribe(GameEventType gameEventType, Action<int> action)
+        public string Subscribe(GameEventType gameEventType, Action<object> action)
         {
             var token = action.Method.Name;
             if (this.events[gameEventType].ContainsKey(token))

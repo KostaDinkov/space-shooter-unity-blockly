@@ -3,6 +3,7 @@
 import InitCustomBlocks from './custom_blocks.js';
 import SetTheme from './theme.js';
 
+let blocksCount = 0;
 
 InitCustomBlocks();
 SetTheme();
@@ -10,8 +11,6 @@ SetTheme();
 let workspace;
 
 function SetToolbox(toolbox) {
-
-  
   let blocklyDiv = document.getElementById("blocklyDiv");
   blocklyDiv.innerHTML = "";
   let toolboxJson = JSON.parse(toolbox);
@@ -43,7 +42,10 @@ function SetToolbox(toolbox) {
   });
   workspace.toolbox_.flyout_.autoClose = false;
   workspace.addChangeListener(Blockly.Events.disableOrphans);
+  workspace.addChangeListener(onWorkspaceChange)
 }
+
+
 function getCode() {
   return Blockly.CSharp.workspaceToCode(workspace);
 }
@@ -69,6 +71,15 @@ function loadLastWorkspace(workspaceString){
 
 function getBlocksCount(){
   return workspace.getAllBlocks().length;
+}
+
+function onWorkspaceChange(){
+ 
+  let blocksOnWorkspace = workspace.getAllBlocks().length;
+  if(blocksOnWorkspace!== blocksCount){
+    blocksCountChanged(blocksOnWorkspace);
+    blocksCount = blocksOnWorkspace;
+  }
 }
 
 window.getCode = getCode;

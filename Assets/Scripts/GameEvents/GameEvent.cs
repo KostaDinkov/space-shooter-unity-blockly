@@ -7,6 +7,6 @@ namespace Scripts.GameEvents
     public class GameEvent
     {
         public GameEventType EventType;
-        public int EventValue;
+        public object EventArgs;
     }
 }

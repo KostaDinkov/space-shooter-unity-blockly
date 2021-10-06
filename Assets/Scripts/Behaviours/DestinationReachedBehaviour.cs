@@ -21,7 +21,7 @@ namespace Scripts.Behaviours
                 this.eventManager.Publish(new GameEvent
                 {
                     EventType = GameEventType.TargetReached,
-                    EventValue = 1
+                    EventArgs = 1
                 });
             }
         }
@@ -33,7 +33,7 @@ namespace Scripts.Behaviours
                 this.eventManager.Publish(new GameEvent
                 {
                     EventType = GameEventType.TargetReached,
-                    EventValue = -1
+                    EventArgs = -1
                 });
             }
         }

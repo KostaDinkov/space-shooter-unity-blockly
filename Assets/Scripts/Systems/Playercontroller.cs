@@ -86,7 +86,7 @@ namespace Scripts.Systems
             }
         }
 
-        private void OnProblemCompleted(int value)
+        private void OnProblemCompleted(object args)
         {
             this.isDisabled = true;
         }

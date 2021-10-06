@@ -28,9 +28,9 @@ namespace Scripts.Objectives
             this.eventManager.Subscribe(this.ListenEvent, this.ObjectiveUpdated);
         }
 
-        private void ObjectiveUpdated(int value)
+        private void ObjectiveUpdated(object args)
         {
-            this.CurrentValue += value;
+            this.CurrentValue += (int)args;
             if (this.IsComplete())
             {
                 this.eventManager.Publish(new GameEvent {EventType = GameEventType.ObjectiveCompleted});

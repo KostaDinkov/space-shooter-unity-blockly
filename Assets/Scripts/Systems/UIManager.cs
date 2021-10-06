@@ -23,6 +23,7 @@ namespace Scripts.Systems
         private TMPro.TextMeshProUGUI infoTitle;
         private TMPro.TextMeshProUGUI problemTitle;
         private TMPro.TextMeshProUGUI infoText;
+        private Text blocksCountText;
         [SerializeField]private GameObject infoPanel;
 
         private void Awake()
@@ -36,6 +37,7 @@ namespace Scripts.Systems
 
             this.runButton = GameObject.Find("RunBtn").GetComponent<Button>();
             this.nextButton = GameObject.Find("NextBtn").GetComponent<Button>();
+            this.blocksCountText = GameObject.Find("BlocksCount").GetComponent<Text>();
             
             this.nextButton.interactable = false;
             this.objectivesTexts = new Dictionary<Objective, TextMeshProUGUI>();
@@ -49,6 +51,7 @@ namespace Scripts.Systems
             this.eventManager.Subscribe(GameEventType.ObjectiveUpdated, this.UpdateUI);
             this.eventManager.Subscribe(GameEventType.SolutionFailed, this.ShowSolutionFailedText);
             this.eventManager.Subscribe(GameEventType.ScriptStarted, this.OnScriptStarted);
+            this.eventManager.Subscribe(GameEventType.BlocksUpdated, this.UpdateBlocksCountText);
 
             //Set next button active if next problem is unlocked
             var nextScene = GameData.Instance.GetNextProblemSceneName();
@@ -60,39 +63,43 @@ namespace Scripts.Systems
             }
         }
 
-      
+        private void UpdateBlocksCountText(object obj)
+        {
+            this.blocksCountText.text = $"Брой блокчета: {(int)obj}";
+        }
 
-        public void OnScriptStarted(int value)
+
+        public void OnScriptStarted(object args)
         {
             runButton.interactable = false;
         }
 
-        public void ShowProblemCompletedText(int value)
+        public void ShowProblemCompletedText(object args)
         {
             this.statusText.text = "Проблемът е решен!";
             this.statusText.enabled = true;
             this.nextButton.interactable = true;
         }
 
-        public void ShowPlayerDiedText(int value)
+        public void ShowPlayerDiedText(object args)
         {
             this.statusText.text = "Дронът е унищожен.\nРестартирайте проблема.";
             this.statusText.enabled = true;
         }
 
-        public void ShowSolutionFailedText(int value)
+        public void ShowSolutionFailedText(object args)
         {
             this.statusText.text = "Непълно решение.Опитай пак.\nРестартирайте проблема.";
             this.statusText.enabled = true;
         }
 
-        public void HideText(int value)
+        public void HideText(object args)
         {
             this.statusText.text = "";
             this.statusText.enabled = false;
         }
 
-        public void InitUI(int value)
+        public void InitUI(object args)
         {
 
             this.InitObjectives();
@@ -147,7 +154,7 @@ namespace Scripts.Systems
             this.infoText.SetText(GameController.Objectives.ProblemDescription);
 
         }
-        private void UpdateUI(int value)
+        private void UpdateUI(object args)
         {
             foreach (var objective in this.objectivesTexts.Keys)
             {

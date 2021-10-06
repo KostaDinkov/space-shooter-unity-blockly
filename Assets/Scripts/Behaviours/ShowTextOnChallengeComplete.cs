@@ -21,19 +21,19 @@ namespace Scripts.Behaviours
         
         }
 
-        public void ShowChallangeCompletedText(int value)
+        public void ShowChallangeCompletedText(object args)
         {
             this.textMesh.text = "ChallangeCompleted";
             this.textMesh.enabled = true;
         }
 
-        public void ShowPlayerDiedText(int value)
+        public void ShowPlayerDiedText(object args)
         {
             this.textMesh.text = "Player Died.\nRestart Challange.";
             this.textMesh.enabled = true;
         }
 
-        public void HideText(int value)
+        public void HideText(object args)
         {
             this.textMesh.text = "";
             this.textMesh.enabled = false;
