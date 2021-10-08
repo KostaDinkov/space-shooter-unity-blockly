@@ -5,7 +5,7 @@ using UnityEngine;
 /// Allows to change rotation axis of the scene view to Z.
 /// Based on unity implementation <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/SceneView/SceneViewMotion.cs"/>
 /// </summary>
-[InitializeOnLoad]
+//[InitializeOnLoad]
 public static class SceneViewMotion2D
 {
     // there is the main difference from unity implementation.
