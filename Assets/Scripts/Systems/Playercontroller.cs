@@ -163,7 +163,7 @@ namespace Scripts.Systems
             if (!this.isAlive) throw new PlayerDiedException();
 
             this.nextFire = Time.time + this.fireRate;
-            Instantiate(this.shot, this.transform.position + this.transform.forward*2, this.transform.rotation);
+            Instantiate(this.shot, this.transform.position + this.transform.forward * 2, this.transform.rotation);
             await UniTask.Delay((int) (this.fireRate * 1000));
             return "shot fired";
         }
@@ -176,16 +176,16 @@ namespace Scripts.Systems
         {
             this.scannerPs.Play();
             await UniTask.Delay(1000);
-            
+
             var objectInFront = this.GetObjectInFront();
 
             if (objectInFront != null)
             {
                 this.lastScanned = objectInFront;
-
+                Debug.Log(objectInFront.GetComponent<SpaceObject.SpaceObject>().SpaceObjectType.ToString());
                 return this.lastScanned.GetComponent<SpaceObject.SpaceObject>().SpaceObjectType.ToString();
             }
-            Debug.Log(objectInFront.GetComponent<SpaceObject.SpaceObject>().SpaceObjectType.ToString());
+
             return "Scanner found no object";
         }
 
@@ -199,13 +199,14 @@ namespace Scripts.Systems
 
             var endPosition = this.transform.position + this.transform.forward * GameData.GridSize * dist;
             endPosition = this.CheckBoundaries(endPosition);
-           
+
             while (this.transform.position != endPosition && this.isAlive)
             {
                 this.transform.position =
                     Vector3.MoveTowards(this.transform.position, endPosition, this.playerSpeed * Time.deltaTime);
                 await UniTask.WaitForEndOfFrame(this.GetCancellationTokenOnDestroy());
             }
+
             return "finished moving";
         }
 
@@ -237,41 +238,49 @@ namespace Scripts.Systems
             var objectAhead = this.GetObjectInFront();
             if (!objectAhead)
             {
-                throw new NoObjectAheadException("Няма намерен обект за товарене.");
+                await this.PlayPickupPs(false, false);
+                Debug.LogError("Няма намерен обект за товарене!");
+                return null;
             }
 
             var spaceObject = objectAhead.GetComponent<SpaceObject.SpaceObject>();
 
-            
-            this.pickupPs.Play();
-            await UniTask.Delay(1000);
-            if (spaceObject.IsCollectable)
+            if (!spaceObject.IsCollectable)
             {
-                int slot = this.GetRandomCargoSlot();
-                if (slot >= 0)
-                {
-                    this.cargoBay[slot] = objectAhead;
-                    objectAhead.SetActive(false);
-                    this.lastPickedUp = objectAhead;
-                    Debug.Log($"Adding cargo {spaceObject.SpaceObjectType} at slot {slot}");
-                    return spaceObject.SpaceObjectType.ToString();
-                }
+                await this.PlayPickupPs(false, false);
+                Debug.LogWarning("Обектът не може да бъде натоварен!");
 
-                throw new CargoBayFullException();
+                return null;
             }
 
-            throw new ObjectNotCollectableException();
+            int slot = this.GetRandomCargoSlot();
+            if (slot < 0)
+            {
+                await this.PlayPickupPs(false, false);
+                Debug.LogError("Товарното помещение е пълно!");
+
+                return null;
+            }
+
+            await this.PlayPickupPs(true, false);
+
+            this.cargoBay[slot] = objectAhead;
+            objectAhead.SetActive(false);
+            this.lastPickedUp = objectAhead;
+            Debug.Log($"Добавяне на обект: {spaceObject.SpaceObjectType} на позиция: {slot}");
+
+            return spaceObject.SpaceObjectType.ToString();
         }
 
         public async UniTask<string> UnloadCargoAt(int slotIndex)
         {
             if (!this.isAlive) throw new PlayerDiedException();
 
-            //Todo play animation
-            await UniTask.Delay(1000);
             var unloadPosition = this.transform.position + this.transform.TransformDirection(Vector3.forward) * 2;
             if (this.GetObjectInFront() == null && this.InBounds(unloadPosition))
             {
+                await this.PlayPickupPs(success: true, unloading: true);
+
                 var cargo = this.cargoBay[slotIndex];
                 this.freeSlots.Add(slotIndex);
                 this.cargoBay[slotIndex] = null;
@@ -280,7 +289,10 @@ namespace Scripts.Systems
                 return cargo.GetComponent<SpaceObject.SpaceObject>().SpaceObjectType.ToString();
             }
 
-            return "Location occupied";
+            await this.PlayPickupPs(false, true);
+            
+            Debug.LogError("Мястото пред дрона не е свободно!");
+            return null;
         }
 
         public string[] GetCargo()
@@ -305,7 +317,7 @@ namespace Scripts.Systems
 
         public void Print(object msg)
         {
-           this.logger.Log(msg.ToString());
+            this.logger.Log(msg.ToString());
         }
 
         #endregion
@@ -361,20 +373,40 @@ namespace Scripts.Systems
             return "rotated";
         }
 
+        private async UniTask PlayPickupPs(bool success, bool unloading)
+        {
+            var originalPsPosition = this.pickupPs.transform.localPosition;
+            var main = this.pickupPs.main;
+            if (unloading)
+            {
+                this.pickupPs.transform.localPosition = new Vector3(0, 0, 0);
+                this.pickupPs.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            }
+
+            if (!success)
+            {
+                main.startColor = new Color(1, 0, 0.1276541f);
+            }
+            else
+            {
+                main.startColor = new Color(0.09811318f, 1, 0.7056843f);
+            }
+
+            this.pickupPs.Play();
+            await UniTask.Delay(1000);
+            this.pickupPs.transform.localPosition = originalPsPosition;
+            this.pickupPs.transform.localRotation = Quaternion.Euler(0, -180, 0);
+        }
+
         private GameObject GetObjectInFront()
         {
             Debug.DrawRay(this.transform.position, this.transform.TransformDirection(Vector3.forward) * 2, Color.yellow,
                 1,
                 false);
-            if (Physics.Raycast(this.transform.position, this.transform.TransformDirection(Vector3.forward),
-                out var hitResult, 2))
-            {
-                //Debug.Log($"<color=orange>Object in front:</color> {hitResult.collider.gameObject.name}");
-                this.lastScanned = hitResult.transform.gameObject;
-                return hitResult.transform.gameObject;
-            }
-
-            return null;
+            return Physics.Raycast(this.transform.position, this.transform.TransformDirection(Vector3.forward),
+                out var hitResult, 2)
+                ? hitResult.transform.gameObject
+                : null;
         }
     }
 }

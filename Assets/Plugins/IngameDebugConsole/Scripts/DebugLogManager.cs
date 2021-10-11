@@ -874,15 +874,15 @@ namespace IngameDebugConsole
 				return;
 #endif
             //Hack - filter everything but Log and Exception messages
-            if ((logType == LogType.Warning) || (logType == LogType.Error) || (logType == LogType.Assert))
-            {
-                return;
-            }
+            //if ((logType == LogType.Warning) || (logType == LogType.Error) || (logType == LogType.Assert))
+            //{
+            //    return;
+            //}
             //Hack - accept only custom messages starting containing  "[INFO]" substrings
-            if (logType == LogType.Log && !logString.Contains("[INFO]"))
-            {
-                return;
-            }
+            //if (logType == LogType.Log && !logString.Contains("[INFO]"))
+            //{
+            //    return;
+            //}
             // Truncate the log if it is longer than maxLogLength
             int logLength = logString.Length;
 			if( stackTrace == null )
