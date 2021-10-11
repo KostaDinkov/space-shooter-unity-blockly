@@ -56,7 +56,8 @@ namespace Scripts.Systems
         private List<int> freeSlots;
         private UniTask<string> currentTask;
         private InGameLogger logger;
-        private ParticleSystem scanner;
+        private ParticleSystem scannerPs;
+        private ParticleSystem pickupPs;
 
         #endregion
 
@@ -68,7 +69,8 @@ namespace Scripts.Systems
             this.cargoBay = new List<GameObject>(new GameObject[this.cargoBayCapacity]);
             this.freeSlots = Enumerable.Range(0, this.cargoBayCapacity).ToList();
             this.logger = new InGameLogger();
-            this.scanner = this.GetComponent<ParticleSystem>();
+            this.scannerPs = this.transform.GetChild(3).GetComponent<ParticleSystem>();
+            this.pickupPs = this.transform.GetChild(2).GetComponent<ParticleSystem>();
         }
 
         public void Start()
@@ -172,10 +174,9 @@ namespace Scripts.Systems
         /// <returns>The the space object type</returns>
         public async UniTask<string> ScanAheadAsync()
         {
-            this.scanner.Play();
+            this.scannerPs.Play();
             await UniTask.Delay(1000);
-
-            //TODO play scan animation
+            
             var objectInFront = this.GetObjectInFront();
 
             if (objectInFront != null)
@@ -241,7 +242,8 @@ namespace Scripts.Systems
 
             var spaceObject = objectAhead.GetComponent<SpaceObject.SpaceObject>();
 
-            //TODO Play animation
+            
+            this.pickupPs.Play();
             await UniTask.Delay(1000);
             if (spaceObject.IsCollectable)
             {
