@@ -133,13 +133,14 @@ MonoBehaviour:
   fireRate: 0.5
   unitSize: 1
   boundary:
-    xMin: -6
-    xMax: 6
+    xMin: 4
+    xMax: 16
     yMin: 0
     yMax: 16
   lastScanned: {fileID: 0}
   cargoBay: []
   cargoBayCapacity: 5
+  lastPickedUp: {fileID: 0}
   shot: {fileID: 1668585415462516, guid: 10f4fe664e6cf324c8312bd697e71834, type: 3}
   isDisabled: 0
   isAlive: 0

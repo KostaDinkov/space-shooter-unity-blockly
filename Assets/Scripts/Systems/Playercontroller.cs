@@ -56,6 +56,7 @@ namespace Scripts.Systems
         private List<int> freeSlots;
         private UniTask<string> currentTask;
         private InGameLogger logger;
+        private ParticleSystem scanner;
 
         #endregion
 
@@ -67,6 +68,7 @@ namespace Scripts.Systems
             this.cargoBay = new List<GameObject>(new GameObject[this.cargoBayCapacity]);
             this.freeSlots = Enumerable.Range(0, this.cargoBayCapacity).ToList();
             this.logger = new InGameLogger();
+            this.scanner = this.GetComponent<ParticleSystem>();
         }
 
         public void Start()
@@ -159,7 +161,7 @@ namespace Scripts.Systems
             if (!this.isAlive) throw new PlayerDiedException();
 
             this.nextFire = Time.time + this.fireRate;
-            Instantiate(this.shot, this.transform.position + this.transform.forward, this.transform.rotation);
+            Instantiate(this.shot, this.transform.position + this.transform.forward*2, this.transform.rotation);
             await UniTask.Delay((int) (this.fireRate * 1000));
             return "shot fired";
         }
@@ -170,17 +172,19 @@ namespace Scripts.Systems
         /// <returns>The the space object type</returns>
         public async UniTask<string> ScanAheadAsync()
         {
+            this.scanner.Play();
             await UniTask.Delay(1000);
 
             //TODO play scan animation
             var objectInFront = this.GetObjectInFront();
+
             if (objectInFront != null)
             {
                 this.lastScanned = objectInFront;
 
                 return this.lastScanned.GetComponent<SpaceObject.SpaceObject>().SpaceObjectType.ToString();
             }
-
+            Debug.Log(objectInFront.GetComponent<SpaceObject.SpaceObject>().SpaceObjectType.ToString());
             return "Scanner found no object";
         }
 

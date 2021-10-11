@@ -50,7 +50,7 @@ public class BlocklyManager : MonoBehaviour
 
     public void LoadSavedBlocks()
     {
-        var currentProblemData = this.gameData.UserProblemStates[this.gameData.CurrentLevelName]
+        var currentProblemData = gameData.UserProblemStates?[this.gameData.CurrentLevelName]
             .FirstOrDefault(p =>
                 p.ProblemName == this.gameData.CurrentProblemName
             );
