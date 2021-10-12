@@ -9,6 +9,7 @@ using Scripts.Exceptions;
 using Scripts.GameEvents;
 using Scripts.SpaceObject;
 using Cysharp.Threading.Tasks;
+using Scripts.Behaviours;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
@@ -182,6 +183,11 @@ namespace Scripts.Systems
             if (objectInFront != null)
             {
                 this.lastScanned = objectInFront;
+                var unidentifiedObject = objectInFront.GetComponent<UnidentifiedObject>();
+                if (unidentifiedObject != null)
+                {
+                    unidentifiedObject.Identify();
+                }
                 Debug.Log(objectInFront.GetComponent<SpaceObject.SpaceObject>().SpaceObjectType.ToString());
                 return this.lastScanned.GetComponent<SpaceObject.SpaceObject>().SpaceObjectType.ToString();
             }

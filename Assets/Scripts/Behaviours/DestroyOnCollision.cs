@@ -26,7 +26,11 @@ namespace Scripts.Behaviours
             }
 
             this.gameObject.SetActive(false);
-            this.eventManager.Publish(new GameEvent(){EventType = this.EventType, EventArgs = 1});
+            if (this.EventType != GameEventType.Null)
+            {
+                this.eventManager.Publish(new GameEvent() { EventType = this.EventType, EventArgs = 1 });
+            }
+            
         }
     }
 }

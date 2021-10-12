@@ -8,8 +8,6 @@ namespace Scripts.Systems
     [CreateAssetMenu]
     public class ToolBox : ScriptableObject
     {
-
-        
         public string kind = "categoryToolbox";
         [LabelText("Categories")]
         public List<CategoryNode> contents = new List<CategoryNode>();

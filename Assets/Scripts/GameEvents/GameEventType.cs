@@ -22,6 +22,7 @@ namespace Scripts.GameEvents
         AsteroidDestroyed,
         ContainerDestroyed,
         MineExploded,
-        BlocksUpdated
+        BlocksUpdated,
+        Null
     }
 }

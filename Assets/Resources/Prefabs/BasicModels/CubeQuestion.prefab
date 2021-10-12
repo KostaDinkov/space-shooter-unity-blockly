@@ -90,8 +90,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3728285491874497504}
-  - component: {fileID: 3762544852433036195}
-  - component: {fileID: 3762544852433036197}
   m_Layer: 0
   m_Name: CubeQuestion
   m_TagString: Untagged
@@ -120,35 +118,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &3762544852433036195
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4104564087191263578}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &3762544852433036197
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4104564087191263578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc543ef40dc77fa4fb22aa6c9fdb931b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tumble: 0.1
 --- !u!1 &4592366601475675759
 GameObject:
   m_ObjectHideFlags: 0
