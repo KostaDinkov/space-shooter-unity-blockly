@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Scripts.SpaceObject
 {
-#if UnityEditor
+#if UNITY_EDITOR
 [ExecuteInEditMode]
 #endif
  
@@ -24,7 +24,7 @@ namespace Scripts.SpaceObject
         
         void Update()
         {
-#if UnityEditor
+#if UNITY_EDITOR
             //Updates material while in edit mode. In play mode we do not need to apply material constantly;
             if (!EditorApplication.isPlaying)
             {
