@@ -120,6 +120,7 @@ namespace Scripts.Systems
             if (this.gameData.GameComplete)
             {
                 Debug.LogWarning($"{DebugTag}: Няма повече задачи!");
+                SceneManager.LoadScene("FinalScene");
                 return;
             }
 
