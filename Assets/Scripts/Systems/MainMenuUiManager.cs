@@ -1,9 +1,6 @@
 
-using System.Linq;
-using Scripts.Behaviours;
 using Scripts.Systems;
 using TMPro;
-using UnityEditor.Events;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -101,7 +98,7 @@ public class MainMenuUiManager : MonoBehaviour
     {
         this.selectedScene = sceneName;
         this.loadSelectedBtn.interactable = true;
-        Debug.Log(sceneName);
+        //Debug.Log(sceneName);
     }
 
     public void LoadSelectedScene()

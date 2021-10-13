@@ -54,7 +54,7 @@ function saveWorkspace(){
   let workspaceXML = Blockly.Xml.workspaceToDom(workspace)
   
   let workspaceString = Blockly.Xml.domToText(workspaceXML);
-  console.log(workspaceString)
+  //console.log(workspaceString)
   return workspaceString;
 }
 
@@ -65,7 +65,7 @@ function loadLastWorkspace(workspaceString){
   }
   const doc = Blockly.Xml.textToDom(workspaceString)
 
-  console.log(doc)
+  //console.log(doc)
   Blockly.Xml.clearWorkspaceAndLoadFromXml(doc, workspace);
 }
 

@@ -6,7 +6,7 @@ public class OverlayMenu : MonoBehaviour
     public void LoadMainMenu()
     {
         //TODO fix hardcoded scene index
-        SceneManager.MoveGameObjectToScene(GameObject.Find("BrowserCanvas"), SceneManager.GetActiveScene());
+        //SceneManager.MoveGameObjectToScene(GameObject.Find("BrowserCanvas"), SceneManager.GetActiveScene());
         SceneManager.LoadScene(1);
     }
 

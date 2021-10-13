@@ -54,7 +54,16 @@ namespace Scripts.Systems
             this.eventManager.Subscribe(GameEventType.BlocksUpdated, this.UpdateBlocksCountText);
 
             //Set next button active if next problem is unlocked
+            
+        }
+
+        void Start()
+        {
             var nextScene = GameData.Instance.GetNextProblemSceneName();
+            if (nextScene == null)
+            {
+                return;
+            }
             var nextProblemState = GameData.Instance.UserProblemStates[nextScene.Substring(0, 3)]
                 .FirstOrDefault(p => p.ProblemName == nextScene.Substring(3, 3));
             if (!nextProblemState.ProblemLocked)

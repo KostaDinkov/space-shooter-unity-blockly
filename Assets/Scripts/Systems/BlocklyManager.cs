@@ -10,14 +10,16 @@ public class BlocklyManager : MonoBehaviour
 {
     //Pass the toolbox scriptable object for the
     //current problem in the Unity inspector
-    public ToolBox ToolBox;
+    private ToolBox toolBox;
     public static BlocklyManager Instance => instance;
     private static BlocklyManager instance;
     private Browser browser;
     private GameData gameData;
     private GameEventManager gameEventManager;
+    
     void Awake()
     {
+        
         this.gameEventManager = GameEventManager.Instance;
         this.gameData = GameData.Instance;
         if (instance != null && instance != this)
@@ -33,6 +35,7 @@ public class BlocklyManager : MonoBehaviour
 
     void Start()
     {
+        this.toolBox = GameController.Instance.Toolbox;
         this.browser.RegisterFunction("blocksCountChanged",BlocksUpdated);
         this.browser.onLoad += node =>
         {
@@ -44,7 +47,7 @@ public class BlocklyManager : MonoBehaviour
 
     public void SetBlocklyToolbox()
     {
-        var toolbox = JsonUtility.ToJson(this.ToolBox);
+        var toolbox = JsonUtility.ToJson(this.toolBox);
         browser.CallFunction("setToolbox", toolbox).Done();
     }
 
@@ -66,7 +69,7 @@ public class BlocklyManager : MonoBehaviour
         {
             //save to local gameData
             var blocksXml = (string) res.Value;
-            Debug.Log(blocksXml);
+            //Debug.Log(blocksXml);
             var problemState = this.gameData.UserProblemStates[this.gameData.CurrentLevelName].Find(p =>
                 p.ProblemName == this.gameData.CurrentProblemName);
             problemState.ProblemBlocksXml = blocksXml;
@@ -88,7 +91,7 @@ public class BlocklyManager : MonoBehaviour
         this.browser.CallFunction("getCode").Then(res =>
         {
             var code = (string) res.Value;
-            Debug.Log(code);
+            //Debug.Log(code);
             tcs.SetResult(code);
         }).Catch((ex) => throw ex);
         return tcs.Task;

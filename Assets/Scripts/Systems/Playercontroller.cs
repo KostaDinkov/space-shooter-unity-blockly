@@ -188,7 +188,7 @@ namespace Scripts.Systems
                 {
                     unidentifiedObject.Identify();
                 }
-                Debug.Log(objectInFront.GetComponent<SpaceObject.SpaceObject>().SpaceObjectType.ToString());
+                //Debug.Log(objectInFront.GetComponent<SpaceObject.SpaceObject>().SpaceObjectType.ToString());
                 return this.lastScanned.GetComponent<SpaceObject.SpaceObject>().SpaceObjectType.ToString();
             }
 

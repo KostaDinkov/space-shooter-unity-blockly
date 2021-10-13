@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ModelMap:
   - SpaceObjectType: 0
-    Model: {fileID: 606689409409267659, guid: b2311ab82bb0d944eafaa246561d7b9c, type: 3}
+    Model: {fileID: 8922692762987163814, guid: a38101b946034c542b35c855181ac26d, type: 3}
   - SpaceObjectType: 3
     Model: {fileID: 3427620801492082616, guid: 5eaa110afd65b6749bb69b8f476c28e7, type: 3}

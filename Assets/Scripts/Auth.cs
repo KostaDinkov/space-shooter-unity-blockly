@@ -37,7 +37,7 @@ public class Auth: MonoBehaviour
 
     private void Login(JSONNode args)
     {
-        Debug.Log(args[0].Value);
+        //Debug.Log(args[0].Value);
         this.gameData.Username = args[0].Value.ToString();
         //TODO fix scene number
         SceneManager.LoadScene(1);

@@ -24,17 +24,18 @@ namespace Scripts.Behaviours
 
             //Todo remove question box
 
-            this.transform.GetChild(0).gameObject.SetActive(false);
-            this.RenderSOModel();
+            var position = this.transform.position;
+            this.gameObject.SetActive(false);
+            this.RenderSOModel(position);
 
             //TODO change the Destroy on Collision event type
         }
 
-        private void RenderSOModel()
+        private void RenderSOModel(Vector3 position)
         {
             var sOModel = this.ModelsMap.ModelMap.FirstOrDefault(m => m.SpaceObjectType == this.spaceObjectType);
-            var go = Instantiate(sOModel.Model, this.transform);
-            go.transform.localPosition = Vector3.zero;
+            var go = Instantiate(sOModel.Model, position, Quaternion.identity);
+            //go.transform.localPosition = Vector3.zero;
             //var localPosition = go.transform.localPosition;
 
         }

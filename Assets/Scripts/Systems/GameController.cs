@@ -31,6 +31,8 @@ namespace Scripts.Systems
         public bool IsPlayerDead { get; set; }
         public static GameController Instance { get; private set; }
 
+        public ToolBox Toolbox;
+
         private void Awake()
         {
             //Make sure there is only one instance of the GameController class (Singleton)
@@ -78,7 +80,7 @@ namespace Scripts.Systems
 
             var code = await this.blocklyManager.GetCode();
 
-            Debug.Log(code);
+            //Debug.Log(code);
             var globals = new Globals {Player = this.Player};
             try
             {
@@ -117,7 +119,7 @@ namespace Scripts.Systems
         {
             if (this.gameData.GameComplete)
             {
-                Debug.LogWarning($"{DebugTag}: No more problems");
+                Debug.LogWarning($"{DebugTag}: Няма повече задачи!");
                 return;
             }
 
@@ -126,7 +128,7 @@ namespace Scripts.Systems
 
             if (nextProblemState.ProblemLocked)
             {
-                Debug.LogWarning($"{DebugTag}: Problem '{nextProblemSceneName}' is locked");
+                Debug.LogWarning($"{DebugTag}: Проблемът '{nextProblemSceneName}' е заключен");
                 return;
             }
 
@@ -166,7 +168,7 @@ namespace Scripts.Systems
             var nextProblemSceneName = this.gameData.GetNextProblemSceneName();
             if (nextProblemSceneName == null)
             {
-                Debug.LogWarning($"{DebugTag}: Couldn't find next problem");
+                Debug.LogWarning($"{DebugTag}: Не може да бъде намерена следваща задача");
                 this.gameData.GameComplete = true;
                 return;
             }
@@ -175,7 +177,7 @@ namespace Scripts.Systems
 
             if (!nextProblemState.ProblemLocked)
             {
-                Debug.Log($"{DebugTag}: Problem '{nextProblemSceneName}' already unlocked");
+                //Debug.Log($"{DebugTag}: Задачата '{nextProblemSceneName}' е вече отключена");
                 return;
             }
 

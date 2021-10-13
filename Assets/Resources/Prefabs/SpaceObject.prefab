@@ -92,8 +92,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4f7962400c950748b3efe1cc49d9216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosion: {fileID: 0}
-  EventType: 0
+  explosion: {fileID: 5198260893934583484, guid: 0e7605256e4980c4294b6a378642a426,
+    type: 3}
+  EventType: 18
 --- !u!114 &6091938565912503606
 MonoBehaviour:
   m_ObjectHideFlags: 0

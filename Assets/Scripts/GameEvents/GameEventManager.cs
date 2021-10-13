@@ -32,7 +32,7 @@ namespace Scripts.GameEvents
 
         public void Publish(GameEvent gameEvent)
         {
-            Debug.Log($"Event fired {gameEvent.EventType.ToString()}");
+            //Debug.Log($"Event fired {gameEvent.EventType.ToString()}");
             foreach (var action in this.events[gameEvent.EventType].Values)
             {
                 action.Invoke(gameEvent.EventArgs);

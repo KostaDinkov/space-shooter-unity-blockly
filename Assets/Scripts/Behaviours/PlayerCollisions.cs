@@ -17,7 +17,7 @@ namespace Scripts.Behaviours
 
         void OnTriggerEnter(Collider other)
         {
-            Debug.Log($"Player colission: {other.name}");
+            //Debug.Log($"Player colission: {other.name}");
             if (other.CompareTag("Boundary") || other.CompareTag("Landing"))
             {
                 return;
