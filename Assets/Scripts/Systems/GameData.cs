@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AzureSqlDbConnect;
 using Models;
 using Scripts.GameEvents;
@@ -95,6 +96,24 @@ namespace Scripts.Systems
         {
             return this.UserProblemStates[sceneName.Substring(0, 3)]
                 .FirstOrDefault(p => p.ProblemName == sceneName.Substring(3, 3));
+        }
+
+        public async Task SaveWorkspace()
+        {
+
+            var blocksXml = await BlocklyManager.Instance.GetBlocksXml();
+            var problemState = UserProblemStates[CurrentLevelName].Find(p =>
+                p.ProblemName == CurrentProblemName);
+            problemState.ProblemBlocksXml = blocksXml;
+
+            //persist to DB
+            //Note: score is 0 because the problem is not yet completed
+            this.dbApi.SaveProblemState(
+                this.Username,
+                this.CurrentLevelName,
+                this.CurrentProblemName,
+                blocksXml,
+                0);
         }
 
         

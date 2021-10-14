@@ -28,7 +28,8 @@
         "EntityFramework.SqlServer.dll",
         "Authentication.dll",
         "Microsoft.Identity.Client.dll",
-        "Models.dll"
+        "Models.dll",
+        "Mono.HttpUtility.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

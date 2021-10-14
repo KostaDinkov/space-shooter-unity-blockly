@@ -76,7 +76,7 @@ namespace Scripts.Systems
             this.gameEventManager.Publish(new GameEvent {EventType = GameEventType.ScriptStarted});
 
             //save workspace blocks
-            this.blocklyManager.SaveBlocksXml();
+            await this.gameData.SaveWorkspace();
 
             var code = await this.blocklyManager.GetCode();
 
@@ -154,12 +154,13 @@ namespace Scripts.Systems
 
         public async void UnlockNextProblem(object args)
         {
-            //Save blocks
-            this.blocklyManager.SaveBlocksXml();
+            
+            await this.gameData.SaveWorkspace();
             
             //Set the score and problem completed
+            //TODO move to GameData
             int blockCount = await this.blocklyManager.GetBlocksCount();
-            this.gameData.dbApi.SetProblemScore(
+            await this.gameData.dbApi.SetProblemScore(
                 this.gameData.Username,
                 this.gameData.CurrentLevelName,
                 this.gameData.CurrentProblemName,

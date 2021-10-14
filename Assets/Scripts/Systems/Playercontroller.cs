@@ -323,7 +323,8 @@ namespace Scripts.Systems
 
         public void Print(object msg)
         {
-            this.logger.Log(msg.ToString());
+            
+            this.logger.Log((string)msg);
         }
 
         #endregion

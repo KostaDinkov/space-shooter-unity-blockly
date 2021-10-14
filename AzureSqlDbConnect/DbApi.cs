@@ -116,12 +116,12 @@ namespace AzureSqlDbConnect
             return problemState;
         }
 
-        public void SetProblemScore(string username, string levelName, string problemName, int score)
+        public async Task SetProblemScore(string username, string levelName, string problemName, int score)
         {
             var problemState = this.GetProblemState(username, levelName, problemName);
             problemState.ProblemScore = score;
             problemState.ProblemCompleted = true;
-            this.db.SaveChangesAsync();
+            await this.db.SaveChangesAsync();
         }
 
         public SortedDictionary<string, List<ProblemState>> GetAllProblemStates(string username)

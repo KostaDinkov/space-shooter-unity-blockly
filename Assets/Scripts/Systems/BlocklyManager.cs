@@ -63,26 +63,14 @@ public class BlocklyManager : MonoBehaviour
         }
     }
 
-    public void SaveBlocksXml()
+    public Task<string> GetBlocksXml()
     {
+        var tcs = new TaskCompletionSource<string>();
         this.browser.CallFunction("saveWorkspace").Then(res =>
         {
-            //save to local gameData
-            var blocksXml = (string) res.Value;
-            //Debug.Log(blocksXml);
-            var problemState = this.gameData.UserProblemStates[this.gameData.CurrentLevelName].Find(p =>
-                p.ProblemName == this.gameData.CurrentProblemName);
-            problemState.ProblemBlocksXml = blocksXml;
-
-            //persist to DB
-            //Note: score is 0 because the problem is not yet completed
-            this.gameData.dbApi.SaveProblemState(
-                this.gameData.Username,
-                this.gameData.CurrentLevelName,
-                this.gameData.CurrentProblemName,
-                blocksXml,
-                0);
-        }).Done();
+            tcs.SetResult((string) res.Value);
+        }).Catch(ex=>throw ex);
+        return tcs.Task;
     }
 
     public Task<string> GetCode()
