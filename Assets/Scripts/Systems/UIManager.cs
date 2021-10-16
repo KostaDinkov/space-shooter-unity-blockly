@@ -23,6 +23,7 @@ namespace Scripts.Systems
         private TMPro.TextMeshProUGUI infoTitle;
         private TMPro.TextMeshProUGUI problemTitle;
         private TMPro.TextMeshProUGUI infoText;
+        private TMPro.TextMeshProUGUI printOutput;
         private Text blocksCountText;
         [SerializeField]private GameObject infoPanel;
 
@@ -34,6 +35,7 @@ namespace Scripts.Systems
             this.infoTitle=GameObject.Find("InfoTitle").GetComponent<TMPro.TextMeshProUGUI>();
             this.infoText = GameObject.Find("InfoText").GetComponent<TMPro.TextMeshProUGUI>();
             this.problemTitle = GameObject.Find("ProblemTitle").GetComponent<TMPro.TextMeshProUGUI>();
+            this.printOutput = GameObject.Find("PrintOutputContent").GetComponent<TMPro.TextMeshProUGUI>();
 
             this.runButton = GameObject.Find("RunBtn").GetComponent<Button>();
             this.nextButton = GameObject.Find("NextBtn").GetComponent<Button>();
@@ -52,9 +54,10 @@ namespace Scripts.Systems
             this.eventManager.Subscribe(GameEventType.SolutionFailed, this.ShowSolutionFailedText);
             this.eventManager.Subscribe(GameEventType.ScriptStarted, this.OnScriptStarted);
             this.eventManager.Subscribe(GameEventType.BlocksUpdated, this.UpdateBlocksCountText);
+            this.eventManager.Subscribe(GameEventType.PrintCalled, this.UiPrint);
 
             //Set next button active if next problem is unlocked
-            
+
         }
 
         void Start()
@@ -138,7 +141,7 @@ namespace Scripts.Systems
                 rectTransform.localScale = new Vector3(1, 1, 1);
 
                 var tmpro = textContainer.AddComponent<TextMeshProUGUI>();
-                tmpro.SetText($"{objective.Description} : {objective.CurrentValue} от {objective.TargetValue}");
+                tmpro.SetText($"{objective.Description} : {objective.CurrentValue} трябва да е {objective.TargetValue}");
                 tmpro.fontSize = 20;
                 tmpro.color = new Color32(35, 190, 255, 255);
                 tmpro.font = Resources.Load<TMP_FontAsset>("Fonts/AnkaCoderItalicSDF");
@@ -175,7 +178,7 @@ namespace Scripts.Systems
                 {
                     this.objectivesTexts[objective].color = new Color32(35, 190, 255, 255);
                 }
-                this.objectivesTexts[objective].text = $"{objective.Description} : {objective.CurrentValue} of {objective.TargetValue}";
+                this.objectivesTexts[objective].text = $"{objective.Description} : {objective.CurrentValue} трябва да е: {objective.TargetValue}";
 
             }
         }
@@ -188,6 +191,14 @@ namespace Scripts.Systems
         public void CloseInfoPanel()
         {
             this.infoPanel.SetActive(false);
+        }
+
+        public void UiPrint(object msg)
+        {
+            var currentText = this.printOutput.text;
+            this.printOutput.SetText($"{currentText}\n{(string)msg}");
+            
+
         }
     }
 }

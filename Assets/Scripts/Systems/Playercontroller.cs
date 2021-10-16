@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using Assets.Scripts.Exceptions;
 using Assets.Scripts.Systems;
 using Scripts.Commands;
 using Scripts.Exceptions;
 using Scripts.GameEvents;
-using Scripts.SpaceObject;
 using Cysharp.Threading.Tasks;
+using Mono.Web;
 using Scripts.Behaviours;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -323,8 +321,10 @@ namespace Scripts.Systems
 
         public void Print(object msg)
         {
-            
-            this.logger.Log((string)msg);
+            var unescaped = HttpUtility.UrlDecode((string)msg);
+            this.logger.Log(unescaped);
+            //Print the string to the UI element
+            this.eventManager.Publish(new GameEvent(){EventArgs = unescaped,EventType = GameEventType.PrintCalled});
         }
 
         #endregion

@@ -7,8 +7,8 @@ namespace Assets.Scripts.Systems
     {
         public void Log(string msg)
         {
-            var unescaped = HttpUtility.UrlDecode(msg);
-            Debug.Log($"<color=#00b2ff>[INFO]</color> - {unescaped}");
+            
+            Debug.Log($"<color=#00b2ff>[INFO]</color> - {msg}");
         }
     }
 }

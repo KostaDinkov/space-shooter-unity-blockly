@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Scripts.GameEvents;
 using UnityEngine;
 
@@ -11,12 +12,12 @@ namespace Scripts.Objectives
     public class Objective 
     {
         public string Description;
-        public int DefaultValue;
-        public int TargetValue;
+        public string DefaultValue;
+        public string TargetValue;
         [Tooltip("The Event that will triger this objective to update it's state.")]
         public GameEventType ListenEvent;
 
-        public int CurrentValue;
+        public string CurrentValue;
         
         private GameEventManager eventManager;
         
@@ -30,7 +31,16 @@ namespace Scripts.Objectives
 
         private void ObjectiveUpdated(object args)
         {
-            this.CurrentValue += (int)args;
+            if (IsNumber(args))
+            {
+                var num = float.Parse(args.ToString());
+                this.CurrentValue = (float.Parse(this.CurrentValue)+ num).ToString(CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                this.CurrentValue = args.ToString();
+            }
+            
             if (this.IsComplete())
             {
                 this.eventManager.Publish(new GameEvent {EventType = GameEventType.ObjectiveCompleted});
@@ -40,7 +50,21 @@ namespace Scripts.Objectives
 
         public bool IsComplete()
         {
-            return this.CurrentValue >= this.TargetValue;
+            if (IsNumber(this.CurrentValue))
+            {
+                return float.Parse(this.CurrentValue) >= float.Parse(this.TargetValue);
+            }
+
+            return this.CurrentValue == this.TargetValue;
+
+        }
+
+        private bool IsNumber(object arg)
+        {
+            
+            float num;
+            var isNum = float.TryParse( arg.ToString(), out num);
+            return isNum;
         }
     }
 }

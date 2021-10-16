@@ -67,12 +67,16 @@ namespace Scripts.Systems
         /// <returns>The name of the next problem (scene name) or null</returns>
         public string GetNextProblemSceneName()
         {
+            if (this.UserProblemStates== null)
+            {
+                return null;
+            }
             //generate next problem name based on current problem name
             //for example p01 => p02, p09 => p10
             //then search for that problem in the current level
             var nextProblemNuber = int.Parse(this.CurrentProblemName.Substring(1, 2)) + 1;
             var nextProblemName = "p" + nextProblemNuber.ToString("D2");
-            var nextProblemNameExists = this.UserProblemStates[this.CurrentLevelName]
+            var nextProblemNameExists = this.UserProblemStates?[this.CurrentLevelName]
                 .FirstOrDefault(p => p.ProblemName == nextProblemName);
             if (nextProblemNameExists != null)
             {
@@ -100,10 +104,15 @@ namespace Scripts.Systems
 
         public async Task SaveWorkspace()
         {
-
+            if (this.UserProblemStates == null)
+            {
+                //Most probably the scene is being tested in isolation
+                return;
+            }
             var blocksXml = await BlocklyManager.Instance.GetBlocksXml();
-            var problemState = UserProblemStates[CurrentLevelName].Find(p =>
+            var problemState = UserProblemStates[CurrentLevelName]?.Find(p =>
                 p.ProblemName == CurrentProblemName);
+            if (problemState == null) return;
             problemState.ProblemBlocksXml = blocksXml;
 
             //persist to DB

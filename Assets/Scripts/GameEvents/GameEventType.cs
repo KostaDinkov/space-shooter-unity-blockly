@@ -23,6 +23,7 @@ namespace Scripts.GameEvents
         ContainerDestroyed,
         MineExploded,
         BlocksUpdated,
-        Null
+        Null,
+        PrintCalled
     }
 }
