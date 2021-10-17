@@ -31,9 +31,10 @@ namespace Scripts.Systems
         {
             this.statusText = GameObject.Find("StatusText").GetComponent<Text>();
             this.statusText.enabled = false;
-
+            this.OpenInfoPanel();
             this.infoTitle=GameObject.Find("InfoTitle").GetComponent<TMPro.TextMeshProUGUI>();
             this.infoText = GameObject.Find("InfoText").GetComponent<TMPro.TextMeshProUGUI>();
+            
             this.problemTitle = GameObject.Find("ProblemTitle").GetComponent<TMPro.TextMeshProUGUI>();
             this.printOutput = GameObject.Find("PrintOutputContent").GetComponent<TMPro.TextMeshProUGUI>();
 
@@ -56,7 +57,7 @@ namespace Scripts.Systems
             this.eventManager.Subscribe(GameEventType.BlocksUpdated, this.UpdateBlocksCountText);
             this.eventManager.Subscribe(GameEventType.PrintCalled, this.UiPrint);
 
-            //Set next button active if next problem is unlocked
+            
 
         }
 
@@ -73,6 +74,7 @@ namespace Scripts.Systems
             {
                 this.nextButton.interactable = true;
             }
+            
         }
 
         private void UpdateBlocksCountText(object obj)
@@ -113,7 +115,7 @@ namespace Scripts.Systems
 
         public void InitUI(object args)
         {
-
+            
             this.InitObjectives();
             this.InitInfoPanel();
    
@@ -185,11 +187,13 @@ namespace Scripts.Systems
 
         public void OpenInfoPanel()
         {
+            BlocklyManager.Instance.TogglePointerInput();
             this.infoPanel.SetActive(true);
         }
 
         public void CloseInfoPanel()
         {
+            BlocklyManager.Instance.TogglePointerInput();
             this.infoPanel.SetActive(false);
         }
 

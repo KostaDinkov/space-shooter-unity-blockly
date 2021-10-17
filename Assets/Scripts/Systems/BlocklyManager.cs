@@ -16,7 +16,8 @@ public class BlocklyManager : MonoBehaviour
     private Browser browser;
     private GameData gameData;
     private GameEventManager gameEventManager;
-    
+    private PointerUIGUI pointerComponent;
+
     void Awake()
     {
         
@@ -31,6 +32,7 @@ public class BlocklyManager : MonoBehaviour
         this.browser = this.gameObject.GetComponent<Browser>();
         instance = this;
         this.gameEventManager.Subscribe(GameEventType.ProblemStarted, _ => { this.LoadSavedBlocks(); });
+        this.pointerComponent = this.GetComponent<PointerUIGUI>();
     }
 
     void Start()
@@ -97,6 +99,13 @@ public class BlocklyManager : MonoBehaviour
     {
         
         this.gameEventManager.Publish(new GameEvent(){EventType = GameEventType.BlocksUpdated, EventArgs = (int)args[0]});
+    }
+
+    public void TogglePointerInput()
+    {
+        this.pointerComponent.enableInput = !this.pointerComponent.enableInput;
+        this.pointerComponent.enableMouseInput = !this.pointerComponent.enableMouseInput;
+        this.pointerComponent.enableTouchInput = !this.pointerComponent.enableTouchInput;
     }
 
 

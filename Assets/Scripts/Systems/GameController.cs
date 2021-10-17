@@ -71,6 +71,20 @@ namespace Scripts.Systems
             this.blocklyManager = GameObject.Find("Browser (GUI)").GetComponent<BlocklyManager>();
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (isOverlayMenuOpen)
+                {
+                    this.ResumeGame();
+                }
+                else
+                {
+                    this.OpenMenu();
+                }
+            }
+        }
         public async void RunCode()
         {
             this.gameEventManager.Publish(new GameEvent {EventType = GameEventType.ScriptStarted});
@@ -193,20 +207,6 @@ namespace Scripts.Systems
             this.gameData.dbApi.SetLastUnlockedProblem(this.gameData.Username, nextProblemState.Id);
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                if (isOverlayMenuOpen)
-                {
-                    this.ResumeGame();
-                }
-                else
-                {
-                    this.OpenMenu();
-                }
-            }
-        }
 
         private void ResumeGame()
         {
