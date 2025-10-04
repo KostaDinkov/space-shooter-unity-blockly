@@ -1,0 +1,166 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76ebf551c9399f24fbbda17b5ec0892d, type: 3}
+  m_Name: l01p05-toolbox
+  m_EditorClassIdentifier: 
+  kind: categoryToolbox
+  contents:
+  - kind: category
+    name: "\u0421\u044A\u0431\u0438\u0442\u0438\u044F"
+    categoryStyle: event_category
+    contents:
+    - kind: block
+      type: on_start
+  - kind: category
+    name: "\u0414\u0440\u043E\u043D"
+    categoryStyle: drone_category
+    contents:
+    - kind: block
+      type: move_forward
+    - kind: block
+      type: rotate_left
+    - kind: block
+      type: rotate_right
+    - kind: block
+      type: fire_weapon
+    - kind: block
+      type: scan_ahead
+    - kind: block
+      type: pickup_object
+    - kind: block
+      type: print
+  - kind: category
+    name: "\u0426\u0438\u043A\u043B\u0438"
+    categoryStyle: 
+    contents:
+    - kind: block
+      type: controls_repeat
+    - kind: block
+      type: controls_repeat_ext
+    - kind: block
+      type: controls_whileUntil
+    - kind: block
+      type: controls_for
+    - kind: block
+      type: controls_forEach
+    - kind: block
+      type: controls_flow_statements
+  - kind: category
+    name: "\u041B\u043E\u0433\u0438\u043A\u0430"
+    categoryStyle: 
+    contents:
+    - kind: block
+      type: controls_if
+    - kind: block
+      type: logic_compare
+    - kind: block
+      type: logic_operation
+    - kind: block
+      type: logic_negate
+    - kind: block
+      type: logic_boolean
+    - kind: block
+      type: logic_ternary
+    - kind: block
+      type: logic_null
+  - kind: category
+    name: "\u0421\u043F\u0438\u0441\u044A\u0446\u0438"
+    categoryStyle: 
+    contents:
+    - kind: block
+      type: lists_create_empty
+    - kind: block
+      type: lists_create_with
+    - kind: block
+      type: lists_repeat
+    - kind: block
+      type: lists_getSublist
+    - kind: block
+      type: lists_length
+    - kind: block
+      type: lists_isEmpty
+    - kind: block
+      type: lists_indexOf
+    - kind: block
+      type: lists_getIndex
+    - kind: block
+      type: lists_setIndex
+  - kind: category
+    name: "\u041F\u0440\u043E\u043C\u0435\u043D\u043B\u0438\u0432\u0438"
+    categoryStyle: 
+    contents:
+    - kind: block
+      type: variables_set
+    - kind: block
+      type: variables_get
+  - kind: category
+    name: "\u0422\u0435\u043A\u0441\u0442"
+    categoryStyle: 
+    contents:
+    - kind: block
+      type: text
+    - kind: block
+      type: text_join
+    - kind: block
+      type: text_trim
+    - kind: block
+      type: text_append
+    - kind: block
+      type: text_length
+    - kind: block
+      type: text_charAt
+    - kind: block
+      type: text_isEmpty
+    - kind: block
+      type: text_indexOf
+    - kind: block
+      type: text_changeCase
+    - kind: block
+      type: text_getSubstring
+  - kind: category
+    name: "\u041C\u0430\u0442\u0435\u043C\u0430\u0442\u0438\u043A\u0430"
+    categoryStyle: 
+    contents:
+    - kind: block
+      type: math_number
+    - kind: block
+      type: math_single
+    - kind: block
+      type: math_change
+    - kind: block
+      type: math_modulo
+    - kind: block
+      type: math_on_list
+    - kind: block
+      type: math_constant
+    - kind: block
+      type: math_constrain
+    - kind: block
+      type: math_arithmetic
+    - kind: block
+      type: math_random_int
+    - kind: block
+      type: math_random_float
+    - kind: block
+      type: math_number_property
+  - kind: category
+    name: "\u0424\u0443\u043D\u043A\u0446\u0438\u0438"
+    categoryStyle: 
+    contents:
+    - kind: block
+      type: procedures_defreturn
+    - kind: block
+      type: procedures_callreturn
+    - kind: block
+      type: procedures_ifreturn
+    - kind: block
+      type: procedures_callnoreturn

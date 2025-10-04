@@ -1,51 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Core;
 using System.Linq;
-using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
-using Models;
 
-namespace AzureSqlDbConnect
+namespace Assets.Scripts.Systems
 {
-    public class DbApi
+    public class FakeDbApi
     {
-        private GameDbContext db;
 
-        public GameDbContext DbContext { get { return this.db; } }
+        private List<Person> people;
 
         //TODO replace with IGameDBContext - database server agnostic implementation
-        public DbApi(GameDbContext db)
+        public FakeDbApi()
         {
-            this.db = db;
+            this.people = new List<Person>();
         }
 
-        public string GetConnectionString()
+        public Person GetUser(string username)
         {
-            var state = db.Database.Connection.State;
-            return (state + ": "+ db.Database.Connection.ConnectionString);
+            return people.FirstOrDefault(p => p.Username == username);
         }
+
+
 
         public bool UserExists(string username)
         {
-            
-            var user = this.db.People.FirstOrDefault(p => p.Username == username);
+
+            var user = people.FirstOrDefault(p => p.Username == username);
             return user != null;
         }
 
         public Guid CreateUser(string username)
         {
-            var person = new Person() {Username = username, Id = Guid.NewGuid()};
-            this.db.People.Add(person);
-            this.db.SaveChanges();
+            var person = new Person() { Username = username, Id = Guid.NewGuid() };
+            this.people.Add(person);
             return person.Id;
         }
 
         public void NewUserProblemStateInit(string username, Dictionary<string, List<string>> levels)
         {
-            var user = this.db.People.FirstOrDefault(p => p.Username == username);
+            var user = this.people.FirstOrDefault(p => p.Username == username);
 
             var problemStates = new List<ProblemState>();
             foreach (var level in levels)
@@ -66,23 +61,24 @@ namespace AzureSqlDbConnect
                 }
             }
 
-            this.db.ProblemStates.AddRange(problemStates);
-            this.db.SaveChanges();
-            
+            user.ProblemStates.AddRange(problemStates);
+
+
             // init new GameState
             var firstProblemState =
-                this.db.ProblemStates.FirstOrDefault(p => p.LevelName == "l01" && p.ProblemName == "p01");
+               user.ProblemStates.FirstOrDefault(p => p.LevelName == "l01" && p.ProblemName == "p01");
+
             var newGameState = new GameState()
             {
                 Person = user,
                 GameCompleted = false,
-                
+
                 LastUnlockedProblem = firstProblemState
             };
 
             firstProblemState.ProblemLocked = false;
             user.GameState = newGameState;
-            this.db.SaveChanges();
+
 
         }
 
@@ -92,16 +88,12 @@ namespace AzureSqlDbConnect
         {
             var problemState = this.GetProblemState(username, levelName, problemName);
 
-            //TODO initialize all problems at login
-            if (problemState == null)
-            {
-                throw new ObjectNotFoundException("Could not find problemState");
-            }
+
 
             problemState.ProblemBlocksXml = problemBlocksXml;
             problemState.ProblemScore = problemScore;
 
-            this.db.SaveChanges();
+
             return problemState;
         }
 
@@ -112,59 +104,106 @@ namespace AzureSqlDbConnect
             if (problemState != null)
             {
                 problemState.ProblemLocked = locked;
-                this.db.SaveChanges();
+
                 return;
             }
-            throw new ObjectNotFoundException("Could not find problemState");
+
         }
 
         private ProblemState GetProblemState(string username, string levelName, string problemName)
         {
-            var problemState = this.db.ProblemStates.FirstOrDefault(p => p.Person.Username == username
+            var user = people.FirstOrDefault(p => p.Username == username);
+            var problemState = user.ProblemStates.FirstOrDefault(p => p.Person.Username == username
                                                                          && p.LevelName == levelName
                                                                          && p.ProblemName == problemName);
             return problemState;
         }
 
-        public async Task SetProblemScore(string username, string levelName, string problemName, int score)
+        public void SetProblemScore(string username, string levelName, string problemName, int score)
         {
             var problemState = this.GetProblemState(username, levelName, problemName);
             problemState.ProblemScore = score;
             problemState.ProblemCompleted = true;
-            await this.db.SaveChangesAsync();
+
         }
 
         public SortedDictionary<string, List<ProblemState>> GetAllProblemStates(string username)
         {
-            var dict=  this.db.ProblemStates.Where(p => p.Person.Username == username).GroupBy(group=>group.LevelName)
-                .ToDictionary(group=>group.Key, group=>group.ToList().OrderBy(p=>p.ProblemName).ToList());
+            var user = this.people.FirstOrDefault(p => p.Username == username);
+            var dict = user.ProblemStates.GroupBy(group => group.LevelName)
+                .ToDictionary(group => group.Key, group => group.ToList().OrderBy(p => p.ProblemName).ToList());
             return new SortedDictionary<string, List<ProblemState>>(dict);
         }
 
         public ProblemState GetLastUnlockedProblem(string username)
         {
-            var user = this.db.People.FirstOrDefault(p => p.Username == username);
+            var user = people.FirstOrDefault(p => p.Username == username);
             if (user == null)
             {
-                throw new ObjectNotFoundException();
+                throw new ArgumentException($"User [{username}] not found");
             }
 
-            var gState = this.db.GameStates.Include(gs=>gs.LastUnlockedProblem).FirstOrDefault(gs => gs.GameStateId == user.Id);
+            var gState = user.GameState.LastUnlockedProblem;
             if (gState == null)
             {
-                throw new ObjectNotFoundException($"No GameState for {user.Username}");
+                throw new ArgumentException($"No GameState for {user.Username}");
             }
-            Console.WriteLine(gState.LastUnlockedProblemId);
-            var result = this.db.ProblemStates.Find(gState.LastUnlockedProblemId);
-            //TODO fix this null return
-            return result;
+
+            return gState;
         }
 
         public void SetLastUnlockedProblem(string username, Guid problemStateId)
         {
-            this.db.GameStates.SingleOrDefault(gs => gs.Person.Username == username)
-                .LastUnlockedProblem = this.db.ProblemStates.SingleOrDefault(ps => ps.Id == problemStateId);
-            this.db.SaveChanges();
+            var user = people.FirstOrDefault(p => p.Username == username);
+            user.GameState.LastUnlockedProblem = user.ProblemStates.SingleOrDefault(ps => ps.Id == problemStateId);
+
         }
+    }
+
+    public class GameState
+    {
+
+        public Guid GameStateId { get; set; }
+        public bool GameCompleted { get; set; }
+
+        public Guid LastUnlockedProblemId { get; set; }
+        public ProblemState LastUnlockedProblem { get; set; }
+
+        public Person Person { get; set; }
+    }
+
+    public class Person
+    {
+        public Person()
+        {
+            this.ProblemStates = new List<ProblemState>();
+        }
+        public Guid Id { get; set; }
+
+        public string FName { get; set; }
+        public string LName { get; set; }
+        public string Username { get; set; }
+
+        public string Email { get; set; }
+
+        public GameState GameState { get; set; }
+
+        public List<ProblemState> ProblemStates { get; set; }
+    }
+
+    public class ProblemState
+    {
+        public Guid Id { get; set; }
+
+        public Guid PersonId { get; set; }
+        public Person Person { get; set; }
+        public string LevelName { get; set; }
+        public string ProblemName { get; set; }
+        public string ProblemBlocksXml { get; set; }
+        public int ProblemScore { get; set; }
+        public bool ProblemLocked { get; set; }
+
+        public bool ProblemCompleted { get; set; }
+
     }
 }

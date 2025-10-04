@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AzureSqlDbConnect;
-using Models;
+using Assets.Scripts.Systems;
 using Scripts.GameEvents;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,7 +12,7 @@ namespace Scripts.Systems
     {
         private static GameData instance;
         private GameEventManager gameEventManager;
-        public DbApi dbApi;
+        public FakeDbApi dbApi;
         public Dictionary<string, string> LevelNames { get; private set; }
 
         public static GameData Instance

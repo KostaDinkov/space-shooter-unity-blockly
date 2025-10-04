@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using AzureSqlDbConnect;
 using Scripts.Systems;
 using UnityEngine.SceneManagement;
+using System;
+using Assets.Scripts.Systems;
 
 public class ApplicationManager : MonoBehaviour
 {
@@ -11,14 +12,26 @@ public class ApplicationManager : MonoBehaviour
     private void Awake()
     {
         this.gameData = GameData.Instance;
-        this.gameData.dbApi = new DbApi(new GameDbContext());
+        this.gameData.dbApi = new FakeDbApi();
+        
         var dbApi = this.gameData.dbApi;
+
         if (!dbApi.UserExists(this.gameData.Username))
         {
             var allProblems = this.GetAllProblems();
+            
             dbApi.CreateUser(this.gameData.Username);
             dbApi.NewUserProblemStateInit(this.gameData.Username, allProblems);
         }
+        var userName = "kosta@kiberlab.net";
+        var user = dbApi.GetUser(userName);
+        
+        foreach (var ps in user.ProblemStates)
+        {
+            ps.ProblemCompleted = true;
+            ps.ProblemLocked = false;
+        }
+
         var lastUnlockedProblemState = dbApi.GetLastUnlockedProblem(this.gameData.Username);
         this.gameData.LastUnlockedProblem = lastUnlockedProblemState.LevelName + lastUnlockedProblemState.ProblemName;
         this.gameData.UserProblemStates = this.gameData.dbApi.GetAllProblemStates(this.gameData.Username);

@@ -174,7 +174,7 @@ namespace Scripts.Systems
             //Set the score and problem completed
             //TODO move to GameData
             int blockCount = await this.blocklyManager.GetBlocksCount();
-            await this.gameData.dbApi.SetProblemScore(
+            this.gameData.dbApi.SetProblemScore(
                 this.gameData.Username,
                 this.gameData.CurrentLevelName,
                 this.gameData.CurrentProblemName,

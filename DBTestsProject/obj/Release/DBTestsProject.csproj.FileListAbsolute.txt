@@ -1,0 +1,17 @@
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\bin\Release\DBTestsProject.exe.config
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\bin\Release\DBTestsProject.exe
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\bin\Release\DBTestsProject.pdb
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\bin\Release\AzureSqlDbConnect.dll
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\bin\Release\EntityFramework.SqlServer.dll
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\bin\Release\Models.dll
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\bin\Release\EntityFramework.dll
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\bin\Release\AzureSqlDbConnect.pdb
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\bin\Release\AzureSqlDbConnect.dll.config
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\bin\Release\Models.pdb
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\bin\Release\EntityFramework.xml
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\obj\Release\DBTestsProject.csproj.AssemblyReference.cache
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\obj\Release\DBTestsProject.csproj.SuggestedBindingRedirects.cache
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\obj\Release\DBTestsProject.csproj.CoreCompileInputs.cache
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\obj\Release\DBTestsProject.csproj.CopyComplete
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\obj\Release\DBTestsProject.exe
+D:\Projects\Unity3D\Space-Shooter-KiberLab\DBTestsProject\obj\Release\DBTestsProject.pdb

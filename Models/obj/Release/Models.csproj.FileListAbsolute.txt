@@ -1,0 +1,10 @@
+D:\Projects\Unity3D\Space-Shooter-KiberLab\Models\bin\Release\Models.dll
+D:\Projects\Unity3D\Space-Shooter-KiberLab\Models\bin\Release\Models.pdb
+D:\Projects\Unity3D\Space-Shooter-KiberLab\Models\obj\Release\Models.csproj.AssemblyReference.cache
+D:\Projects\Unity3D\Space-Shooter-KiberLab\Models\obj\Release\Models.csproj.CoreCompileInputs.cache
+D:\Projects\Unity3D\Space-Shooter-KiberLab\Models\obj\Release\Models.dll
+D:\Projects\Unity3D\Space-Shooter-KiberLab\Models\obj\Release\Models.pdb
+D:\Projects\Unity3D\Space-Shooter-KiberLab\Assets\AzureDB\Models.dll
+D:\Projects\Unity3D\Space-Shooter-KiberLab\Assets\AzureDB\Models.pdb
+D:\Projects\Unity3D\Space-Shooter-KiberLab\AzureSqlDbConnect\bin\Release\Models.dll
+D:\Projects\Unity3D\Space-Shooter-KiberLab\AzureSqlDbConnect\bin\Release\Models.pdb

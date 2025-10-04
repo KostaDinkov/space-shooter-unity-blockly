@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using AzureSqlDbConnect;
+using System;
 
 namespace DBTestsProject
 {
@@ -14,6 +10,13 @@ namespace DBTestsProject
         static void Main(string[] args)
         {
             var dbApi = new DbApi(new GameDbContext());
+            
+            if (!dbApi.UserExists(username))
+            {
+                var guid = dbApi.CreateUser(username);
+                Console.WriteLine(guid);
+            }
+            Console.WriteLine(dbApi.GetConnectionString());
             var problemStates = dbApi.GetAllProblemStates(username);
             var lastUnlockedProblem = dbApi.GetLastUnlockedProblem(username);
         }
