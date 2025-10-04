@@ -1,7 +1,9 @@
-# Unity Blockly Game 🚀
+# Space Shooter 🚀
 
 An innovative educational game that teaches programming fundamentals through interactive space-themed puzzles. Students learn programming concepts by controlling a space drone using visual blocks that generate real C# code.
+
 ![alt text](screenshot.png)
+
 ## 🎯 Project Overview
 
 This R&D project explores the integration between browser-based visual programming (Google Blockly) and Unity game engine. Students drag and drop code blocks to control their spaceship, learning programming concepts like loops, conditionals, variables, and functions in an engaging game environment.
@@ -9,12 +11,14 @@ This R&D project explores the integration between browser-based visual programmi
 ## ✨ Key Features
 
 ### Educational Gameplay
+
 - **Visual Programming**: Drag-and-drop Blockly interface generates real C# code
 - **Progressive Learning**: Each level introduces fundamental programming concepts
 - **Space-Themed Puzzles**: Navigate asteroids, collect objects, and complete missions
 - **Real-time Code Execution**: Generated code runs directly in Unity engine
 
 ### Technical Innovation
+
 - **Browser-Unity Communication**: Seamless integration between web interface and game
 - **Runtime Code Compilation**: Dynamic C# script execution using Roslyn
 - **Save/Restore System**: Persistent block workspace and progress tracking
@@ -40,6 +44,7 @@ This R&D project explores the integration between browser-based visual programmi
 ## 📚 Learning Progression
 
 ### Level Structure
+
 1. **Sequential Execution** - Basic command sequences
 2. **Loops** - Repetitive actions and iteration
 3. **Conditional Statements** - Decision-making logic
@@ -65,11 +70,13 @@ Assets/
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Unity 2020.3.21f1 or later
 - Modern web browser with JavaScript support
 - Visual Studio or compatible C# IDE
 
 ### Development Setup
+
 1. Clone the repository
 2. Open project in Unity Hub
 3. Install required packages via Package Manager
@@ -78,6 +85,7 @@ Assets/
 ## 🧪 Testing
 
 The project includes comprehensive unit tests for:
+
 - Player movement and collision detection
 - Command execution and error handling
 - Objective completion tracking
@@ -86,6 +94,7 @@ The project includes comprehensive unit tests for:
 ## 📈 Current Status
 
 **Development Stage**: Early R&D Phase
+
 - ✅ Core browser-Unity communication working
 - ✅ Basic gameplay mechanics implemented
 - ✅ Visual programming interface functional
